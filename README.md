@@ -1,20 +1,34 @@
+# Mantine Vite template
 
-# Discord Status as Image
-Providing an instant, accurate live Discord status and 'Add friend' link that can be embeded into websites or README.
-With a few clicks and your username, things are set up!
+## Features
 
-## How to Get one?
-1. Access this website: https://dsi.bennynguyen.us
-2. Following the instructions on the website
-	1. Click on the invite link to join the server
-	2. Enter your username
-	3. Hit Obtain and you're done.
+This template comes with the following features:
 
-## Technology
- - React
- - Raspberry Pi
- - Refiner (Discord bot)
- - ... (more api stuff here)
+- [PostCSS](https://postcss.org/) with [mantine-postcss-preset](https://mantine.dev/styles/postcss-preset)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Storybook](https://storybook.js.org/)
+- [Vitest](https://vitest.dev/) setup with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
+- ESLint setup with [eslint-config-mantine](https://github.com/mantinedev/eslint-config-mantine)
 
-## Contributions
-Any contribution is appreciated. Just create an issue/pull request and I will review ASAP.
+## npm scripts
+
+## Build and dev scripts
+
+- `dev` – start development server
+- `build` – build production version of the app
+- `preview` – locally preview production build
+
+### Testing scripts
+
+- `typecheck` – checks TypeScript types
+- `lint` – runs ESLint
+- `prettier:check` – checks files with Prettier
+- `vitest` – runs vitest tests
+- `vitest:watch` – starts vitest watch
+- `test` – runs `vitest`, `prettier:check`, `lint` and `typecheck` scripts
+
+### Other scripts
+
+- `storybook` – starts storybook dev server
+- `storybook:build` – build production storybook bundle to `storybook-static`
+- `prettier:write` – formats all files with Prettier
