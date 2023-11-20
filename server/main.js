@@ -36,6 +36,7 @@ app.get('/smallcard/:id', async (req, res) => {
             `http://localhost:2011/smallcard?username=${data['username']}&avatar=${data['avatar_url']}&status=${data['status']}`,
             { waitUntil: ['domcontentloaded', 'load', 'networkidle2'] }
           );
+          await page.waitForTimeout(100);
           const screenshotBuffer = await page.screenshot({
             clip: { x: 0, y: 0, width: 1350, height: 450 },
           });
