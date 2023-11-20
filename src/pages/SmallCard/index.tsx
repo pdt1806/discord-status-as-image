@@ -39,17 +39,29 @@ const SmallCard = () => {
       display="flex"
     >
       <Avatar h={'70%'} w={273} alt="Avatar" src={avatar} />
+      <Box
+        w={100}
+        h={100}
+        style={{
+          borderRadius: '50%',
+          transform: 'translate(-85px, 100px)',
+          backgroundColor: '#2B2D31',
+        }}
+      />
       <Avatar
         w={75}
         h={75}
         src={statusImage}
         style={{
-          transform: 'translate(-85px, 100px)',
-          outline: '10px solid #2B2D31',
+          transform: 'translate(-172px, 100px)',
           backgroundColor: '#2B2D31',
         }}
       />
-      <Box>
+      <Box
+        style={{
+          transform: 'translateX(-80px)',
+        }}
+      >
         <Title fw={500} size={130} c="white">
           {username}
         </Title>
