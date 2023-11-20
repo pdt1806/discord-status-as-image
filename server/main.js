@@ -11,9 +11,7 @@ app.get("/smallcard/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    console.log(`http://localhost:7000/user/${id}`);
-
-    fetch(`http://localhost:7000/user/${id}`)
+    fetch(`http://127.0.0.1:7000/user/${id}`)
       .then((response) => {
         if (response == 404) {
           res.status(404).send("User not found");
