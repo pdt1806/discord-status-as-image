@@ -35,7 +35,7 @@ const MainContent = () => {
                 setUserID("");
                 setLink("");
                 setUserID(values.userID);
-                setLink(`http://localhost:1911/smallcard/${values.userID}`);
+                setLink(`http://disi-api.bennynguyen.us/smallcard/${values.userID}`);
               })}
               w="90%"
             >
