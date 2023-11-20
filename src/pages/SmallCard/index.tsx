@@ -49,9 +49,11 @@ const SmallCard = () => {
           backgroundColor: '#2B2D31',
         }}
       />
-      <Title fw={500} size={100} style={{ transform: 'translateX(-80px)' }} c="white">
-        {username}
-      </Title>
+      <Box>
+        <Title fw={500} size={130} c="white">
+          {username}
+        </Title>
+      </Box>
     </Box>
   );
 };
