@@ -1,5 +1,5 @@
 import express from "express";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
 
 const app = express();
 
@@ -22,7 +22,8 @@ app.get("/smallcard/:id", async (req, res) => {
       .then(async (data) => {
         const browser = await puppeteer.launch({
           headless: "new",
-          args: ["--no-sandbox", "--disable-setuid-sandbox"],
+	  executablePath: '/usr/bin/chromium-browser',
+          args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-gpu", "--disable-software-rasterizer"],
         });
         const page = await browser.newPage();
         await page.goto(
