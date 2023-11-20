@@ -1,18 +1,18 @@
-import { Box, Button, Image, Table, Text, TextInput, UnstyledButton } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { useState } from "react";
+import { Box, Button, Image, Table, Text, TextInput, UnstyledButton } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { useState } from 'react';
 
 const MainContent = () => {
-  const [userID, setUserID] = useState("");
-  const [link, setLink] = useState("");
+  const [userID, setUserID] = useState('');
+  const [link, setLink] = useState('');
   const form = useForm({
     initialValues: {
-      userID: "",
+      userID: '',
     },
   });
 
   return (
-    <Table w="95%" h="90%" style={{ fontSize: "30px" }}>
+    <Table w="95%" h="90%" style={{ fontSize: '30px' }}>
       <Table.Thead>
         <Table.Tr>
           <Table.Th w="33%">Step 1 - Join the Discord Server</Table.Th>
@@ -25,22 +25,22 @@ const MainContent = () => {
           <Table.Td h="100%">
             <iframe
               src="https://discord.com/widget?id=1174576233581912074&theme=dark"
-              style={{ width: "90%", height: "90%", border: "none" }}
+              style={{ width: '90%', height: '90%', border: 'none' }}
             />
           </Table.Td>
-          <Table.Td display={"flex"} style={{ alignItems: "start" }}>
+          <Table.Td display={'flex'} style={{ alignItems: 'start' }}>
             <Box
               component="form"
               onSubmit={form.onSubmit((values) => {
-                setUserID("");
-                setLink("");
+                setUserID('');
+                setLink('');
                 setUserID(values.userID);
-                setLink(`http://localhost:1911/smallcard/${values.userID}`);
+                setLink(`http://disi-api.bennynguyen.us/smallcard/${values.userID}`);
               })}
               w="90%"
             >
               <TextInput
-                {...form.getInputProps("userID")}
+                {...form.getInputProps('userID')}
                 withAsterisk
                 required
                 label="User ID"
@@ -50,8 +50,8 @@ const MainContent = () => {
             </Box>
           </Table.Td>
           <Table.Td>
-            {link !== "" ? (
-              <Box display={"flex"} style={{ flexDirection: "column" }}>
+            {link !== '' ? (
+              <Box display={'flex'} style={{ flexDirection: 'column' }}>
                 <a href={`https://discord.com/users/${userID}`} target="_blank">
                   <Image src={link} mb="md" />
                 </a>

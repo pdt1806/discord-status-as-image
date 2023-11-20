@@ -1,18 +1,18 @@
-import MainContent from "@/components/MainContent";
-import { Box, Center, Title } from "@mantine/core";
+import MainContent from '@/components/MainContent';
+import { Box, Center, Title } from '@mantine/core';
 
 const Home = () => {
   return (
     <Box
       w="100vw"
       h="100vh"
-      display={"flex"}
+      display={'flex'}
       style={{
-        flexDirection: "column",
-        alignItems: "center",
+        flexDirection: 'column',
+        alignItems: 'center',
         background: "url('/images/background.png')",
-        backgroundSize: "cover",
-        color: "white",
+        backgroundSize: 'cover',
+        color: 'white',
       }}
     >
       <Title mt="10vh" size={60}>
@@ -24,7 +24,7 @@ const Home = () => {
         w="80%"
         mih={450}
         miw={1000}
-        style={{ backgroundColor: "#00000050", borderRadius: "25px" }}
+        style={{ backgroundColor: '#00000050', borderRadius: '25px' }}
       >
         <Center w="100%" h="100%">
           <MainContent />
