@@ -1,4 +1,4 @@
-import { Avatar, Box, Image, Title } from '@mantine/core';
+import { Avatar, Box, Title } from '@mantine/core';
 import { useLocation } from 'react-router-dom';
 
 const SmallCard = () => {
@@ -39,25 +39,14 @@ const SmallCard = () => {
       display="flex"
     >
       <Avatar h={'70%'} w={273} alt="Avatar" src={avatar} />
-      <Box
-        w={75}
-        h={75}
-        style={{
-          borderRadius: '100%',
-          transform: 'translate(-80px, 100px)',
-          outline: '10px solid #2B2D31',
-          outlineOffset: '-2px',
-          backgroundColor: '#2B2D31',
-        }}
-      />
-      <Image
+      <Avatar
         w={75}
         h={75}
         src={statusImage}
         style={{
-          borderRadius: '100%',
-          transform: 'translate(-155px, 100px)',
+          transform: 'translate(-85px, 100px)',
           outline: '10px solid #2B2D31',
+          backgroundColor: '#2B2D31',
         }}
       />
       <Title fw={500} size={100} style={{ transform: 'translateX(-80px)' }} c="white">
