@@ -6,12 +6,12 @@ const SmallCard = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
 
-  const [username, setUsername] = useState('');
-  const [avatar, setAvatar] = useState('');
-  const [status, setStatus] = useState('');
+  const [username, setUsername] = useState(params.get('username'));
+  const [avatar, setAvatar] = useState(params.get('avatar'));
+  const [status, setStatus] = useState(params.get('status'));
   const id = params.get('id');
 
-  function fetchData() {
+  function updateStatus() {
     fetch(`https://refiner-api.bennynguyen.us/user/${id}`, {
       credentials: 'include',
       headers: {
@@ -28,12 +28,12 @@ const SmallCard = () => {
   }
 
   useEffect(() => {
-    fetchData();
+    updateStatus();
   }, []);
 
   setTimeout(() => {
     try {
-      fetchData();
+      updateStatus();
     } catch {}
   }, 30000);
 
