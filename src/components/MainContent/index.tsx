@@ -78,7 +78,7 @@ const MainContent = () => {
                   🔗 Copy Anchor
                 </UnstyledButton>
                 <Link
-                  to={`/smallcard?avatar=${data['avatar_url']}&id=${data['id']}&username=${data['username']}&status=${data['status']}`}
+                  to={`/smallcard?avatar=${data['avatar']}&id=${data['id']}&username=${data['username']}&status=${data['status']}`}
                   target="_blank"
                   style={{ textDecoration: 'none', color: 'white' }}
                 >
