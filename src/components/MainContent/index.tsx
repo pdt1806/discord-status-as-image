@@ -38,13 +38,14 @@ const MainContent = () => {
                 setLink('');
                 setUserID(values.userID);
                 fetch(`https://refiner-api.bennynguyen.us/user/${values.userID}`, {
-                  mode: 'no-cors',
+                  credentials: 'include',
                   headers: {
                     'Content-Type': 'application/json',
                   },
                 })
                   .then((res) => res.json())
                   .then((data) => {
+                    console.log(data);
                     setData(data);
                   });
                 setLink(`http://disi-api.bennynguyen.us/smallcard/${values.userID}`);

@@ -1,5 +1,5 @@
 import { Avatar, Box, Title } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const SmallCard = () => {
@@ -11,24 +11,23 @@ const SmallCard = () => {
   const [status, setStatus] = useState(params.get('status'));
   const id = params.get('id');
 
-  useEffect(() => {
-    setTimeout(() => {
-      try {
-        fetch(`https://refiner-api.bennynguyen.us/user/${id}`, {
-          mode: 'no-cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            setUsername(data.username);
-            setAvatar(data.avatar);
-            setStatus(data.status);
-          });
-      } catch {}
-    }, 10000);
-  });
+  setTimeout(() => {
+    try {
+      fetch(`https://refiner-api.bennynguyen.us/user/${id}`, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUsername(data.username);
+          setAvatar(data.avatar);
+          setStatus(data.status);
+          setStatusImage(setStatusImg());
+        });
+    } catch {}
+  }, 30000);
 
   function setStatusImg() {
     switch (status) {
@@ -58,8 +57,9 @@ const SmallCard = () => {
     return '100';
   }
 
-  const statusImage = setStatusImg();
-  const titleSize = setTitleSize();
+  let titleSize = setTitleSize();
+
+  const [statusImage, setStatusImage] = useState(setStatusImg());
 
   return (
     <Box
