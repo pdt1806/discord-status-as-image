@@ -37,7 +37,12 @@ const MainContent = () => {
                 setUserID('');
                 setLink('');
                 setUserID(values.userID);
-                fetch(`https://refiner-api.bennynguyen.us/user/${values.userID}`)
+                fetch(`https://refiner-api.bennynguyen.us/user/${values.userID}`, {
+                  mode: 'no-cors',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                })
                   .then((res) => res.json())
                   .then((data) => {
                     setData(data);

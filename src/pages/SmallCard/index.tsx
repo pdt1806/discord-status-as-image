@@ -14,7 +14,12 @@ const SmallCard = () => {
   useEffect(() => {
     setTimeout(() => {
       try {
-        fetch('https://refiner-api.bennynguyen.us/user/' + id)
+        fetch(`https://refiner-api.bennynguyen.us/user/${id}`, {
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
           .then((res) => res.json())
           .then((data) => {
             setUsername(data.username);
