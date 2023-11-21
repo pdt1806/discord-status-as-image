@@ -1,31 +1,39 @@
 import { Avatar, Box, Title } from '@mantine/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const SmallCard = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
 
-  const [username, setUsername] = useState(params.get('username'));
-  const [avatar, setAvatar] = useState(params.get('avatar'));
-  const [status, setStatus] = useState(params.get('status'));
+  const [username, setUsername] = useState('');
+  const [avatar, setAvatar] = useState('');
+  const [status, setStatus] = useState('');
   const id = params.get('id');
+
+  function fetchData() {
+    fetch(`https://refiner-api.bennynguyen.us/user/${id}`, {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setUsername(data.username);
+        setAvatar(data.avatar);
+        setStatus(data.status);
+        setStatusImage(setStatusImg());
+      });
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   setTimeout(() => {
     try {
-      fetch(`https://refiner-api.bennynguyen.us/user/${id}`, {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setUsername(data.username);
-          setAvatar(data.avatar);
-          setStatus(data.status);
-          setStatusImage(setStatusImg());
-        });
+      fetchData();
     } catch {}
   }, 30000);
 
