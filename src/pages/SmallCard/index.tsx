@@ -24,7 +24,21 @@ const SmallCard = () => {
     }
   }
 
+  function setTitleSize() {
+    if (username?.length! > 30) {
+      return '45';
+    } else if (username?.length! > 25) {
+      return '50';
+    } else if (username?.length! > 20) {
+      return '60';
+    } else if (username?.length! > 15) {
+      return '80';
+    }
+    return '100';
+  }
+
   const statusImage = setStatus();
+  const titleSize = setTitleSize();
 
   return (
     <Box
@@ -59,10 +73,10 @@ const SmallCard = () => {
       />
       <Box
         style={{
-          transform: 'translateX(-80px)',
+          transform: 'translateX(-100px)',
         }}
       >
-        <Title fw={500} size={130} c="white">
+        <Title fw={500} size={titleSize} c={status != 'offline' ? 'white' : '#5d5f6b'}>
           {username}
         </Title>
       </Box>
