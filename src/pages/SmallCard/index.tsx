@@ -1,15 +1,31 @@
 import { Avatar, Box, Title } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const SmallCard = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
 
-  const username = params.get('username');
-  const avatar = params.get('avatar');
-  const status = params.get('status');
+  const [username, setUsername] = useState(params.get('username'));
+  const [avatar, setAvatar] = useState(params.get('avatar'));
+  const [status, setStatus] = useState(params.get('status'));
+  const id = params.get('id');
 
-  function setStatus() {
+  useEffect(() => {
+    setTimeout(() => {
+      try {
+        fetch('https://refiner-api.bennynguyen.us/user/' + id)
+          .then((res) => res.json())
+          .then((data) => {
+            setUsername(data.username);
+            setAvatar(data.avatar);
+            setStatus(data.status);
+          });
+      } catch {}
+    }, 10000);
+  });
+
+  function setStatusImg() {
     switch (status) {
       case 'online':
         return '/images/icons/online.svg';
@@ -37,7 +53,7 @@ const SmallCard = () => {
     return '100';
   }
 
-  const statusImage = setStatus();
+  const statusImage = setStatusImg();
   const titleSize = setTitleSize();
 
   return (

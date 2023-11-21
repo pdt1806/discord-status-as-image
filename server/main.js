@@ -33,7 +33,7 @@ app.get('/smallcard/:id', async (req, res) => {
           });
           const page = await browser.newPage();
           await page.goto(
-            `http://localhost:2011/smallcard?username=${data['username']}&avatar=${data['avatar_url']}&status=${data['status']}`,
+            `http://localhost:2011/smallcard?username=${data['username']}&avatar=${data['avatar_url']}&status=${data['status']}&id=${id}`,
             { waitUntil: ['domcontentloaded', 'load', 'networkidle2'] }
           );
           const screenshotBuffer = await page.screenshot({

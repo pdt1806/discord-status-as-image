@@ -1,10 +1,12 @@
 import { Box, Button, Image, Table, Text, TextInput, UnstyledButton } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const MainContent = () => {
   const [userID, setUserID] = useState('');
   const [link, setLink] = useState('');
+  const [data, setData] = useState({} as any);
   const form = useForm({
     initialValues: {
       userID: '',
@@ -31,10 +33,15 @@ const MainContent = () => {
           <Table.Td display={'flex'} style={{ alignItems: 'start' }}>
             <Box
               component="form"
-              onSubmit={form.onSubmit((values) => {
+              onSubmit={form.onSubmit(async (values) => {
                 setUserID('');
                 setLink('');
                 setUserID(values.userID);
+                fetch(`https://refiner-api.bennynguyen.us/user/${values.userID}`)
+                  .then((res) => res.json())
+                  .then((data) => {
+                    setData(data);
+                  });
                 setLink(`http://disi-api.bennynguyen.us/smallcard/${values.userID}`);
               })}
               w="90%"
@@ -70,6 +77,13 @@ const MainContent = () => {
                 >
                   🔗 Copy Anchor
                 </UnstyledButton>
+                <Link
+                  to={`/smallcard?avatar=${data['avatar_url']}&id=${data['id']}&username=${data['username']}&status=${data['status']}`}
+                  target="_blank"
+                  style={{ textDecoration: 'none', color: 'white' }}
+                >
+                  <UnstyledButton>🔗 View live card</UnstyledButton>
+                </Link>
               </Box>
             ) : (
               <Text>Complete the previous steps correctly and your cards will show here!</Text>
