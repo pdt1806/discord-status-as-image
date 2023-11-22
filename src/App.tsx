@@ -1,5 +1,7 @@
 import { createTheme, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
+import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import SmallCard from './pages/SmallCard';
@@ -28,6 +30,7 @@ export default function App() {
         fontFamily: 'Gabarito, sans-serif',
       })}
     >
+      <Notifications />
       <RouterProvider router={router} />
     </MantineProvider>
   );

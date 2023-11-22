@@ -4,13 +4,21 @@ import puppeteer from 'puppeteer-core';
 
 const app = express();
 
+const root = 'https://disi.bennynguyen.us'; // normal one
+
 app.get('/', (req, res) => {
-  res.send({ message: 'Hello from server!' });
+  res.send({ message: 'API of Discord Status as Image' });
 });
 
 app.get('/smallcard/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const { bg, bg1, bg2, angle } = req.query;
+    const link = bg1
+      ? `${root}/smallcard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&angle=${angle}&`
+      : bg
+        ? `${root}/smallcard?bg=${bg}&`
+        : `${root}/smallcard?`;
 
     fetch(`http://127.0.0.1:7000/user/${id}`)
       .then((response) => {
@@ -33,7 +41,7 @@ app.get('/smallcard/:id', async (req, res) => {
           });
           const page = await browser.newPage();
           await page.goto(
-            `http://localhost:2011/smallcard?username=${data['username']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
+            `${link}username=${data['username']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
             { waitUntil: ['domcontentloaded', 'load', 'networkidle2'] }
           );
           const screenshotBuffer = await page.screenshot({

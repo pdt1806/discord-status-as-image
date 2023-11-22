@@ -1,3 +1,4 @@
+import { blendColors, hexToRgb } from '@/utils/tools';
 import { Avatar, Box, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -10,6 +11,32 @@ const SmallCard = () => {
   const [avatar, setAvatar] = useState(params.get('avatar'));
   const [status, setStatus] = useState(params.get('status'));
   const id = params.get('id');
+  const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#2B2D31';
+  let backgroundGradient;
+  let textColor;
+  if (!params.get('bg1') && !params.get('bg2')) {
+    const textColorRaw = hexToRgb(backgroundColor || '');
+    textColor =
+      textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186
+        ? '#202225'
+        : 'white';
+  } else {
+    const gradient1Raw = hexToRgb(params.get('bg1') || '');
+    const gradient2Raw = hexToRgb(params.get('bg2') || '');
+    const gradient1 = gradient1Raw ? `${gradient1Raw.r}, ${gradient1Raw.g}, ${gradient1Raw.b}` : '';
+    const gradient2 = gradient2Raw ? `${gradient2Raw.r}, ${gradient2Raw.g}, ${gradient2Raw.b}` : '';
+    backgroundGradient =
+      gradient1 && gradient2 && params.get('angle')
+        ? `linear-gradient(${params.get('angle')}deg, rgb(${gradient1}) 0%, rgb(${gradient2}) 100%)`
+        : '';
+    const textColorRaw = hexToRgb(
+      blendColors(params.get('bg1') || '', params.get('bg2') || '') || ''
+    );
+    textColor =
+      textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186
+        ? '#202225'
+        : 'white';
+  }
 
   function updateStatus() {
     fetch(`https://refiner-api.bennynguyen.us/user/${id}`, {
@@ -23,12 +50,13 @@ const SmallCard = () => {
         setUsername(data.username);
         setAvatar(data.avatar);
         setStatus(data.status);
-        setStatusImage(setStatusImg());
+        setStatusImage(setStatusImg(data.status));
       });
   }
 
   useEffect(() => {
     updateStatus();
+    console.log(params.get('bg'));
   }, []);
 
   setTimeout(() => {
@@ -37,7 +65,7 @@ const SmallCard = () => {
     } catch {}
   }, 30000);
 
-  function setStatusImg() {
+  function setStatusImg(status?: string) {
     switch (status) {
       case 'online':
         return '/images/icons/online.svg';
@@ -67,49 +95,55 @@ const SmallCard = () => {
 
   let titleSize = setTitleSize();
 
-  const [statusImage, setStatusImage] = useState(setStatusImg());
+  const [statusImage, setStatusImage] = useState(setStatusImg(status || 'offline'));
 
   return (
-    <Box
-      w={1350}
-      h={450}
-      style={{
-        backgroundColor: '#2B2D31',
-        position: 'absolute',
-        alignItems: 'center',
-        padding: '30px 30px 30px 70px',
-      }}
-      display="flex"
-    >
-      <Avatar h={'70%'} w={273} alt="Avatar" src={avatar} />
+    <a href={`https://discord.com/users/${id}`} target="_blank">
       <Box
-        w={100}
-        h={100}
+        w={1350}
+        h={450}
         style={{
-          borderRadius: '50%',
-          transform: 'translate(-85px, 100px)',
-          backgroundColor: '#2B2D31',
+          background: backgroundGradient ? backgroundGradient : backgroundColor,
+          position: 'absolute',
+          alignItems: 'center',
+          padding: '30px 30px 30px 70px',
         }}
-      />
-      <Avatar
-        w={75}
-        h={75}
-        src={statusImage}
-        style={{
-          transform: 'translate(-172px, 100px)',
-          backgroundColor: '#2B2D31',
-        }}
-      />
-      <Box
-        style={{
-          transform: 'translateX(-100px)',
-        }}
+        display="flex"
       >
-        <Title fw={500} size={titleSize} c={status != 'offline' ? 'white' : '#5d5f6b'}>
-          {username}
-        </Title>
+        <Avatar h={'70%'} w={273} alt="Avatar" src={avatar} />
+        <Box
+          w={100}
+          h={100}
+          style={{
+            borderRadius: '50%',
+            transform: 'translate(-85px, 100px)',
+            background: backgroundGradient
+              ? parseInt(params.get('angle')!) > 179
+                ? `#${params.get('bg2')}`
+                : `#${params.get('bg1')}`
+              : backgroundColor,
+          }}
+        />
+        <Avatar
+          w={75}
+          h={75}
+          src={statusImage}
+          style={{
+            transform: 'translate(-172px, 100px)',
+            background: 'transparent',
+          }}
+        />
+        <Box
+          style={{
+            transform: 'translateX(-100px)',
+          }}
+        >
+          <Title fw={500} size={titleSize} c={status != 'offline' ? textColor : '#5d5f6b'}>
+            {username}
+          </Title>
+        </Box>
       </Box>
-    </Box>
+    </a>
   );
 };
 
