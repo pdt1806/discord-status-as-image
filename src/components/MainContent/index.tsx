@@ -16,12 +16,12 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const MainContent = () => {
-  const [userID, setUserID] = useState('');
+  const [userID, setUserID] = useState<Number | null>(null);
   const [link, setLink] = useState('');
   const [tail, setTail] = useState('');
   const form = useForm({
     initialValues: {
-      userID: '',
+      userID: null as Number | null,
       colorMode: 'Single',
       backgroundSingle: '',
       backgroundGradient1: '',
@@ -62,33 +62,43 @@ const MainContent = () => {
           <Table.Td display={'flex'} style={{ alignItems: 'start', flexDirection: 'column' }}>
             <Box
               component="form"
-              onSubmit={form.onSubmit(async (values) => {
-                setTail(
-                  values.backgroundGradient1
-                    ? `bg1=${values.backgroundGradient1.replace(
+              onSubmit={form.onSubmit(() => {
+                const newTail =
+                  colorMode == 'Gradient'
+                    ? `bg1=${form.values.backgroundGradient1.replace(
                         '#',
                         ''
-                      )}&bg2=${values.backgroundGradient2.replace('#', '')}&angle=${
-                        values.backgroundGradientAngle
+                      )}&bg2=${form.values.backgroundGradient2.replace('#', '')}&angle=${
+                        form.values.backgroundGradientAngle
                       }`
-                    : values.backgroundSingle
-                      ? `bg=${values.backgroundSingle.replace('#', '')}`
-                      : ''
+                    : form.values.backgroundSingle
+                      ? `bg=${form.values.backgroundSingle.replace('#', '')}`
+                      : '';
+                setTail(newTail);
+                setUserID(form.values.userID);
+                setLink(
+                  `https://disi-api.bennynguyen.us/smallcard/${form.values.userID}?${newTail}` // api
                 );
-                setUserID('');
-                setLink('');
-                setUserID(values.userID);
-                setLink(`https://disi-api.bennynguyen.us/smallcard/${values.userID}?${tail}`); // api
               })}
               w="90%"
             >
-              <TextInput
+              <NumberInput
                 {...form.getInputProps('userID')}
                 withAsterisk
                 required
                 id="disi-userid"
                 label="User ID"
+                min={1e16}
+                max={1e18 - 1}
+                hideControls
+                clampBehavior="strict"
                 placeholder="Enter your User ID"
+                onChange={(e) => {
+                  form.setValues({
+                    ...form.values,
+                    userID: e as number,
+                  });
+                }}
               />
               <Box mt="xl">
                 <Title order={4}>Background color</Title>
@@ -195,6 +205,9 @@ const MainContent = () => {
               <Button type="submit" mt="xl">
                 Generate
               </Button>
+              <Text mt="md" size="sm">
+                It may take a while for the image to be loaded.
+              </Text>
             </Box>
           </Table.Td>
           <Table.Td>

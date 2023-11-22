@@ -17,7 +17,8 @@ const SmallCard = () => {
   if (!params.get('bg1') && !params.get('bg2')) {
     const textColorRaw = hexToRgb(backgroundColor || '');
     textColor =
-      textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186
+      textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186 &&
+      status != 'offline'
         ? '#202225'
         : 'white';
   } else {
@@ -33,7 +34,8 @@ const SmallCard = () => {
       blendColors(params.get('bg1') || '', params.get('bg2') || '') || ''
     );
     textColor =
-      textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186
+      textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186 &&
+      status != 'offline'
         ? '#202225'
         : 'white';
   }
@@ -56,7 +58,6 @@ const SmallCard = () => {
 
   useEffect(() => {
     updateStatus();
-    console.log(params.get('bg'));
   }, []);
 
   setTimeout(() => {
