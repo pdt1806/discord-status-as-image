@@ -17,8 +17,7 @@ const SmallCard = () => {
   if (!params.get('bg1') && !params.get('bg2')) {
     const textColorRaw = hexToRgb(backgroundColor || '');
     textColor =
-      textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186 &&
-      status != 'offline'
+      textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186
         ? '#202225'
         : 'white';
   } else {
@@ -34,14 +33,14 @@ const SmallCard = () => {
       blendColors(params.get('bg1') || '', params.get('bg2') || '') || ''
     );
     textColor =
-      textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186 &&
-      status != 'offline'
+      textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186
         ? '#202225'
         : 'white';
   }
 
   function updateStatus() {
     fetch(`https://refiner-api.bennynguyen.us/user/${id}`, {
+      // refiner-api
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',

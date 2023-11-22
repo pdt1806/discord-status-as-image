@@ -1,34 +1,35 @@
 import MainContent from '@/components/MainContent';
+import { isMobile } from '@/utils/tools';
 import { Box, Center, Title } from '@mantine/core';
+import classes from './index.module.css';
 
 const Home = () => {
   return (
     <Box
       w="100vw"
-      h="100vh"
+      h={!isMobile ? '100vh' : '100%'}
       display={'flex'}
       style={{
-        flexDirection: 'column',
-        alignItems: 'center',
-        background: "url('/images/background.png')",
+        background: "url('/images/background.png') center center fixed",
         backgroundSize: 'cover',
-        color: 'white',
+        backgroundAttachment: 'fixed',
+        backgroundRepeat: 'no-repeat',
       }}
     >
-      <Title mt="10vh" size={60}>
-        Discord Status as Image
-      </Title>
-      <Box
-        mt="xl"
-        h="70%"
-        w="80%"
-        mih={450}
-        miw={1000}
-        style={{ backgroundColor: '#00000050', borderRadius: '25px' }}
-      >
-        <Center w="100%" h="100%">
-          <MainContent />
-        </Center>
+      <Box className={classes.home}>
+        <Title size={!isMobile ? 60 : 40} ta={'center'} pt={isMobile ? 'xl' : '0'}>
+          Discord Status as Image
+        </Title>
+        <Box
+          mt="xl"
+          h="min-content"
+          p="xl"
+          style={{ backgroundColor: '#00000050', borderRadius: !isMobile ? '25px' : '0' }}
+        >
+          <Center w="100%" h="100%">
+            <MainContent />
+          </Center>
+        </Box>
       </Box>
     </Box>
   );
