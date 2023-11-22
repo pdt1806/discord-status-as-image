@@ -78,7 +78,7 @@ const MainContent = () => {
                 setUserID('');
                 setLink('');
                 setUserID(values.userID);
-                setLink(`https://disi.bennynguyen.us/smallcard/${values.userID}?${tail}`);
+                setLink(`https://disi-api.bennynguyen.us/smallcard/${values.userID}?${tail}`); // api
               })}
               w="90%"
             >
