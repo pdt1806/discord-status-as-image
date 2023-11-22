@@ -221,7 +221,7 @@ const MainContent = () => {
                     copiedNotification();
                   }}
                 >
-                  🔗 Copy Anchor
+                  🔗 Copy Anchor (image)
                 </UnstyledButton>
                 <UnstyledButton mb="md">
                   <Link
@@ -236,7 +236,7 @@ const MainContent = () => {
                   onClick={async () => {
                     await navigator.clipboard.writeText(
                       `<iframe
-                        src=${link}
+                        src=https://disi.bennynguyen.us/smallcard?id=${userID}&${tail}
                         name="disi-small-card"
                         scrolling="no"
                         frameborder="0"
