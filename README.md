@@ -7,8 +7,8 @@
 
 1. Access this website: https://disi.bennynguyen.us
 2. Following the instructions on the website
-   1. Click on the invite link to join the server
-   2. Enter your user ID and colors if you want
+   1. Click on the invite link to join the server.
+   2. Enter your user ID and colors if you want.
    3. Hit Generate and you're done.
 
 ## Technology

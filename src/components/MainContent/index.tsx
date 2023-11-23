@@ -9,6 +9,7 @@ import {
   Text,
   TextInput,
   Title,
+  Tooltip,
   UnstyledButton,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
@@ -199,9 +200,6 @@ const MainContent = () => {
         <Button type="submit" mt="xl">
           Generate
         </Button>
-        <Text mt="md" size="sm">
-          It may take a while for the image to be loaded.
-        </Text>
       </Box>
     </Table.Td>
   );
@@ -214,6 +212,7 @@ const MainContent = () => {
             <Image src={link} mb="md" />
           </a>
           <UnstyledButton
+            w="fit-content"
             mb="md"
             onClick={async () => {
               await navigator.clipboard.writeText(link);
@@ -223,6 +222,7 @@ const MainContent = () => {
             🔗 Copy Image URL
           </UnstyledButton>
           <UnstyledButton
+            w="fit-content"
             mb="md"
             onClick={async () => {
               await navigator.clipboard.writeText(
@@ -233,16 +233,19 @@ const MainContent = () => {
           >
             🔗 Copy Anchor (image)
           </UnstyledButton>
-          <UnstyledButton mb="md">
-            <Link
-              to={`/smallcard?id=${userID}&${tail}`}
-              target="_blank"
-              style={{ textDecoration: 'none', color: 'white' }}
-            >
-              <UnstyledButton>🌐 View live card</UnstyledButton>
-            </Link>
-          </UnstyledButton>
+          <Tooltip label="Reload every 30 seconds" position="right">
+            <UnstyledButton mb="md" w="fit-content">
+              <Link
+                to={`/smallcard?id=${userID}&${tail}`}
+                target="_blank"
+                style={{ textDecoration: 'none', color: 'white' }}
+              >
+                <UnstyledButton>🌐 View live card</UnstyledButton>
+              </Link>
+            </UnstyledButton>
+          </Tooltip>
           <UnstyledButton
+            w="fit-content"
             onClick={async () => {
               await navigator.clipboard.writeText(
                 `
@@ -259,6 +262,9 @@ const MainContent = () => {
           >
             🔗 Copy iframe
           </UnstyledButton>
+          <Text mt="md" size="sm">
+            It may take a while for the image to be loaded.
+          </Text>
         </Box>
       ) : (
         <Text>Complete the previous steps correctly and your cards will show here!</Text>
