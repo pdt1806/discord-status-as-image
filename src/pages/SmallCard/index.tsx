@@ -3,7 +3,7 @@ import { Avatar, Box, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const SmallCard = () => {
+const SmallCard = (props: { scale: number }) => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
 
@@ -97,6 +97,8 @@ const SmallCard = () => {
 
   const [statusImage, setStatusImage] = useState(setStatusImg(status || 'offline'));
 
+  const ratio = window.innerWidth / 1350;
+
   return (
     <a href={`https://discord.com/users/${id}`} target="_blank">
       <Box
@@ -107,6 +109,8 @@ const SmallCard = () => {
           position: 'absolute',
           alignItems: 'center',
           padding: '30px 30px 30px 70px',
+          transform: `${ratio < 1 ? `scale(${ratio})` : ''}`,
+          transformOrigin: 'top left',
         }}
         display="flex"
       >
@@ -148,3 +152,7 @@ const SmallCard = () => {
 };
 
 export default SmallCard;
+
+SmallCard.defaultProps = {
+  scale: 1,
+};
