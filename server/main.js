@@ -40,6 +40,7 @@ app.get('/smallcard/:id', async (req, res) => {
             args: ['--no-sandbox', '--disable-setuid-sandbox', '--headless', '--disable-gpu'],
           });
           const page = await browser.newPage();
+          await page.setViewport({ width: 1350, height: 450 });
           await page.goto(
             `${link}username=${data['username']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
             { waitUntil: ['domcontentloaded', 'load', 'networkidle2'] }
