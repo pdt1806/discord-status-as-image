@@ -6,8 +6,7 @@ import classes from './index.module.css';
 
 const Home = () => {
   useEffect(() => {
-    if (window.location.href != 'https://disi.bennynguyen.us')
-      window.location.href = 'https://disi.bennynguyen.us';
+    if (window.location.pathname !== '/') window.location.pathname = '/';
   }, []);
 
   return (
