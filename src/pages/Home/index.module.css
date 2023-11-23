@@ -5,15 +5,14 @@
   justify-content: center;
   color: white;
   width: 100%;
-
   @media screen and (max-width: 1600px) {
     scale: 0.85;
   }
-  @media screen and (max-width: 1366px) {
-    scale: 0.7;
-  }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1080px) {
     justify-content: flex-start;
     scale: 1;
+  }
+  @media screen and (max-height: 750px) {
+    justify-content: flex-start;
   }
 }

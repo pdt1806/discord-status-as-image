@@ -1,13 +1,18 @@
 import MainContent from '@/components/MainContent';
-import { isMobile } from '@/utils/tools';
+import { idealHeight, isMobile } from '@/utils/tools';
 import { Box, Center, Title } from '@mantine/core';
+import { useEffect } from 'react';
 import classes from './index.module.css';
 
 const Home = () => {
+  useEffect(() => {
+    window.location.href = 'https://disi.bennynguyen.us';
+  }, []);
+
   return (
     <Box
       w="100vw"
-      h={!isMobile ? '100vh' : '100%'}
+      h={!isMobile ? (!idealHeight ? '100%' : '100vh') : '100%'}
       display={'flex'}
       style={{
         background: "url('/images/background.png') center center fixed",
@@ -17,13 +22,14 @@ const Home = () => {
       }}
     >
       <Box className={classes.home}>
-        <Title size={!isMobile ? 60 : 40} ta={'center'} pt={isMobile ? 'xl' : '0'}>
+        <Title size={!isMobile ? 60 : 40} ta={'center'} pt={isMobile || !idealHeight ? 'xl' : '0'}>
           Discord Status as Image
         </Title>
         <Box
           mt="xl"
           h="min-content"
           p="xl"
+          maw="85%"
           style={{ backgroundColor: '#00000050', borderRadius: !isMobile ? '25px' : '0' }}
         >
           <Center w="100%" h="100%">

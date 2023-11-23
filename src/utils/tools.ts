@@ -27,4 +27,5 @@ export function blendColors(colorA: string, colorB: string) {
   return '#' + r + g + b;
 }
 
-export const isMobile = window.innerWidth < 768;
+export const isMobile = window.innerWidth < 1080;
+export const idealHeight = window.innerHeight >= 750;

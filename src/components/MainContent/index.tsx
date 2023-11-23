@@ -226,7 +226,7 @@ const MainContent = () => {
             mb="md"
             onClick={async () => {
               await navigator.clipboard.writeText(
-                `<a href="https://discord.com/users/${userID}" target="_blank"><img src=${link}></img></a>`
+                `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="100px" src="${link}"></img></a>`
               );
               copiedNotification();
             }}
@@ -239,22 +239,20 @@ const MainContent = () => {
               target="_blank"
               style={{ textDecoration: 'none', color: 'white' }}
             >
-              <UnstyledButton>🔴 View live card</UnstyledButton>
+              <UnstyledButton>🌐 View live card</UnstyledButton>
             </Link>
           </UnstyledButton>
           <UnstyledButton
             onClick={async () => {
               await navigator.clipboard.writeText(
-                `<iframe
-                src=https://disi.bennynguyen.us/smallcard?id=${userID}&${tail}
-                name="disi-small-card"
-                scrolling="no"
-                frameborder="0"
-                marginheight="0px"
-                marginwidth="0px"
-                height="450px"
-                width="1350px"
-              ></iframe>`
+                `
+              <iframe
+              src="https://disi.bennynguyen.us/smallcard?id=${userID}&${tail}"
+              name="disi-small-card"
+              height="100px"
+              width="300px"
+            ></iframe>
+              `
               );
               copiedNotification();
             }}
