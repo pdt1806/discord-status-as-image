@@ -2,6 +2,7 @@ import { isMobile } from '@/utils/tools';
 import {
   Box,
   Button,
+  Checkbox,
   ColorPicker,
   HoverCard,
   Image,
@@ -15,13 +16,11 @@ import {
   UnstyledButton,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const MainContent = () => {
-  const [username, setusername] = useState<String | null>(null);
   const [link, setLink] = useState('');
   const [tail, setTail] = useState('');
   const [userID, setUserID] = useState('');
@@ -33,6 +32,7 @@ const MainContent = () => {
       backgroundGradient1: '',
       backgroundGradient2: '',
       backgroundGradientAngle: 0,
+      created: false,
     },
   });
 
@@ -47,10 +47,6 @@ const MainContent = () => {
       autoClose: 2000,
     });
   }
-
-  const [openedSingle, { open: openSingle, close: closeSingle }] = useDisclosure(false);
-  const [openedGradient1, { open: openGradient1, close: closeGradient1 }] = useDisclosure(false);
-  const [openedGradient2, { open: openGradient2, close: closeGradient2 }] = useDisclosure(false);
 
   const column1 = (
     <Table.Td h="100%">
@@ -80,7 +76,7 @@ const MainContent = () => {
               }
               const data = await res.json();
               setUserID(data.id);
-              const newTail =
+              let newTail =
                 colorMode == 'Gradient'
                   ? `bg1=${form.values.backgroundGradient1.replace(
                       '#',
@@ -91,8 +87,8 @@ const MainContent = () => {
                   : form.values.backgroundSingle
                     ? `bg=${form.values.backgroundSingle.replace('#', '')}`
                     : '';
+              if (form.values.created) newTail += '&created=true';
               setTail(newTail);
-              setusername(form.values.username);
               setLink(
                 `https://disi-api.bennynguyen.us/smallcard/${data.id}?${newTail}` // disi-api
               );
@@ -114,6 +110,17 @@ const MainContent = () => {
             form.setValues({
               ...form.values,
               username: e.currentTarget.value,
+            });
+          }}
+        />
+        <Checkbox
+          label="Show account created date"
+          mt="md"
+          {...form.getInputProps('created')}
+          onChange={(e) => {
+            form.setValues({
+              ...form.values,
+              created: e.currentTarget.checked,
             });
           }}
         />
@@ -288,7 +295,7 @@ const MainContent = () => {
     <Table.Td>
       {link !== '' ? (
         <Box display={'flex'} style={{ flexDirection: 'column' }}>
-          <a href={`https://discord.com/users/${username}`} target="_blank">
+          <a href={`https://discord.com/users/${form.values.username}`} target="_blank">
             <Image src={link} mb="md" />
           </a>
           <UnstyledButton

@@ -1,4 +1,4 @@
-import { blendColors, hexToRgb } from '@/utils/tools';
+import { blendColors, hexToRgb, monthNames } from '@/utils/tools';
 import { Avatar, Box, Image, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -11,11 +11,12 @@ const SmallCard = (props: { scale: number }) => {
   const [username, setUsername] = useState(params.get('username'));
   const [avatar, setAvatar] = useState(params.get('avatar'));
   const [status, setStatus] = useState(params.get('status'));
+  const createdDate = params.get('createdDate');
   const id = params.get('id');
-  const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '';
+  const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#2b2d31';
   let backgroundGradient;
   let textColor;
-  if (!params.get('bg1') && !params.get('bg2')) {
+  if (!params.get('bg1')) {
     const textColorRaw = hexToRgb(backgroundColor || '');
     textColor =
       textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186
@@ -130,9 +131,35 @@ const SmallCard = (props: { scale: number }) => {
             transform: 'translateX(-10px)',
           }}
         >
-          <Title fw={500} size={titleSize} c={status != 'offline' ? textColor : '#5d5f6b'}>
+          <Title
+            fw={500}
+            size={titleSize}
+            c={
+              status != 'offline' || (status == 'offline' && textColor == 'white')
+                ? textColor
+                : '#5d5f6b'
+            }
+          >
             {username}
           </Title>
+          {createdDate ? (
+            <Box mt="sm" display="flex" style={{ alignItems: 'center' }}>
+              <Image
+                alt="discord-logo"
+                src="/images/discord.svg"
+                w={60}
+                h={60}
+                mr="lg"
+                style={{
+                  filter: textColor == 'white' ? 'invert(1)' : 'invert(0)',
+                }}
+              />
+              <Title order={1} c={textColor} fw={500}>
+                {monthNames[createdDate.slice(0, 2) as keyof typeof monthNames]}{' '}
+                {createdDate.slice(3, 5)}, {createdDate.slice(6, 10)}
+              </Title>
+            </Box>
+          ) : null}
         </Box>
       </Box>
     </a>

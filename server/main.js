@@ -13,8 +13,8 @@ app.get('/', (req, res) => {
 app.get('/smallcard/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { bg, bg1, bg2, angle } = req.query;
-    const link = bg1
+    const { bg, bg1, bg2, angle, created } = req.query;
+    let link = bg1
       ? `${root}/smallcard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&angle=${angle}&`
       : bg
         ? `${root}/smallcard?bg=${bg}&`
@@ -35,6 +35,7 @@ app.get('/smallcard/:id', async (req, res) => {
       })
       .then(async (data) => {
         try {
+          created ? (link += `createdDate=${data['created_at']}&`) : null;
           const browser = await puppeteer.launch({
             executablePath: '/usr/bin/chromium-browser',
             args: ['--no-sandbox', '--disable-setuid-sandbox', '--headless', '--disable-gpu'],
