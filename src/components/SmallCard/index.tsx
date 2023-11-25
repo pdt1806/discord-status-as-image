@@ -11,7 +11,7 @@ const SmallCard = (props: { scale: number }) => {
   const [username, setUsername] = useState(params.get('username'));
   const [avatar, setAvatar] = useState(params.get('avatar'));
   const [status, setStatus] = useState(params.get('status'));
-  const createdDate = params.get('createdDate');
+  const [createdDate, setCreatedDate] = useState(params.get('createdDate'));
   const id = params.get('id');
   const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#2b2d31';
   let backgroundGradient;
@@ -54,6 +54,9 @@ const SmallCard = (props: { scale: number }) => {
         setAvatar(data.avatar);
         setStatus(data.status);
         setStatusImage(setStatusImg(data.status));
+        if (params.get('created') == 'true') {
+          setCreatedDate(data.created_at);
+        }
       });
   }
 
@@ -154,7 +157,7 @@ const SmallCard = (props: { scale: number }) => {
                   filter: textColor == 'white' ? 'invert(1)' : 'invert(0)',
                 }}
               />
-              <Title order={1} c={textColor} fw={500}>
+              <Title size={40} c={textColor} fw={400}>
                 {monthNames[createdDate.slice(0, 2) as keyof typeof monthNames]}{' '}
                 {createdDate.slice(3, 5)}, {createdDate.slice(6, 10)}
               </Title>

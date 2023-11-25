@@ -78,14 +78,14 @@ const MainContent = () => {
               setUserID(data.id);
               let newTail =
                 colorMode == 'Gradient'
-                  ? `bg1=${form.values.backgroundGradient1.replace(
+                  ? `&bg1=${form.values.backgroundGradient1.replace(
                       '#',
                       ''
                     )}&bg2=${form.values.backgroundGradient2.replace('#', '')}&angle=${
                       form.values.backgroundGradientAngle
                     }`
                   : form.values.backgroundSingle
-                    ? `bg=${form.values.backgroundSingle.replace('#', '')}`
+                    ? `&bg=${form.values.backgroundSingle.replace('#', '')}`
                     : '';
               if (form.values.created) newTail += '&created=true';
               setTail(newTail);
@@ -323,7 +323,7 @@ const MainContent = () => {
           <Tooltip label="Reload every 30 seconds" position="right">
             <UnstyledButton mb="md" w="fit-content">
               <Link
-                to={`/smallcard?id=${userID}&${tail}`}
+                to={`/smallcard?id=${userID}${tail}`}
                 target="_blank"
                 style={{ textDecoration: 'none', color: 'white' }}
               >
@@ -337,7 +337,7 @@ const MainContent = () => {
               await navigator.clipboard.writeText(
                 `
               <iframe
-              src="https://disi.bennynguyen.us/smallcard?id=${userID}&${tail}"
+              src="https://disi.bennynguyen.us/smallcard?id=${userID}${tail}"
               name="disi-small-card"
               height="100px"
               width="300px"
