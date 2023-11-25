@@ -3,8 +3,8 @@ import '@mantine/core/styles.css';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
+import SmallCard from './components/SmallCard';
 import Home from './pages/Home';
-import SmallCard from './pages/SmallCard';
 
 const routes: RouteObject[] = [
   {

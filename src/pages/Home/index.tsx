@@ -38,7 +38,7 @@ const Home = () => {
           </Center>
         </Box>
         <Text mt="md" mb="md">
-          Made by{' '}
+          Created by{' '}
           <Link
             to="https://github.com/pdt1806"
             target="_blank"
