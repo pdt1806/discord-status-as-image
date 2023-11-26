@@ -29,7 +29,7 @@ export function blendColors(colorA: string, colorB: string) {
 
 export const isMobile = window.innerWidth < 1080;
 
-export const monthNames = {
+const monthNames = {
   '01': 'Jan',
   '02': 'Feb',
   '03': 'Mar',
@@ -43,3 +43,8 @@ export const monthNames = {
   '11': 'Nov',
   '12': 'Dec',
 } as const;
+
+export default function formatDate(date: string) {
+  return `${monthNames[date.slice(0, 2) as keyof typeof monthNames]}${' '}
+  ${date.slice(3, 5)}, ${date.slice(6, 10)}`;
+}

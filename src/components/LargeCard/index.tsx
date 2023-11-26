@@ -1,4 +1,4 @@
-import { blendColors, hexToRgb } from '@/utils/tools';
+import formatDate, { blendColors, hexToRgb } from '@/utils/tools';
 import { Avatar, Box, Divider, Image, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -13,6 +13,7 @@ const LargeCard = (props: { scale: number }) => {
   const [status, setStatus] = useState(params.get('status'));
   const [createdDate, setCreatedDate] = useState(params.get('createdDate'));
   const [activity, setActivity] = useState(params.get('activity'));
+  const [aboutMe, setAboutMe] = useState(params.get('aboutMe'));
   const id = params.get('id');
   const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#2b2d31';
   let backgroundGradient;
@@ -114,7 +115,7 @@ const LargeCard = (props: { scale: number }) => {
     <a href={`https://discord.com/users/${id}`} target="_blank">
       <Box
         w={807}
-        h={1000}
+        h="min-content"
         style={{
           background: backgroundGradient ? backgroundGradient : backgroundColor,
           position: 'absolute',
@@ -138,18 +139,20 @@ const LargeCard = (props: { scale: number }) => {
         </Box>
         <Box
           style={{
-            position: 'absolute',
             backgroundColor: 'black',
-            transform: 'translate(30px, 140px)',
+            transform: 'translateX(30px)',
             borderRadius: '20px',
             zIndex: 0,
           }}
           w={747}
-          h={620}
+          p={30}
+          mt={150}
+          mb={30}
+          h="max-content"
         >
-          <Box style={{ position: 'absolute', transform: 'translate(30px, 20px)' }}>
+          <Box mb={30}>
             <Title
-              fw={500}
+              fw={600}
               size={titleSize}
               c={
                 status != 'offline' || (status == 'offline' && textColor == 'white')
@@ -159,26 +162,9 @@ const LargeCard = (props: { scale: number }) => {
             >
               {username}
             </Title>
-            {/* {createdDate ? (
-            <Box mt="sm" display="flex" style={{ alignItems: 'center' }}>
-              <Image
-                alt="discord-logo"
-                src="/images/discord.svg"
-                w={60}
-                h={60}
-                mr="lg"
-                style={{
-                  filter: textColor == 'white' ? 'invert(1)' : 'invert(0)',
-                }}
-              />
-              <Title size={40} c={textColor} fw={400}>
-                {monthNames[createdDate.slice(0, 2) as keyof typeof monthNames]}{' '}
-                {createdDate.slice(3, 5)}, {createdDate.slice(6, 10)}
-              </Title>
-            </Box>
-          ) : null} */}
             <Title
-              fw={40}
+              fw={500}
+              mt={10}
               size={titleSize - 20}
               c={
                 status != 'offline' || (status == 'offline' && textColor == 'white')
@@ -190,7 +176,7 @@ const LargeCard = (props: { scale: number }) => {
             </Title>
             <Title
               fw={300}
-              mt={5}
+              mt={10}
               size={30}
               c={
                 status != 'offline' || (status == 'offline' && textColor == 'white')
@@ -200,9 +186,22 @@ const LargeCard = (props: { scale: number }) => {
             >
               egg/eggu
             </Title>
+            <Title
+              fw={400}
+              mt={35}
+              mb={35}
+              size={25}
+              c={
+                status != 'offline' || (status == 'offline' && textColor == 'white')
+                  ? textColor
+                  : '#5d5f6b'
+              }
+            >
+              🥚 mỗi ngày đến trường là một niềm đau
+            </Title>
           </Box>
-          <Divider w={700} style={{ transform: 'translate(23.5px, 230px)' }} />
-          <Box style={{ transform: 'translate(30px, 255px)' }}>
+          <Divider w={687} mb={30} />
+          <Box>
             <Title
               size={25}
               c={
@@ -218,7 +217,35 @@ const LargeCard = (props: { scale: number }) => {
               mt="sm"
               lineClamp={4}
               style={{ fontSize: '22px', maxWidth: '700px', wordWrap: 'break-word' }}
-            ></Text>
+            >
+              {aboutMe}
+            </Text>
+            <Title
+              mt={30}
+              size={25}
+              c={
+                status != 'offline' || (status == 'offline' && textColor == 'white')
+                  ? textColor
+                  : '#5d5f6b'
+              }
+            >
+              MEMBER SINCE
+            </Title>
+            {createdDate ? (
+              <Box display="flex" style={{ alignItems: 'center' }} mt="sm">
+                <Image
+                  alt="discord-logo"
+                  src="/images/discord.svg"
+                  style={{ filter: textColor == 'white' ? 'invert(1)' : 'invert(0)' }}
+                  w={35}
+                  h={35}
+                  mr="md"
+                />
+                <Text c="white" lineClamp={4} style={{ fontSize: '22px' }}>
+                  {formatDate(createdDate)}
+                </Text>
+              </Box>
+            ) : null}
           </Box>
         </Box>
       </Box>

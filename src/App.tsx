@@ -32,7 +32,7 @@ export default function App() {
   return (
     <MantineProvider
       theme={createTheme({
-        fontFamily: 'Gabarito, sans-serif',
+        fontFamily: 'Noto Sans TC, sans-serif',
       })}
     >
       <Notifications />

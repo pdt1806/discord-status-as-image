@@ -1,4 +1,4 @@
-import { blendColors, hexToRgb, monthNames } from '@/utils/tools';
+import formatDate, { blendColors, hexToRgb } from '@/utils/tools';
 import { Avatar, Box, Image, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -148,7 +148,7 @@ const SmallCard = (props: { scale: number }) => {
             {username}
           </Title>
           {createdDate ? (
-            <Box mt="sm" display="flex" style={{ alignItems: 'center' }}>
+            <Box mt="lg" display="flex" style={{ alignItems: 'center' }}>
               <Image
                 alt="discord-logo"
                 src="/images/discord.svg"
@@ -160,8 +160,7 @@ const SmallCard = (props: { scale: number }) => {
                 }}
               />
               <Title size={40} c={textColor} fw={400}>
-                {monthNames[createdDate.slice(0, 2) as keyof typeof monthNames]}{' '}
-                {createdDate.slice(3, 5)}, {createdDate.slice(6, 10)}
+                {formatDate(createdDate)}
               </Title>
             </Box>
           ) : null}
