@@ -31,7 +31,7 @@ const MainContent = () => {
       backgroundSingle: '',
       backgroundGradient1: '',
       backgroundGradient2: '',
-      backgroundGradientAngle: 0,
+      backgroundGradientDegree: 0,
       created: false,
     },
   });
@@ -81,8 +81,8 @@ const MainContent = () => {
                   ? `&bg1=${form.values.backgroundGradient1.replace(
                       '#',
                       ''
-                    )}&bg2=${form.values.backgroundGradient2.replace('#', '')}&angle=${
-                      form.values.backgroundGradientAngle
+                    )}&bg2=${form.values.backgroundGradient2.replace('#', '')}&degree=${
+                      form.values.backgroundGradientDegree
                     }`
                   : form.values.backgroundSingle
                     ? `&bg=${form.values.backgroundSingle.replace('#', '')}`
@@ -136,7 +136,7 @@ const MainContent = () => {
                 ...form.values,
                 backgroundGradient1: '',
                 backgroundGradient2: '',
-                backgroundGradientAngle: 0,
+                backgroundGradientDegree: 0,
                 backgroundSingle: '',
               });
               form.setFieldValue('colorMode', e.currentTarget.value);
@@ -267,8 +267,8 @@ const MainContent = () => {
               </HoverCard>
               <NumberInput
                 placeholder="0"
-                label="Angle"
-                {...form.getInputProps('backgroundGradientAngle')}
+                label="Degree"
+                {...form.getInputProps('backgroundGradientDegree')}
                 allowDecimal={false}
                 clampBehavior="strict"
                 max={360}
@@ -277,7 +277,7 @@ const MainContent = () => {
                 onChange={(e) => {
                   form.setValues({
                     ...form.values,
-                    backgroundGradientAngle: e as number,
+                    backgroundGradientDegree: e as number,
                   });
                 }}
               />
@@ -295,7 +295,7 @@ const MainContent = () => {
     <Table.Td>
       {link !== '' ? (
         <Box display={'flex'} style={{ flexDirection: 'column' }}>
-          <a href={`https://discord.com/users/${form.values.username}`} target="_blank">
+          <a href={`https://discord.com/users/${userID}`} target="_blank">
             <Image src={link} mb="md" />
           </a>
           <UnstyledButton

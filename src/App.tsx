@@ -3,6 +3,7 @@ import '@mantine/core/styles.css';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
+import LargeCard from './components/LargeCard';
 import SmallCard from './components/SmallCard';
 import Home from './pages/Home';
 
@@ -14,6 +15,10 @@ const routes: RouteObject[] = [
   {
     path: '/smallcard',
     element: <SmallCard />,
+  },
+  {
+    path: '/largecard',
+    element: <LargeCard />,
   },
   {
     path: '/*',

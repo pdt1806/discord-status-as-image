@@ -1,10 +1,10 @@
-import { blendColors, hexToRgb, monthNames } from '@/utils/tools';
-import { Avatar, Box, Image, Title } from '@mantine/core';
+import { blendColors, hexToRgb } from '@/utils/tools';
+import { Avatar, Box, Divider, Image, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import classes from '../style/avatar.module.css';
 
-const SmallCard = (props: { scale: number }) => {
+const LargeCard = (props: { scale: number }) => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
 
@@ -12,6 +12,7 @@ const SmallCard = (props: { scale: number }) => {
   const [avatar, setAvatar] = useState(params.get('avatar'));
   const [status, setStatus] = useState(params.get('status'));
   const [createdDate, setCreatedDate] = useState(params.get('createdDate'));
+  const [activity, setActivity] = useState(params.get('activity'));
   const id = params.get('id');
   const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#2b2d31';
   let backgroundGradient;
@@ -59,6 +60,9 @@ const SmallCard = (props: { scale: number }) => {
         if (params.get('created') == 'true') {
           setCreatedDate(data.created_at);
         }
+        if (params.get('showActivity') == 'true') {
+          setActivity(data.activity);
+        }
       });
   }
 
@@ -89,65 +93,73 @@ const SmallCard = (props: { scale: number }) => {
 
   function setTitleSize() {
     if (username?.length! > 30) {
-      return '45';
+      return 35;
     } else if (username?.length! > 25) {
-      return '50';
+      return 40;
     } else if (username?.length! > 20) {
-      return '60';
+      return 45;
     } else if (username?.length! > 15) {
-      return '80';
+      return 50;
     }
-    return '100';
+    return 60;
   }
 
   let titleSize = setTitleSize();
 
   const [statusImage, setStatusImage] = useState(setStatusImg(status || 'offline'));
 
-  const ratio = window.innerWidth / 1350;
+  const ratio = window.innerWidth / 807;
 
   return (
     <a href={`https://discord.com/users/${id}`} target="_blank">
       <Box
-        w={1350}
-        h={450}
+        w={807}
+        h={1000}
         style={{
           background: backgroundGradient ? backgroundGradient : backgroundColor,
           position: 'absolute',
           alignItems: 'center',
-          padding: '30px 30px 30px 70px',
           transform: `${ratio < 1 ? `scale(${ratio})` : ''}`,
           transformOrigin: 'top left',
         }}
-        display="flex"
       >
-        <Image alt="Avatar" src={avatar} className={classes.avatar} />
-        <Avatar
-          w={75}
-          h={75}
-          src={statusImage}
-          style={{
-            transform: 'translate(-72px, 101px)',
-            background: 'transparent',
-          }}
-        />
+        <Box w={807} h={210} style={{ backgroundColor: '#335500' }}></Box>
+        <Box style={{ transform: 'scale(0.8) translate(20px, -180px)', position: 'absolute' }}>
+          <Image alt="Avatar" src={avatar} className={classes.avatar} />
+          <Avatar
+            w={75}
+            h={75}
+            src={statusImage}
+            style={{
+              transform: `translate(204px, -70px) `,
+              background: 'transparent',
+            }}
+          />
+        </Box>
         <Box
           style={{
-            transform: 'translateX(-10px)',
+            position: 'absolute',
+            backgroundColor: 'black',
+            transform: 'translate(30px, 140px)',
+            borderRadius: '20px',
+            zIndex: 0,
           }}
+          w={747}
+          h={620}
         >
-          <Title
-            fw={500}
-            size={titleSize}
-            c={
-              status != 'offline' || (status == 'offline' && textColor == 'white')
-                ? textColor
-                : '#5d5f6b'
-            }
-          >
-            {username}
-          </Title>
-          {createdDate ? (
+          <Box style={{ position: 'absolute', transform: 'translate(30px, 20px)' }}>
+            <Title
+              fw={500}
+              size={titleSize}
+              c={
+                status != 'offline' || (status == 'offline' && textColor == 'white')
+                  ? textColor
+                  : '#5d5f6b'
+              }
+            >
+              {username}
+            </Title>
+            {/* {createdDate ? (
             <Box mt="sm" display="flex" style={{ alignItems: 'center' }}>
               <Image
                 alt="discord-logo"
@@ -164,15 +176,58 @@ const SmallCard = (props: { scale: number }) => {
                 {createdDate.slice(3, 5)}, {createdDate.slice(6, 10)}
               </Title>
             </Box>
-          ) : null}
+          ) : null} */}
+            <Title
+              fw={40}
+              size={titleSize - 20}
+              c={
+                status != 'offline' || (status == 'offline' && textColor == 'white')
+                  ? textColor
+                  : '#5d5f6b'
+              }
+            >
+              {username}
+            </Title>
+            <Title
+              fw={300}
+              mt={5}
+              size={30}
+              c={
+                status != 'offline' || (status == 'offline' && textColor == 'white')
+                  ? textColor
+                  : '#5d5f6b'
+              }
+            >
+              egg/eggu
+            </Title>
+          </Box>
+          <Divider w={700} style={{ transform: 'translate(23.5px, 230px)' }} />
+          <Box style={{ transform: 'translate(30px, 255px)' }}>
+            <Title
+              size={25}
+              c={
+                status != 'offline' || (status == 'offline' && textColor == 'white')
+                  ? textColor
+                  : '#5d5f6b'
+              }
+            >
+              ABOUT ME
+            </Title>
+            <Text
+              c="white"
+              mt="sm"
+              lineClamp={4}
+              style={{ fontSize: '22px', maxWidth: '700px', wordWrap: 'break-word' }}
+            ></Text>
+          </Box>
         </Box>
       </Box>
     </a>
   );
 };
 
-export default SmallCard;
+export default LargeCard;
 
-SmallCard.defaultProps = {
+LargeCard.defaultProps = {
   scale: 1,
 };
