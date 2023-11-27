@@ -2,7 +2,7 @@ import formatDate, { blendColors, hexToRgb } from '@/utils/tools';
 import { Avatar, Box, Image, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import classes from '../style/avatar.module.css';
+import classes from '../style/profile.module.css';
 
 const SmallCard = (props: { scale: number }) => {
   const { search } = useLocation();

@@ -2,7 +2,7 @@ import formatDate, { blendColors, hexToRgb } from '@/utils/tools';
 import { Avatar, Box, Divider, Image, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import classes from '../style/avatar.module.css';
+import classes from '../style/profile.module.css';
 
 const LargeCard = (props: { scale: number }) => {
   const { search } = useLocation();
@@ -13,6 +13,7 @@ const LargeCard = (props: { scale: number }) => {
   const [status, setStatus] = useState(params.get('status'));
   const [createdDate, setCreatedDate] = useState(params.get('createdDate'));
   const [activity, setActivity] = useState(params.get('activity'));
+  const [mood, setMood] = useState(params.get('mood'));
   const [aboutMe, setAboutMe] = useState(params.get('aboutMe'));
   const id = params.get('id');
   const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#2b2d31';
@@ -43,6 +44,7 @@ const LargeCard = (props: { scale: number }) => {
         ? '#202225'
         : 'white';
   }
+  const bannerColor = params.get('bannerColor') ? `#${params.get('bannerColor')}` : textColor;
 
   function updateStatus() {
     fetch(`https://refiner-api.bennynguyen.us/user/${id}`, {
@@ -94,15 +96,15 @@ const LargeCard = (props: { scale: number }) => {
 
   function setTitleSize() {
     if (username?.length! > 30) {
-      return 35;
+      return 25;
     } else if (username?.length! > 25) {
-      return 40;
+      return 30;
     } else if (username?.length! > 20) {
-      return 45;
+      return 35;
     } else if (username?.length! > 15) {
-      return 50;
+      return 40;
     }
-    return 60;
+    return 45;
   }
 
   let titleSize = setTitleSize();
@@ -124,7 +126,18 @@ const LargeCard = (props: { scale: number }) => {
           transformOrigin: 'top left',
         }}
       >
-        <Box w={807} h={210} style={{ backgroundColor: '#335500' }}></Box>
+        {/* <Image
+          src="https://pbs.twimg.com/profile_banners/1703168350954967040/1694984289/1500x500"
+          className={classes.banner}
+          w={807}
+          h="auto"
+        /> */}
+        <Box
+          h={210}
+          w={807}
+          style={{ backgroundColor: bannerColor }}
+          className={classes.colorBanner}
+        />
         <Box style={{ transform: 'scale(0.8) translate(20px, -180px)', position: 'absolute' }}>
           <Image alt="Avatar" src={avatar} className={classes.avatar} />
           <Avatar
@@ -139,9 +152,24 @@ const LargeCard = (props: { scale: number }) => {
         </Box>
         <Box
           style={{
-            backgroundColor: 'black',
+            position: 'absolute',
+            backgroundColor: '#28944c',
+            padding: '8px 18px 8px 18px',
+            color: 'white',
+            fontSize: '20px',
+            fontWeight: '400',
+            borderRadius: '5px',
+            boxShadow: '0 0 10px 0px #00000050',
+            transform: 'translate(548px, 30px)',
+          }}
+        >
+          Send Friend Request
+        </Box>
+        <Box
+          style={{
+            backgroundColor: textColor == 'white' ? '#111111' : '#ffffff',
             transform: 'translateX(30px)',
-            borderRadius: '20px',
+            borderRadius: '15px',
             zIndex: 0,
           }}
           w={747}
@@ -150,103 +178,84 @@ const LargeCard = (props: { scale: number }) => {
           mb={30}
           h="max-content"
         >
-          <Box mb={30}>
-            <Title
-              fw={600}
-              size={titleSize}
-              c={
-                status != 'offline' || (status == 'offline' && textColor == 'white')
-                  ? textColor
-                  : '#5d5f6b'
-              }
-            >
+          <Box mb={15}>
+            <Title fw={600} size={titleSize} c={textColor}>
               {username}
             </Title>
-            <Title
-              fw={500}
-              mt={10}
-              size={titleSize - 20}
-              c={
-                status != 'offline' || (status == 'offline' && textColor == 'white')
-                  ? textColor
-                  : '#5d5f6b'
-              }
-            >
+            <Title fw={500} mt={10} size={titleSize - 15} c={textColor}>
               {username}
             </Title>
-            <Title
-              fw={300}
-              mt={10}
-              size={30}
-              c={
-                status != 'offline' || (status == 'offline' && textColor == 'white')
-                  ? textColor
-                  : '#5d5f6b'
-              }
-            >
+            <Title fw={400} mt={10} size={25} c={textColor}>
               egg/eggu
             </Title>
-            <Title
-              fw={400}
-              mt={35}
-              mb={35}
-              size={25}
-              c={
-                status != 'offline' || (status == 'offline' && textColor == 'white')
-                  ? textColor
-                  : '#5d5f6b'
-              }
-            >
-              🥚 mỗi ngày đến trường là một niềm đau
-            </Title>
-          </Box>
-          <Divider w={687} mb={30} />
-          <Box>
-            <Title
-              size={25}
-              c={
-                status != 'offline' || (status == 'offline' && textColor == 'white')
-                  ? textColor
-                  : '#5d5f6b'
-              }
-            >
-              ABOUT ME
-            </Title>
-            <Text
-              c="white"
-              mt="sm"
-              lineClamp={4}
-              style={{ fontSize: '22px', maxWidth: '700px', wordWrap: 'break-word' }}
-            >
-              {aboutMe}
-            </Text>
-            <Title
-              mt={30}
-              size={25}
-              c={
-                status != 'offline' || (status == 'offline' && textColor == 'white')
-                  ? textColor
-                  : '#5d5f6b'
-              }
-            >
-              MEMBER SINCE
-            </Title>
-            {createdDate ? (
-              <Box display="flex" style={{ alignItems: 'center' }} mt="sm">
-                <Image
-                  alt="discord-logo"
-                  src="/images/discord.svg"
-                  style={{ filter: textColor == 'white' ? 'invert(1)' : 'invert(0)' }}
-                  w={35}
-                  h={35}
-                  mr="md"
-                />
-                <Text c="white" lineClamp={4} style={{ fontSize: '22px' }}>
-                  {formatDate(createdDate)}
-                </Text>
-              </Box>
+            {mood ? (
+              <Title
+                fw={400}
+                mt={35}
+                size={25}
+                c={
+                  status != 'offline' || (status == 'offline' && textColor == 'white')
+                    ? textColor
+                    : '#5d5f6b'
+                }
+              >
+                {mood}
+              </Title>
             ) : null}
           </Box>
+          {aboutMe || createdDate ? <Divider w={687} mb={30} mt={30} /> : null}
+          {aboutMe ? (
+            <Box>
+              <Title
+                size={20}
+                c={
+                  status != 'offline' || (status == 'offline' && textColor == 'white')
+                    ? textColor
+                    : '#5d5f6b'
+                }
+              >
+                ABOUT ME
+              </Title>
+              <Text
+                c="white"
+                mt="sm"
+                lineClamp={4}
+                style={{ fontSize: '22px', maxWidth: '700px', wordWrap: 'break-word' }}
+              >
+                {aboutMe}
+              </Text>
+            </Box>
+          ) : null}
+          {createdDate ? (
+            <Box>
+              <Title
+                mt={30}
+                size={20}
+                c={
+                  status != 'offline' || (status == 'offline' && textColor == 'white')
+                    ? textColor
+                    : '#5d5f6b'
+                }
+              >
+                MEMBER SINCE
+              </Title>
+              {createdDate ? (
+                <Box display="flex" style={{ alignItems: 'center' }} mt="sm">
+                  <Image
+                    alt="discord-logo"
+                    src="/images/discord.svg"
+                    style={{ filter: textColor == 'white' ? 'invert(1)' : 'invert(0)' }}
+                    w={35}
+                    h={35}
+                    mr="md"
+                  />
+                  <Text c={textColor} lineClamp={4} style={{ fontSize: '22px' }}>
+                    {formatDate(createdDate)}
+                  </Text>
+                </Box>
+              ) : null}
+            </Box>
+          ) : null}
         </Box>
       </Box>
     </a>

@@ -1,0 +1,31 @@
+.avatar {
+  height: 70%;
+  width: 273px;
+  border-radius: 50%;
+  -webkit-mask-image: url('/images/avatar_overlay.svg');
+  -moz-mask-image: url('/images/avatar_overlay.svg');
+  -webkit-mask-size: cover;
+  -moz-mask-size: cover;
+}
+
+.banner {
+  width: 807px !important;
+  height: 250px !important;
+  overflow: hidden;
+  -webkit-mask-image: url('/images/banner_overlay.svg');
+  -moz-mask-image: url('/images/banner_overlay.svg');
+  -webkit-mask-size: 807px auto;
+  -moz-mask-size: 807px auto;
+  object-fit: cover;
+}
+
+.colorBanner {
+  width: 807px !important;
+  height: 210px !important;
+  overflow: hidden;
+  -webkit-mask-image: url('/images/color_banner_overlay.svg');
+  -moz-mask-image: url('/images/color_banner_overlay.svg');
+  -webkit-mask-size: 807px auto;
+  -moz-mask-size: 807px auto;
+  object-fit: cover;
+}
