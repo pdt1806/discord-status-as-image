@@ -33,6 +33,9 @@ export default function App() {
     <MantineProvider
       theme={createTheme({
         fontFamily: 'Noto Sans TC, sans-serif',
+        breakpoints: {
+          smallHeader: '800px',
+        },
       })}
     >
       <Notifications />

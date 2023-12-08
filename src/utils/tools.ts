@@ -28,6 +28,7 @@ export function blendColors(colorA: string, colorB: string) {
 }
 
 export const isMobile = window.innerWidth < 1080;
+export const smallestHeader = window.innerWidth < 530;
 
 const monthNames = {
   '01': 'Jan',

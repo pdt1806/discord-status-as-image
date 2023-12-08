@@ -11,7 +11,7 @@
    2. Enter your username and background color(s) if you want.
    3. Hit Generate and you're all set.
 
-![](https://cdn.discordapp.com/attachments/863030800135225366/1177421186112692224/image.png?ex=657271ee&is=655ffcee&hm=77d4d99abf49e71605b253f689c617f306e81ba6b2698883adf965d3e51878bf&)
+![](https://media.discordapp.net/attachments/863030800135225366/1182488273336148068/image.png?ex=6584e105&is=65726c05&hm=3ca8947dac7ed3c59889ca29a1e09ff5f63119d7b4afe814398ab7600f614d4b&=&format=webp&quality=lossless&width=1193&height=671)
 
 ## Technology
 
