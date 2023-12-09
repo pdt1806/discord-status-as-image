@@ -21,6 +21,8 @@ const Home = () => {
       <Box
         h="min-content"
         p="xl"
+        mt={isMobile ? '0' : 'md'}
+        mb={isMobile ? '0' : 'md'}
         ml="auto"
         mr="auto"
         maw={isMobile ? '100%' : '85%'}
