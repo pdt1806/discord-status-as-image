@@ -63,7 +63,7 @@ const SmallCard = (props: { scale: number }) => {
   }
 
   useEffect(() => {
-    updateStatus();
+    if (!params.get('username')) updateStatus();
   }, []);
 
   setTimeout(() => {

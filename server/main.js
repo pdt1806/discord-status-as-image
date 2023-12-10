@@ -44,14 +44,14 @@ app.get('/smallcard/:id', async (req, res) => {
           await page.setViewport({ width: 1350, height: 450 });
           await page.goto(
             `${link}username=${data['username']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
-            { waitUntil: ['domcontentloaded', 'load', 'networkidle2'] }
+            { waitUntil: ['domcontentloaded', 'load'] }
           );
           const screenshotBuffer = await page.screenshot({
             clip: { x: 0, y: 0, width: 1350, height: 450 },
           });
-          await browser.close();
           res.set('Content-Type', 'image/png');
           res.send(screenshotBuffer);
+          await browser.close();
         } catch {
           res.status(500).send('Internal Server Error');
         }
