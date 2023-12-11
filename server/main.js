@@ -44,7 +44,7 @@ app.get('/smallcard/:id', async (req, res) => {
           await page.setViewport({ width: 1350, height: 450 });
           await page.goto(
             `${link}username=${data['username']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
-            { waitUntil: ['domcontentloaded', 'load'] }
+            { waitUntil: ['domcontentloaded', 'load', 'networkidle0'] }
           );
           const screenshotBuffer = await page.screenshot({
             clip: { x: 0, y: 0, width: 1350, height: 450 },

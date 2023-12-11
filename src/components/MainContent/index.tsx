@@ -335,14 +335,7 @@ const MainContent = () => {
             w="fit-content"
             onClick={async () => {
               await navigator.clipboard.writeText(
-                `
-              <iframe
-              src="https://disi.bennynguyen.us/smallcard?id=${userID}${tail}"
-              name="disi-small-card"
-              height="100px"
-              width="300px"
-            ></iframe>
-              `
+                `<iframe src="https://disi.bennynguyen.us/smallcard?id=${userID}${tail}" name="disi-small-card" height="100px" width="300px"></iframe>`
               );
               copiedNotification();
             }}
