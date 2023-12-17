@@ -84,16 +84,9 @@ app.get('/smallcard/:id', async (req, res) => {
           await page.setViewport({ width: 1350, height: 450 });
           await page.goto(
             `${link}username=${data['username']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
-            { waitUntil: ['domcontentloaded'] }
+            { waitUntil: ['domcontentloaded', 'load', 'networkidle0'] }
           );
-          await page.waitForSelector('h1');
-          await page.waitForSelector('img[alt="Avatar"]');
-          await page.waitForFunction(() => {
-            const img = document.querySelector('img[alt="Avatar"]');
-            return img && img.complete;
-          });
           const screenshotBuffer = await page.screenshot({
-            type: 'jpeg',
             clip: { x: 0, y: 0, width: 1350, height: 450 },
           });
           res.set('Content-Type', 'image/png');
