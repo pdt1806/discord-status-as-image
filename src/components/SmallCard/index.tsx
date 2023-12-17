@@ -66,11 +66,13 @@ const SmallCard = (props: { scale: number }) => {
     if (!params.get('username')) updateStatus();
   }, []);
 
-  setTimeout(() => {
-    try {
-      updateStatus();
-    } catch {}
-  }, 30000);
+  useEffect(() => {
+    setTimeout(() => {
+      try {
+        updateStatus();
+      } catch {}
+    }, 15000);
+  });
 
   function setStatusImg(status?: string) {
     switch (status) {

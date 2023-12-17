@@ -6,6 +6,45 @@ const app = express();
 
 const root = 'https://disi.bennynguyen.us'; // normal one
 
+const minimal_args = [
+  '--autoplay-policy=user-gesture-required',
+  '--disable-background-networking',
+  '--disable-background-timer-throttling',
+  '--disable-backgrounding-occluded-windows',
+  '--disable-breakpad',
+  '--disable-client-side-phishing-detection',
+  '--disable-component-update',
+  '--disable-default-apps',
+  '--disable-dev-shm-usage',
+  '--disable-domain-reliability',
+  '--disable-extensions',
+  '--disable-features=AudioServiceOutOfProcess',
+  '--disable-hang-monitor',
+  '--disable-ipc-flooding-protection',
+  '--disable-notifications',
+  '--disable-offer-store-unmasked-wallet-cards',
+  '--disable-popup-blocking',
+  '--disable-print-preview',
+  '--disable-prompt-on-repost',
+  '--disable-renderer-backgrounding',
+  '--disable-setuid-sandbox',
+  '--disable-speech-api',
+  '--disable-sync',
+  '--hide-scrollbars',
+  '--ignore-gpu-blacklist',
+  '--metrics-recording-only',
+  '--mute-audio',
+  '--no-default-browser-check',
+  '--no-first-run',
+  '--no-pings',
+  '--no-sandbox',
+  '--no-zygote',
+  '--password-store=basic',
+  '--use-gl=swiftshader',
+  '--use-mock-keychain',
+  '--headless',
+];
+
 app.get('/', (req, res) => {
   res.send({ message: 'API of Discord Status as Image' });
 });
@@ -38,15 +77,23 @@ app.get('/smallcard/:id', async (req, res) => {
           created ? (link += `createdDate=${data['created_at']}&`) : null;
           const browser = await puppeteer.launch({
             executablePath: '/usr/bin/chromium-browser',
-            args: ['--no-sandbox', '--disable-setuid-sandbox', '--headless', '--disable-gpu'],
+            userDataDir: './loaded',
+            args: minimal_args,
           });
           const page = await browser.newPage();
           await page.setViewport({ width: 1350, height: 450 });
           await page.goto(
             `${link}username=${data['username']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
-            { waitUntil: ['domcontentloaded', 'load', 'networkidle0'] }
+            { waitUntil: ['domcontentloaded'] }
           );
+          await page.waitForSelector('h1');
+          await page.waitForSelector('img[alt="Avatar"]');
+          await page.waitForFunction(() => {
+            const img = document.querySelector('img[alt="Avatar"]');
+            return img && img.complete;
+          });
           const screenshotBuffer = await page.screenshot({
+            type: 'jpeg',
             clip: { x: 0, y: 0, width: 1350, height: 450 },
           });
           res.set('Content-Type', 'image/png');
