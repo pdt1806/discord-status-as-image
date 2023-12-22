@@ -4,7 +4,7 @@ import puppeteer from 'puppeteer-core';
 
 const app = express();
 
-const root = 'https://disi.bennynguyen.us'; // normal one
+const root = 'http://localhost:2011';
 
 const minimal_args = [
   '--autoplay-policy=user-gesture-required',
@@ -84,7 +84,7 @@ app.get('/smallcard/:id', async (req, res) => {
           await page.setViewport({ width: 1350, height: 450 });
           await page.goto(
             `${link}username=${data['username']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
-            { waitUntil: ['domcontentloaded', 'load', 'networkidle0'] }
+            { waitUntil: ['networkidle0'] }
           );
           const screenshotBuffer = await page.screenshot({
             clip: { x: 0, y: 0, width: 1350, height: 450 },
