@@ -31,10 +31,8 @@ const LargeCard = (props: { scale: number }) => {
     const gradient1 = gradient1Raw ? `${gradient1Raw.r}, ${gradient1Raw.g}, ${gradient1Raw.b}` : '';
     const gradient2 = gradient2Raw ? `${gradient2Raw.r}, ${gradient2Raw.g}, ${gradient2Raw.b}` : '';
     backgroundGradient =
-      gradient1 && gradient2 && params.get('degree')
-        ? `linear-gradient(${params.get(
-            'degree'
-          )}deg, rgb(${gradient1}) 0%, rgb(${gradient2}) 100%)`
+      gradient1 && gradient2 && params.get('angle')
+        ? `linear-gradient(${params.get('angle')}deg, rgb(${gradient1}) 0%, rgb(${gradient2}) 100%)`
         : '';
     const textColorRaw = hexToRgb(
       blendColors(params.get('bg1') || '', params.get('bg2') || '') || ''

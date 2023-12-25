@@ -31,7 +31,7 @@ const MainContent = () => {
       backgroundSingle: '',
       backgroundGradient1: '',
       backgroundGradient2: '',
-      backgroundGradientDegree: 0,
+      backgroundGradientAngle: 0,
       created: false,
     },
   });
@@ -62,38 +62,36 @@ const MainContent = () => {
       <Box
         component="form"
         onSubmit={form.onSubmit(() => {
-          fetch(`https://refiner-api.bennynguyen.us/username/${form.values.username}`).then(
-            async (res) => {
-              if (res.status === 404) {
-                notifications.show({
-                  title: 'Error!',
-                  message: 'User not found',
-                  color: 'red',
-                  icon: null,
-                  autoClose: 3000,
-                });
-                return;
-              }
-              const data = await res.json();
-              setUserID(data.id);
-              let newTail =
-                colorMode == 'Gradient'
-                  ? `&bg1=${form.values.backgroundGradient1.replace(
-                      '#',
-                      ''
-                    )}&bg2=${form.values.backgroundGradient2.replace('#', '')}&degree=${
-                      form.values.backgroundGradientDegree
-                    }`
-                  : form.values.backgroundSingle
-                    ? `&bg=${form.values.backgroundSingle.replace('#', '')}`
-                    : '';
-              if (form.values.created) newTail += '&created=true';
-              setTail(newTail);
-              setLink(
-                `https://disi-api.bennynguyen.us/smallcard/${data.id}?${newTail}` // disi-api
-              );
+          fetch(`http://localhost:7000/username/${form.values.username}`).then(async (res) => {
+            if (res.status === 404) {
+              notifications.show({
+                title: 'Error!',
+                message: 'User not found',
+                color: 'red',
+                icon: null,
+                autoClose: 3000,
+              });
+              return;
             }
-          );
+            const data = await res.json();
+            setUserID(data.id);
+            let newTail =
+              colorMode == 'Gradient'
+                ? `&bg1=${form.values.backgroundGradient1.replace(
+                    '#',
+                    ''
+                  )}&bg2=${form.values.backgroundGradient2.replace('#', '')}&angle=${
+                    form.values.backgroundGradientAngle
+                  }`
+                : form.values.backgroundSingle
+                  ? `&bg=${form.values.backgroundSingle.replace('#', '')}`
+                  : '';
+            if (form.values.created) newTail += '&created=true';
+            setTail(newTail);
+            setLink(
+              `https://disi-api.bennynguyen.us/smallcard/${data.id}?${newTail}` // disi-api
+            );
+          });
         })}
         w="90%"
       >
@@ -136,7 +134,7 @@ const MainContent = () => {
                 ...form.values,
                 backgroundGradient1: '',
                 backgroundGradient2: '',
-                backgroundGradientDegree: 0,
+                backgroundGradientAngle: 0,
                 backgroundSingle: '',
               });
               form.setFieldValue('colorMode', e.currentTarget.value);
@@ -267,8 +265,8 @@ const MainContent = () => {
               </HoverCard>
               <NumberInput
                 placeholder="0"
-                label="Degree"
-                {...form.getInputProps('backgroundGradientDegree')}
+                label="Angle"
+                {...form.getInputProps('backgroundGradientAngle')}
                 allowDecimal={false}
                 clampBehavior="strict"
                 max={360}
@@ -277,7 +275,7 @@ const MainContent = () => {
                 onChange={(e) => {
                   form.setValues({
                     ...form.values,
-                    backgroundGradientDegree: e as number,
+                    backgroundGradientAngle: e as number,
                   });
                 }}
               />

@@ -4,7 +4,7 @@ import puppeteer from 'puppeteer-core';
 
 const app = express();
 
-const root = 'http://localhost:2011';
+const root = 'https://disi.bennynguyen.us'; // normal one
 
 const minimal_args = [
   '--autoplay-policy=user-gesture-required',
@@ -52,9 +52,9 @@ app.get('/', (req, res) => {
 app.get('/smallcard/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { bg, bg1, bg2, degree, created } = req.query;
+    const { bg, bg1, bg2, angle, created } = req.query;
     let link = bg1
-      ? `${root}/smallcard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&degree=${degree}&`
+      ? `${root}/smallcard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&angle=${angle}&`
       : bg
         ? `${root}/smallcard?bg=${bg}&`
         : `${root}/smallcard?`;
