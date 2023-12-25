@@ -18,7 +18,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.18.0",
-    "serve": "^14.2.1"
+    "serve": "^14.2.1",
+    "ts-import": "^5.0.0-beta.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.3",

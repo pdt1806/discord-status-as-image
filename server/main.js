@@ -1,10 +1,15 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import puppeteer from 'puppeteer-core';
+import * as tsImport from 'ts-import';
+
+const filePath = `../src/env/env.ts`;
+const loadedModule = await tsImport.load(filePath, {});
+const testing = loadedModule.testing;
 
 const app = express();
 
-const root = 'https://disi.bennynguyen.us'; // normal one
+const root = testing ? 'http://localhost:5173' : 'http://localhost:2011';
 
 const minimal_args = [
   '--autoplay-policy=user-gesture-required',
@@ -92,7 +97,7 @@ app.get('/smallcard/:id', async (req, res) => {
           res.set('Content-Type', 'image/png');
           res.send(screenshotBuffer);
           await browser.close();
-        } catch {
+        } catch (error) {
           res.status(500).send('Internal Server Error');
         }
       });

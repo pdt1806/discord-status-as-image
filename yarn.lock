@@ -1392,6 +1392,11 @@
   dependencies:
     "delayed-stream" "~1.0.0"
 
+"comment-parser@1.3.1":
+  "integrity" "sha512-B52sN2VNghyq5ofvUsqZjmk6YkihBX5vMSChmSK9v4ShjKf3Vk5Xcmgpw4o+iIgtrnM/u5FiMpz9VKb8lpBveA=="
+  "resolved" "https://registry.npmjs.org/comment-parser/-/comment-parser-1.3.1.tgz"
+  "version" "1.3.1"
+
 "compressible@~2.0.16":
   "integrity" "sha512-AF3r7P5dWxL8MxyITRMlORQNaOA2IkAFaTr4k7BUumjPtRpGDTZpl0Pb1XCO6JeDCBdp126Cgs9sMxqSjgYyRg=="
   "resolved" "https://registry.npmjs.org/compressible/-/compressible-2.0.18.tgz"
@@ -3590,6 +3595,11 @@
     "prelude-ls" "^1.2.1"
     "type-check" "^0.4.0"
 
+"options-defaults@2.0.40":
+  "integrity" "sha512-a0oW0AMaP/Uqk1gU7s3unE83wzs/MACy3wsCnNREn4wqp4KCcxRdulRjf0d2FeIxENbGJ4EBGtHTQ6J30XB6Cw=="
+  "resolved" "https://registry.npmjs.org/options-defaults/-/options-defaults-2.0.40.tgz"
+  "version" "2.0.40"
+
 "p-limit@^2.2.0":
   "integrity" "sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w=="
   "resolved" "https://registry.npmjs.org/p-limit/-/p-limit-2.3.0.tgz"
@@ -4854,6 +4864,15 @@
   "resolved" "https://registry.npmjs.org/ts-api-utils/-/ts-api-utils-1.0.3.tgz"
   "version" "1.0.3"
 
+"ts-import@^5.0.0-beta.0":
+  "integrity" "sha512-YOe/xCmwDWughfeaAaGJ4UWzlCKNnt9e+oda3St6mUMkRJCTBhBso+7XApIijw7Mr9SS6NLOdav8i5EJrx7UVQ=="
+  "resolved" "https://registry.npmjs.org/ts-import/-/ts-import-5.0.0-beta.0.tgz"
+  "version" "5.0.0-beta.0"
+  dependencies:
+    "comment-parser" "1.3.1"
+    "options-defaults" "2.0.40"
+    "tslib" "2.5.0"
+
 "tsconfck@^2.1.0":
   "integrity" "sha512-ghqN1b0puy3MhhviwO2kGF8SeMDNhEbnKxjK7h6+fvY9JAxqvXi8y5NAHSQv687OVboS2uZIByzGd45/YxrRHg=="
   "resolved" "https://registry.npmjs.org/tsconfck/-/tsconfck-2.1.2.tgz"
@@ -4873,6 +4892,11 @@
   "integrity" "sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.6.2.tgz"
   "version" "2.6.2"
+
+"tslib@2.5.0":
+  "integrity" "sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg=="
+  "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.5.0.tgz"
+  "version" "2.5.0"
 
 "type-check@^0.4.0", "type-check@~0.4.0":
   "integrity" "sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew=="
@@ -4958,7 +4982,7 @@
     "for-each" "^0.3.3"
     "is-typed-array" "^1.1.9"
 
-"typescript@^4.3.5 || ^5.0.0", "typescript@^5.2.2", "typescript@>=4.2.0", "typescript@>=4.9.5":
+"typescript@^4.3.5 || ^5.0.0", "typescript@^5.2.2", "typescript@>=4.2.0", "typescript@>=4.9.5", "typescript@5":
   "integrity" "sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w=="
   "resolved" "https://registry.npmjs.org/typescript/-/typescript-5.2.2.tgz"
   "version" "5.2.2"

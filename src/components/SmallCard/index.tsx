@@ -1,3 +1,4 @@
+import { refinerAPI, testing } from '@/env/env';
 import formatDate, { blendColors, hexToRgb } from '@/utils/tools';
 import { Avatar, Box, Image, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
@@ -41,8 +42,7 @@ const SmallCard = (props: { scale: number }) => {
   }
 
   function updateStatus() {
-    fetch(`https://refiner-api.bennynguyen.us/user/${id}`, {
-      // refiner-api
+    fetch(`${testing ? refinerAPI['dev'] : refinerAPI['prod']}/user/${id}`, {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',

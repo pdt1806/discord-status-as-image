@@ -1,3 +1,4 @@
+import { disiAPI, refinerAPI, testing } from '@/env/env';
 import { isMobile } from '@/utils/tools';
 import {
   Box,
@@ -21,7 +22,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const MainContent = () => {
-  const [link, setLink] = useState('');
+  const [smallCardLink, setSmallCardLink] = useState('');
   const [tail, setTail] = useState('');
   const [userID, setUserID] = useState('');
   const form = useForm({
@@ -62,7 +63,9 @@ const MainContent = () => {
       <Box
         component="form"
         onSubmit={form.onSubmit(() => {
-          fetch(`http://localhost:7000/username/${form.values.username}`).then(async (res) => {
+          fetch(
+            `${testing ? refinerAPI['dev'] : refinerAPI['prod']}/username/${form.values.username}`
+          ).then(async (res) => {
             if (res.status === 404) {
               notifications.show({
                 title: 'Error!',
@@ -88,8 +91,8 @@ const MainContent = () => {
                   : '';
             if (form.values.created) newTail += '&created=true';
             setTail(newTail);
-            setLink(
-              `https://disi-api.bennynguyen.us/smallcard/${data.id}?${newTail}` // disi-api
+            setSmallCardLink(
+              `${testing ? disiAPI['dev'] : disiAPI['prod']}/smallcard/${data.id}?${newTail}`
             );
           });
         })}
@@ -291,16 +294,16 @@ const MainContent = () => {
 
   const column3 = (
     <Table.Td>
-      {link !== '' ? (
+      {smallCardLink !== '' ? (
         <Box display={'flex'} style={{ flexDirection: 'column' }}>
           <a href={`https://discord.com/users/${userID}`} target="_blank">
-            <Image src={link} mb="md" />
+            <Image src={smallCardLink} mb="md" />
           </a>
           <UnstyledButton
             w="fit-content"
             mb="md"
             onClick={async () => {
-              await navigator.clipboard.writeText(link);
+              await navigator.clipboard.writeText(smallCardLink);
               copiedNotification();
             }}
           >
@@ -311,7 +314,7 @@ const MainContent = () => {
             mb="md"
             onClick={async () => {
               await navigator.clipboard.writeText(
-                `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="100px" src="${link}"></img></a>`
+                `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="100px" src="${smallCardLink}"></img></a>`
               );
               copiedNotification();
             }}
