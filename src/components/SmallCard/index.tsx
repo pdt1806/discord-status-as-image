@@ -127,7 +127,7 @@ const SmallCard = (props: { scale: number }) => {
           h={75}
           src={statusImage}
           style={{
-            transform: 'translate(-72px, 101px)',
+            transform: 'translate(-72px, 100px)',
             background: 'transparent',
           }}
         />
