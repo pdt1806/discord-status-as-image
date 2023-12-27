@@ -221,23 +221,11 @@ const LargeCard = (props: { scale: number }) => {
           {createdDate ? (
             <Box>
               <Title mt={30} size={20} c={textColor}>
-                MEMBER SINCE
+                DISCORD MEMBER SINCE
               </Title>
-              {createdDate ? (
-                <Box display="flex" style={{ alignItems: 'center' }} mt="sm">
-                  <Image
-                    alt="discord-logo"
-                    src="/images/discord.svg"
-                    style={{ filter: textColor == 'white' ? 'invert(1)' : 'invert(0)' }}
-                    w={35}
-                    h={35}
-                    mr="md"
-                  />
-                  <Text c={textColor} lineClamp={4} style={{ fontSize: '22px' }}>
-                    {formatDate(createdDate)}
-                  </Text>
-                </Box>
-              ) : null}
+              <Text c={textColor} lineClamp={4} mt="sm" style={{ fontSize: '22px' }}>
+                {formatDate(createdDate)}
+              </Text>
             </Box>
           ) : null}
         </Box>
