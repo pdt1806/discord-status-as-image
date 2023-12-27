@@ -78,8 +78,10 @@ const Home = () => {
           <List mb="xs" withPadding>
             <List.Item>Your username is required.</List.Item>
             <List.Item>
-              If you choose to have a gradient background, the colors and the angle are also
-              required.
+              If you choose to have a gradient background, the colors and the angle are required.
+            </List.Item>
+            <List.Item>
+              If you choose to get a large card, the banner color is also required.
             </List.Item>
           </List>
           <List.Item>Click the "Generate" button and you are all set.</List.Item>
@@ -93,9 +95,10 @@ const Home = () => {
             The image does not come with a border radius and colored border; you can add them when
             embedding the image into websites.
           </List.Item>
-          {/* <List.Item>
-            Gradient background angle is not applicable to big cards in order to match with Discord.
-          </List.Item> */}
+          <List.Item>
+            Gradient background angle is not applicable to large cards in order to match with
+            Discord.
+          </List.Item>
         </List>
         <Title mt="xl" mb="md" order={3}>
           Love my Work?
