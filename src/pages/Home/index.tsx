@@ -31,7 +31,7 @@ const Home = () => {
         mb={isMobile ? '0' : 'md'}
         ml="auto"
         mr="auto"
-        maw={isMobile ? '100%' : '85%'}
+        w={isMobile ? '100%' : '85%'}
         style={{
           backgroundColor: '#00000050',
           borderRadius: !isMobile ? '25px' : '0',

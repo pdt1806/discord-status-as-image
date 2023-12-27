@@ -88,7 +88,7 @@ app.get('/smallcard/:id', async (req, res) => {
           const page = await browser.newPage();
           await page.setViewport({ width: 1350, height: 450 });
           await page.goto(
-            `${link}username=${data['username']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
+            `${link}displayName=${data['display_name']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
             { waitUntil: ['networkidle0'] }
           );
           const screenshotBuffer = await page.screenshot({
@@ -102,7 +102,70 @@ app.get('/smallcard/:id', async (req, res) => {
         }
       });
   } catch (error) {
-    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/largecard/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { bg, bg1, bg2, created, aboutMe, bannerColor, pronouns } = req.query;
+    let link = bg1
+      ? `${root}/largecard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&`
+      : bg
+        ? `${root}/largecard?bg=${bg}&`
+        : `${root}/largecard?`;
+    link += aboutMe ? `aboutMe=${encodeURIComponent(aboutMe)}&` : '';
+    link += pronouns ? `pronouns=${pronouns}&` : '';
+    link += `bannerColor=${bannerColor}&`;
+    fetch(`http://127.0.0.1:7000/user/${id}`)
+      .then((response) => {
+        try {
+          if (response.status == 404) {
+            res.status(404).send('User not found');
+            return null;
+          }
+          return response.json();
+        } catch {
+          res.status(500).send('Internal Server Error');
+          return null;
+        }
+      })
+      .then(async (data) => {
+        try {
+          created ? (link += `createdDate=${data['created_at']}&`) : null;
+          const browser = await puppeteer.launch({
+            executablePath: '/usr/bin/chromium-browser',
+            userDataDir: './loaded',
+            args: minimal_args,
+          });
+          const page = await browser.newPage();
+          await page.setViewport({ width: 807, height: 1000 });
+          await page.goto(
+            `${link}username=${data['username']}&displayName=${data['display_name']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
+            { waitUntil: ['networkidle0'] }
+          );
+          const maxHeight = await page.evaluate(() => {
+            const elements = document.querySelectorAll('#disi-large-card');
+            let maxElementHeight = 0;
+
+            elements.forEach((element) => {
+              const { height } = element.getBoundingClientRect();
+              maxElementHeight = Math.max(maxElementHeight, height);
+            });
+            return maxElementHeight;
+          });
+          const screenshotBuffer = await page.screenshot({
+            clip: { x: 0, y: 0, width: 807, height: maxHeight },
+          });
+          res.set('Content-Type', 'image/png');
+          res.send(screenshotBuffer);
+          await browser.close();
+        } catch (error) {
+          res.status(500).send('Internal Server Error');
+        }
+      });
+  } catch (error) {
     res.status(500).send('Internal Server Error');
   }
 });

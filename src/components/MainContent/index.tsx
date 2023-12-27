@@ -1,5 +1,5 @@
 import { disiAPI, refinerAPI, testing } from '@/env/env';
-import { isMobile } from '@/utils/tools';
+import { isMobile, limitTextarea } from '@/utils/tools';
 import {
   Box,
   Button,
@@ -12,6 +12,7 @@ import {
   Table,
   Text,
   TextInput,
+  Textarea,
   Title,
   Tooltip,
   UnstyledButton,
@@ -23,8 +24,11 @@ import { Link } from 'react-router-dom';
 
 const MainContent = () => {
   const [smallCardLink, setSmallCardLink] = useState('');
-  const [tail, setTail] = useState('');
+  const [largeCardLink, setLargeCardLink] = useState('');
+  const [smallTail, setSmallTail] = useState('');
+  const [largeTail, setLargeTail] = useState('');
   const [userID, setUserID] = useState('');
+  const [wantLargeCard, setWantLargeCard] = useState(false);
   const form = useForm({
     initialValues: {
       username: null as String | null,
@@ -34,6 +38,10 @@ const MainContent = () => {
       backgroundGradient2: '',
       backgroundGradientAngle: 0,
       created: false,
+      aboutMe: '',
+      mood: '',
+      bannerColor: '',
+      pronouns: '',
     },
   });
 
@@ -83,17 +91,33 @@ const MainContent = () => {
                 ? `&bg1=${form.values.backgroundGradient1.replace(
                     '#',
                     ''
-                  )}&bg2=${form.values.backgroundGradient2.replace('#', '')}&angle=${
-                    form.values.backgroundGradientAngle
-                  }`
+                  )}&bg2=${form.values.backgroundGradient2.replace('#', '')}`
                 : form.values.backgroundSingle
                   ? `&bg=${form.values.backgroundSingle.replace('#', '')}`
                   : '';
+
             if (form.values.created) newTail += '&created=true';
-            setTail(newTail);
+            const smallTail =
+              newTail +
+              (colorMode == 'Gradient' ? `&angle=${form.values.backgroundGradientAngle}` : '');
+            const largeTail =
+              newTail +
+              (form.values.bannerColor
+                ? `&bannerColor=${form.values.bannerColor.replace('#', '')}`
+                : '') +
+              (form.values.aboutMe ? `&aboutMe=${form.values.aboutMe}` : '') +
+              (form.values.mood ? `&mood=${form.values.mood}` : '') +
+              (form.values.pronouns ? `&pronouns=${form.values.pronouns}` : '');
+            setSmallTail(smallTail);
+            setLargeTail(largeTail);
+
             setSmallCardLink(
-              `${testing ? disiAPI['dev'] : disiAPI['prod']}/smallcard/${data.id}?${newTail}`
+              `${testing ? disiAPI['dev'] : disiAPI['prod']}/smallcard/${data.id}?${smallTail}`
             );
+            wantLargeCard &&
+              setLargeCardLink(
+                `${testing ? disiAPI['dev'] : disiAPI['prod']}/largecard/${data.id}?${largeTail}`
+              );
           });
         })}
         w="90%"
@@ -285,8 +309,99 @@ const MainContent = () => {
             </Box>
           )}
         </Box>
-        <Button type="submit" mt="xl">
+        <Checkbox
+          label="Get a large card"
+          mt="lg"
+          onChange={(e) => {
+            setWantLargeCard(e.currentTarget.checked);
+          }}
+        />
+        {wantLargeCard ? (
+          <Box mt="xl">
+            <Title order={4}>Details</Title>
+            <TextInput
+              {...form.getInputProps('pronouns')}
+              label="Pronouns"
+              placeholder="Enter your pronouns"
+              onChange={(e) => {
+                form.setValues({
+                  ...form.values,
+                  pronouns: e.currentTarget.value.trim().length != 0 ? e.currentTarget.value : '',
+                });
+              }}
+            />
+            <Textarea
+              label="About me"
+              minRows={5}
+              maxRows={5}
+              autosize
+              placeholder="Write something about yourself."
+              onChange={(e) => {
+                e.currentTarget.value = limitTextarea(e.currentTarget.value);
+                form.setValues({
+                  ...form.values,
+                  aboutMe:
+                    e.currentTarget.value.trim().length != 0
+                      ? encodeURIComponent(e.currentTarget.value)
+                      : '',
+                });
+              }}
+            />
+            <HoverCard shadow="md" openDelay={250}>
+              <HoverCard.Target>
+                <TextInput
+                  placeholder="#FFFFFF"
+                  label="Banner color"
+                  description="For large card"
+                  {...form.getInputProps('bannerColor')}
+                  maxLength={7}
+                  minLength={7}
+                  required
+                  onChange={(e) => {
+                    if (
+                      /^([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) &&
+                      !form.values.bannerColor
+                    )
+                      e.currentTarget.value = `#${e.currentTarget.value.toUpperCase()}`;
+                    if (
+                      /^#([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) ||
+                      e.currentTarget.value === ''
+                    )
+                      form.setValues({
+                        ...form.values,
+                        bannerColor: e.currentTarget.value.toUpperCase(),
+                      });
+                  }}
+                />
+              </HoverCard.Target>
+              <HoverCard.Dropdown>
+                <ColorPicker
+                  value={form.values.bannerColor}
+                  onChange={(e) => {
+                    form.setValues({
+                      ...form.values,
+                      bannerColor: e.toUpperCase(),
+                    });
+                  }}
+                />
+              </HoverCard.Dropdown>
+            </HoverCard>
+          </Box>
+        ) : null}
+        <Button type="submit" mt="xl" mr="md">
           Generate
+        </Button>
+        <Button
+          onClick={() => {
+            setSmallCardLink('');
+            setLargeCardLink('');
+            setSmallTail('');
+            setLargeTail('');
+          }}
+          mt="xl"
+          color="orange"
+        >
+          Clear result
         </Button>
       </Box>
     </Table.Td>
@@ -295,60 +410,123 @@ const MainContent = () => {
   const column3 = (
     <Table.Td>
       {smallCardLink !== '' ? (
-        <Box display={'flex'} style={{ flexDirection: 'column' }}>
-          <a href={`https://discord.com/users/${userID}`} target="_blank">
-            <Image src={smallCardLink} mb="md" />
-          </a>
-          <UnstyledButton
-            w="fit-content"
-            mb="md"
-            onClick={async () => {
-              await navigator.clipboard.writeText(smallCardLink);
-              copiedNotification();
-            }}
-          >
-            🔗 Copy Image URL
-          </UnstyledButton>
-          <UnstyledButton
-            w="fit-content"
-            mb="md"
-            onClick={async () => {
-              await navigator.clipboard.writeText(
-                `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="100px" src="${smallCardLink}"></img></a>`
-              );
-              copiedNotification();
-            }}
-          >
-            🔗 Copy Anchor (image)
-          </UnstyledButton>
-          <Tooltip label="Reload every 30 seconds" position="right">
-            <UnstyledButton mb="md" w="fit-content">
-              <Link
-                to={`/smallcard?id=${userID}${tail}`}
-                target="_blank"
-                style={{ textDecoration: 'none', color: 'white' }}
-              >
-                <UnstyledButton>🌐 View live card</UnstyledButton>
-              </Link>
+        <Box display={'flex'} style={{ flexDirection: 'column' }} mt="lg">
+          <Box display={'flex'} style={{ flexDirection: 'column' }} mb="lg">
+            <Title order={4} mb="md">
+              Small card
+            </Title>
+            <a href={`https://discord.com/users/${userID}`} target="_blank">
+              <Image src={smallCardLink} mb="md" />
+            </a>
+            <UnstyledButton
+              w="fit-content"
+              mb="md"
+              onClick={async () => {
+                await navigator.clipboard.writeText(smallCardLink);
+                copiedNotification();
+              }}
+            >
+              🔗 Copy Image URL
             </UnstyledButton>
-          </Tooltip>
-          <UnstyledButton
-            w="fit-content"
-            onClick={async () => {
-              await navigator.clipboard.writeText(
-                `<iframe src="https://disi.bennynguyen.us/smallcard?id=${userID}${tail}" name="disi-small-card" height="100px" width="300px"></iframe>`
-              );
-              copiedNotification();
-            }}
-          >
-            🔗 Copy iframe (live card)
-          </UnstyledButton>
-          <Text mt="md" size="sm">
-            It may take a while for the image to be loaded.
-          </Text>
+            <UnstyledButton
+              w="fit-content"
+              mb="md"
+              onClick={async () => {
+                await navigator.clipboard.writeText(
+                  `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="100px" src="${smallCardLink}"></img></a>`
+                );
+                copiedNotification();
+              }}
+            >
+              🔗 Copy Anchor (image)
+            </UnstyledButton>
+            <Tooltip label="Reload every 30 seconds" position="right">
+              <UnstyledButton mb="md" w="fit-content">
+                <Link
+                  to={`/smallcard?id=${userID}${smallTail}`}
+                  target="_blank"
+                  style={{ textDecoration: 'none', color: 'white' }}
+                >
+                  <UnstyledButton>🌐 View live card</UnstyledButton>
+                </Link>
+              </UnstyledButton>
+            </Tooltip>
+            <UnstyledButton
+              w="fit-content"
+              onClick={async () => {
+                await navigator.clipboard.writeText(
+                  `<iframe src="https://disi.bennynguyen.us/smallcard?id=${userID}${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
+                );
+                copiedNotification();
+              }}
+            >
+              🔗 Copy iframe (live card)
+            </UnstyledButton>
+          </Box>
+          {wantLargeCard && largeCardLink ? (
+            <Box display={'flex'} style={{ flexDirection: 'column' }}>
+              <Title order={4} mb="md">
+                Large card
+              </Title>
+              <a href={`https://discord.com/users/${userID}`} target="_blank">
+                <Image src={largeCardLink} mb="md" />
+              </a>
+              <UnstyledButton
+                w="fit-content"
+                mb="md"
+                onClick={async () => {
+                  await navigator.clipboard.writeText(largeCardLink);
+                  copiedNotification();
+                }}
+              >
+                🔗 Copy Image URL
+              </UnstyledButton>
+              <UnstyledButton
+                w="fit-content"
+                mb="md"
+                onClick={async () => {
+                  await navigator.clipboard.writeText(
+                    `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="auto" src="${largeCardLink}"></img></a>`
+                  );
+                  copiedNotification();
+                }}
+              >
+                🔗 Copy Anchor (image)
+              </UnstyledButton>
+              <Tooltip label="Reload every 30 seconds" position="right">
+                <UnstyledButton mb="md" w="fit-content">
+                  <Link
+                    to={`/largecard?id=${userID}${largeTail}`}
+                    target="_blank"
+                    style={{ textDecoration: 'none', color: 'white' }}
+                  >
+                    <UnstyledButton>🌐 View live card</UnstyledButton>
+                  </Link>
+                </UnstyledButton>
+              </Tooltip>
+              <UnstyledButton
+                w="fit-content"
+                onClick={async () => {
+                  await navigator.clipboard.writeText(
+                    `<iframe src="https://disi.bennynguyen.us/largecard?id=${userID}${largeTail}" name="disi-large-card" height="361.51px" width="300px"></iframe>`
+                  );
+                  copiedNotification();
+                }}
+              >
+                🔗 Copy iframe (live card)
+              </UnstyledButton>
+              <Text mt="sm" style={{ fontSize: '15px' }}>
+                The height of the iframe is pre-determined to be 361.51px. You probably will need to
+                change it to fit your needs.
+              </Text>
+            </Box>
+          ) : null}
         </Box>
       ) : (
-        <Text>Complete the previous steps correctly and your cards will show here!</Text>
+        <Box>
+          <Text>Complete the previous steps correctly and your cards will show here!</Text>
+          <Text>It may take a while for the image(s) to be loaded.</Text>
+        </Box>
       )}
     </Table.Td>
   );

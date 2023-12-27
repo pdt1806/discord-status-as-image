@@ -1,5 +1,5 @@
 import { refinerAPI, testing } from '@/env/env';
-import formatDate, { blendColors, hexToRgb } from '@/utils/tools';
+import { blendColors, formatDate, hexToRgb } from '@/utils/tools';
 import { Avatar, Box, Divider, Image, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -10,16 +10,16 @@ const LargeCard = (props: { scale: number }) => {
   const params = new URLSearchParams(search);
 
   const [username, setUsername] = useState(params.get('username'));
+  const [displayName, setDisplayName] = useState(params.get('displayName'));
   const [avatar, setAvatar] = useState(params.get('avatar'));
   const [status, setStatus] = useState(params.get('status'));
   const [createdDate, setCreatedDate] = useState(params.get('createdDate'));
-  const [activity, setActivity] = useState(params.get('activity'));
-  const [mood, setMood] = useState(params.get('mood'));
-  const [aboutMe, setAboutMe] = useState(params.get('aboutMe'));
+  // const [activity, setActivity] = useState(params.get('activity'));
   const id = params.get('id');
   const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#2b2d31';
   let backgroundGradient;
   let textColor;
+  let textColorRaw;
   if (!params.get('bg1')) {
     const textColorRaw = hexToRgb(backgroundColor || '');
     textColor =
@@ -32,18 +32,20 @@ const LargeCard = (props: { scale: number }) => {
     const gradient1 = gradient1Raw ? `${gradient1Raw.r}, ${gradient1Raw.g}, ${gradient1Raw.b}` : '';
     const gradient2 = gradient2Raw ? `${gradient2Raw.r}, ${gradient2Raw.g}, ${gradient2Raw.b}` : '';
     backgroundGradient =
-      gradient1 && gradient2 && params.get('angle')
-        ? `linear-gradient(${params.get('angle')}deg, rgb(${gradient1}) 0%, rgb(${gradient2}) 100%)`
+      gradient1 && gradient2
+        ? `linear-gradient(180deg, rgb(${gradient1}) 0%, rgb(${gradient2}) 100%)`
         : '';
-    const textColorRaw = hexToRgb(
-      blendColors(params.get('bg1') || '', params.get('bg2') || '') || ''
-    );
+    textColorRaw = hexToRgb(blendColors(params.get('bg1') || '', params.get('bg2') || '') || '');
     textColor =
       textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186
         ? '#202225'
         : 'white';
   }
-  const bannerColor = params.get('bannerColor') ? `#${params.get('bannerColor')}` : textColor;
+  const bannerColor = params.get('bannerColor') ? `#${params.get('bannerColor')}` : '';
+  const bannerImage = params.get('bannerImage') ? params.get('bannerImage') : '';
+  const mood = params.get('mood');
+  const aboutMe = params.get('aboutMe');
+  const pronouns = params.get('pronouns');
 
   function updateStatus() {
     fetch(`${testing ? refinerAPI['dev'] : refinerAPI['prod']}/user/${id}`, {
@@ -55,15 +57,16 @@ const LargeCard = (props: { scale: number }) => {
       .then((res) => res.json())
       .then((data) => {
         setUsername(data.username);
+        setDisplayName(data.display_name);
         setAvatar(data.avatar);
         setStatus(data.status);
         setStatusImage(setStatusImg(data.status));
         if (params.get('created') == 'true') {
           setCreatedDate(data.created_at);
         }
-        if (params.get('showActivity') == 'true') {
-          setActivity(data.activity);
-        }
+        // if (params.get('showActivity') == 'true') {
+        //   setActivity(data.activity);
+        // }
       });
   }
 
@@ -75,7 +78,7 @@ const LargeCard = (props: { scale: number }) => {
     try {
       updateStatus();
     } catch {}
-  }, 30000);
+  }, 15000);
 
   function setStatusImg(status?: string) {
     switch (status) {
@@ -116,6 +119,7 @@ const LargeCard = (props: { scale: number }) => {
       <Box
         w={807}
         h="min-content"
+        id="disi-large-card"
         style={{
           background: backgroundGradient ? backgroundGradient : backgroundColor,
           position: 'absolute',
@@ -124,18 +128,17 @@ const LargeCard = (props: { scale: number }) => {
           transformOrigin: 'top left',
         }}
       >
-        {/* <Image
-          src="https://pbs.twimg.com/profile_banners/1703168350954967040/1694984289/1500x500"
-          className={classes.banner}
-          w={807}
-          h="auto"
-        /> */}
-        <Box
-          h={210}
-          w={807}
-          style={{ backgroundColor: bannerColor }}
-          className={classes.colorBanner}
-        />
+        {bannerImage ? (
+          <Image src={bannerImage} className={classes.banner} w={807} h="auto" />
+        ) : (
+          <Box
+            h={210}
+            w={807}
+            style={{ backgroundColor: bannerColor }}
+            className={classes.colorBanner}
+          />
+        )}
+
         <Box style={{ transform: 'scale(0.8) translate(20px, -180px)', position: 'absolute' }}>
           <Image alt="Avatar" src={avatar} className={classes.avatar} />
           <Avatar
@@ -143,7 +146,7 @@ const LargeCard = (props: { scale: number }) => {
             h={75}
             src={statusImage}
             style={{
-              transform: `translate(204px, -70px) `,
+              transform: `translate(202px, -72px) `,
               background: 'transparent',
             }}
           />
@@ -178,25 +181,18 @@ const LargeCard = (props: { scale: number }) => {
         >
           <Box mb={15}>
             <Title fw={600} size={titleSize} c={textColor}>
-              {username}
+              {displayName}
             </Title>
             <Title fw={500} mt={10} size={titleSize - 15} c={textColor}>
               {username}
             </Title>
-            <Title fw={400} mt={10} size={25} c={textColor}>
-              egg/eggu
-            </Title>
+            {pronouns ? (
+              <Title fw={400} mt={10} size={25} c={textColor}>
+                {pronouns}
+              </Title>
+            ) : null}
             {mood ? (
-              <Title
-                fw={400}
-                mt={35}
-                size={25}
-                c={
-                  status != 'offline' || (status == 'offline' && textColor == 'white')
-                    ? textColor
-                    : '#5d5f6b'
-                }
-              >
+              <Title fw={400} mt={35} size={25} c={textColor}>
                 {mood}
               </Title>
             ) : null}
@@ -204,21 +200,19 @@ const LargeCard = (props: { scale: number }) => {
           {aboutMe || createdDate ? <Divider w={687} mb={30} mt={30} /> : null}
           {aboutMe ? (
             <Box>
-              <Title
-                size={20}
-                c={
-                  status != 'offline' || (status == 'offline' && textColor == 'white')
-                    ? textColor
-                    : '#5d5f6b'
-                }
-              >
+              <Title size={20} c={textColor}>
                 ABOUT ME
               </Title>
               <Text
-                c="white"
+                c={textColor}
                 mt="sm"
-                lineClamp={4}
-                style={{ fontSize: '22px', maxWidth: '700px', wordWrap: 'break-word' }}
+                lineClamp={5}
+                style={{
+                  fontSize: '22px',
+                  maxWidth: '700px',
+                  wordWrap: 'break-word',
+                  whiteSpace: 'pre-line',
+                }}
               >
                 {aboutMe}
               </Text>
@@ -226,15 +220,7 @@ const LargeCard = (props: { scale: number }) => {
           ) : null}
           {createdDate ? (
             <Box>
-              <Title
-                mt={30}
-                size={20}
-                c={
-                  status != 'offline' || (status == 'offline' && textColor == 'white')
-                    ? textColor
-                    : '#5d5f6b'
-                }
-              >
+              <Title mt={30} size={20} c={textColor}>
                 MEMBER SINCE
               </Title>
               {createdDate ? (

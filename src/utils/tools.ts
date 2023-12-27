@@ -45,7 +45,16 @@ const monthNames = {
   '12': 'Dec',
 } as const;
 
-export default function formatDate(date: string) {
+export function formatDate(date: string) {
   return `${monthNames[date.slice(0, 2) as keyof typeof monthNames]}${' '}
   ${date.slice(3, 5)}, ${date.slice(6, 10)}`;
+}
+
+export function limitTextarea(value: string) {
+  var lines = value.split('\n');
+  lines = lines.map(function(line) {
+    return line.slice(0, 70);
+  });
+  var newText = lines.slice(0, 5).join('\n');
+  return newText;
 }

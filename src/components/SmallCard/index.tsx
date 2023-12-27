@@ -1,15 +1,15 @@
 import { refinerAPI, testing } from '@/env/env';
-import formatDate, { blendColors, hexToRgb } from '@/utils/tools';
+import { blendColors, formatDate, hexToRgb } from '@/utils/tools';
 import { Avatar, Box, Image, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import classes from '../style/profile.module.css';
 
-const SmallCard = (props: { scale: number }) => {
+const SmallCard = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
 
-  const [username, setUsername] = useState(params.get('username'));
+  const [displayName, setDisplayName] = useState(params.get('displayName'));
   const [avatar, setAvatar] = useState(params.get('avatar'));
   const [status, setStatus] = useState(params.get('status'));
   const [createdDate, setCreatedDate] = useState(params.get('createdDate'));
@@ -50,7 +50,7 @@ const SmallCard = (props: { scale: number }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setUsername(data.username);
+        setDisplayName(data.display_name);
         setAvatar(data.avatar);
         setStatus(data.status);
         setStatusImage(setStatusImg(data.status));
@@ -61,7 +61,7 @@ const SmallCard = (props: { scale: number }) => {
   }
 
   useEffect(() => {
-    if (!params.get('username')) updateStatus();
+    if (!params.get('displayName')) updateStatus();
   }, []);
 
   useEffect(() => {
@@ -88,13 +88,13 @@ const SmallCard = (props: { scale: number }) => {
   }
 
   function setTitleSize() {
-    if (username?.length! > 30) {
+    if (displayName?.length! > 30) {
       return '45';
-    } else if (username?.length! > 25) {
+    } else if (displayName?.length! > 25) {
       return '50';
-    } else if (username?.length! > 20) {
+    } else if (displayName?.length! > 20) {
       return '60';
-    } else if (username?.length! > 15) {
+    } else if (displayName?.length! > 15) {
       return '80';
     }
     return '100';
@@ -145,7 +145,7 @@ const SmallCard = (props: { scale: number }) => {
                 : '#5d5f6b'
             }
           >
-            {username}
+            {displayName}
           </Title>
           {createdDate ? (
             <Box mt="lg" display="flex" style={{ alignItems: 'center' }}>
@@ -171,7 +171,3 @@ const SmallCard = (props: { scale: number }) => {
 };
 
 export default SmallCard;
-
-SmallCard.defaultProps = {
-  scale: 1,
-};
