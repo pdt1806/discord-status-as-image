@@ -91,7 +91,7 @@ const Home = () => {
         </Title>
         <List>
           <List.Item mb="xs">The provided status image is not guaranteed to be accurate.</List.Item>
-          <List.Item>
+          <List.Item mb="xs">
             The image does not come with a border radius and colored border; you can add them when
             embedding the image into websites.
           </List.Item>
@@ -104,7 +104,7 @@ const Home = () => {
           Love my Work?
         </Title>
         <Text mb="xs">
-          If you enjoy my work, please consider supporting me by 'buying me a coffee' or via GitHub
+          If you enjoy my work, please consider supporting me by "buying me a coffee" or via GitHub
           Sponsors. It means a lot to me!
         </Text>
         <Link
