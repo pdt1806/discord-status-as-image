@@ -44,8 +44,8 @@ const LargeCard = (props: { scale: number }) => {
   const bannerColor = params.get('bannerColor') ? `#${params.get('bannerColor')}` : '';
   const bannerImage = params.get('bannerImage') ? params.get('bannerImage') : '';
   const mood = params.get('mood');
-  const aboutMe = params.get('aboutMe');
-  const pronouns = params.get('pronouns');
+  const aboutMe = decodeURIComponent(params.get('aboutMe') || '');
+  const pronouns = decodeURIComponent(params.get('pronouns') || '');
 
   function updateStatus() {
     fetch(`${testing ? refinerAPI['dev'] : refinerAPI['prod']}/user/${id}`, {

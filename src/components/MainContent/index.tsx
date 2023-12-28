@@ -105,12 +105,11 @@ const MainContent = () => {
               (form.values.bannerColor
                 ? `&bannerColor=${form.values.bannerColor.replace('#', '')}`
                 : '') +
-              (form.values.aboutMe ? `&aboutMe=${form.values.aboutMe}` : '') +
+              (form.values.aboutMe ? `&aboutMe=${encodeURIComponent(form.values.aboutMe)}` : '') +
               (form.values.mood ? `&mood=${form.values.mood}` : '') +
-              (form.values.pronouns ? `&pronouns=${form.values.pronouns}` : '');
+              (form.values.pronouns ? `&pronouns=${encodeURIComponent(form.values.pronouns)}` : '');
             setSmallTail(smallTail);
             setLargeTail(largeTail);
-
             setSmallCardLink(
               `${testing ? disiAPI['dev'] : disiAPI['prod']}/smallcard/${data.id}?${smallTail}`
             );
@@ -335,14 +334,14 @@ const MainContent = () => {
               minRows={5}
               maxRows={5}
               autosize
-              placeholder="Write something about yourself."
+              {...form.getInputProps('aboutMe')}
+              placeholder="Write something about yourself"
               onChange={(e) => {
-                e.currentTarget.value = limitTextarea(e.currentTarget.value);
                 form.setValues({
                   ...form.values,
                   aboutMe:
                     e.currentTarget.value.trim().length != 0
-                      ? encodeURIComponent(e.currentTarget.value)
+                      ? limitTextarea(e.currentTarget.value)
                       : '',
                 });
               }}
