@@ -390,18 +390,20 @@ const MainContent = () => {
         <Button type="submit" mt="xl" mr="md">
           Generate
         </Button>
-        <Button
-          onClick={() => {
-            setSmallCardLink('');
-            setLargeCardLink('');
-            setSmallTail('');
-            setLargeTail('');
-          }}
-          mt="xl"
-          color="orange"
-        >
-          Clear result
-        </Button>
+        {smallCardLink !== '' ? (
+          <Button
+            onClick={() => {
+              setSmallCardLink('');
+              setLargeCardLink('');
+              setSmallTail('');
+              setLargeTail('');
+            }}
+            mt="xl"
+            color="orange"
+          >
+            Clear result
+          </Button>
+        ) : null}
       </Box>
     </Table.Td>
   );
