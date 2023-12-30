@@ -71,9 +71,7 @@ const Home = () => {
           How to get one?
         </Title>
         <List type="ordered">
-          <List.Item mb="xs">
-            Join the Discord Server to provide the necessary information.
-          </List.Item>
+          <List.Item mb="xs">Join the Discord Server to have your live status captured.</List.Item>
           <List.Item>Fill out the form.</List.Item>
           <List mb="xs" withPadding>
             <List.Item>Your username is required.</List.Item>
