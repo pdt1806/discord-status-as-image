@@ -59,15 +59,23 @@ const MainContent = () => {
 
   const column1 = (
     <Table.Td h="100%">
-      <iframe
-        src="https://discord.com/widget?id=1174576233581912074&theme=dark"
-        style={{ width: '90%', height: '90%', border: 'none', minHeight: '300px' }}
-      />
+      <Box h="100%" display="flex" mt="xl">
+        <iframe
+          src="https://discord.com/widget?id=1174576233581912074&theme=dark"
+          style={{
+            width: '90%',
+            height: '90%',
+            border: 'none',
+            minHeight: '300px',
+            maxHeight: '500px',
+          }}
+        />
+      </Box>
     </Table.Td>
   );
 
   const column2 = (
-    <Table.Td display={'flex'} style={{ alignItems: 'start', flexDirection: 'column' }}>
+    <Table.Td h="100%" display={'flex'} style={{ alignItems: 'start', flexDirection: 'column' }}>
       <Box
         component="form"
         onSubmit={form.onSubmit(() => {
@@ -411,7 +419,12 @@ const MainContent = () => {
   const column3 = (
     <Table.Td>
       {smallCardLink !== '' ? (
-        <Box display={'flex'} style={{ flexDirection: 'column' }} mt="lg">
+        <Box
+          display={'flex'}
+          style={{ flexDirection: 'column', alignItems: 'start' }}
+          h="100%"
+          mt="xl"
+        >
           <Box display={'flex'} style={{ flexDirection: 'column' }} mb="lg">
             <Title order={4} mb="md">
               Small card
@@ -525,7 +538,7 @@ const MainContent = () => {
         </Box>
       ) : (
         <Box>
-          <Text>Complete the previous steps correctly and your cards will show here!</Text>
+          <Text>Complete the previous steps correctly and your card(s) will show here!</Text>
           <Text>It may take a while for the image(s) to be loaded.</Text>
         </Box>
       )}

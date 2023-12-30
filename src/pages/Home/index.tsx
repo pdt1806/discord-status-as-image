@@ -117,15 +117,21 @@ const Home = () => {
           </Text>
         </Link>
         <Box display={'flex'} style={{ flexDirection: isMobile ? 'column' : 'row' }}>
-          <a href="https://www.buymeacoffee.com/pdteggman" target="_blank">
+          <a
+            href="https://www.buymeacoffee.com/pdteggman"
+            target="_blank"
+            style={{
+              width: 'auto ',
+            }}
+          >
             <Image
               src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&amp;emoji=☕&amp;slug=pdteggman&amp;button_colour=FFDD00&amp;font_colour=000000&amp;font_family=Poppins&amp;outline_colour=000000&amp;coffee_colour=ffffff"
               alt="Buy me a coffee"
-              mih="32px"
-              miw="154px"
-              maw="225px"
+              h="48px"
+              w="225px"
             />
           </a>
+
           {isMobile ? (
             <iframe
               src="https://github.com/sponsors/pdt1806/button"
