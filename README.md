@@ -11,7 +11,7 @@
    2. Fill out the form with necessary information.
    3. Hit Generate and you're all set.
 
-![](https://media.discordapp.net/attachments/863030800135225366/1182488273336148068/image.png?ex=6584e105&is=65726c05&hm=3ca8947dac7ed3c59889ca29a1e09ff5f63119d7b4afe814398ab7600f614d4b&=&format=webp&quality=lossless&width=1193&height=671)
+![](https://cdn.discordapp.com/attachments/1190763499081699428/1191170076573966436/localhost_5173_.png?ex=65a47695&is=65920195&hm=dbbb08fe350bb25fe37020416ade6b55733987e789d882c388c822bcb9b9274d&)
 
 ## Technology
 
@@ -22,7 +22,8 @@
 - [Puppeteer](https://pptr.dev/)
 - [Refiner Discord Bot](https://github.com/pdt1806/refiner-discord-bot)
   - [discord.py](https://discordpy.readthedocs.io/en/latest/)
-  - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+  - [FastAPI](https://fastapi.tiangolo.com/)
+  - [Uvicorn](https://www.uvicorn.org/)
 
 ## Main developer
 

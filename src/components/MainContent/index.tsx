@@ -29,6 +29,7 @@ const MainContent = () => {
   const [largeTail, setLargeTail] = useState('');
   const [userID, setUserID] = useState('');
   const [wantLargeCard, setWantLargeCard] = useState(false);
+  const [bannerMode, setBannerMode] = useState('Custom Color');
   const form = useForm({
     initialValues: {
       username: null as String | null,
@@ -44,6 +45,8 @@ const MainContent = () => {
       pronouns: '',
     },
   });
+
+  const bannerModeList = ['Custom Color', 'Discord Accent Color', 'Image Banner (Nitro User Only)'];
 
   const [colorMode, setColorMode] = useState('Single');
 
@@ -103,19 +106,25 @@ const MainContent = () => {
                 : form.values.backgroundSingle
                   ? `&bg=${form.values.backgroundSingle.replace('#', '')}`
                   : '';
-
             if (form.values.created) newTail += '&created=true';
             const smallTail =
               newTail +
               (colorMode == 'Gradient' ? `&angle=${form.values.backgroundGradientAngle}` : '');
             const largeTail =
               newTail +
-              (form.values.bannerColor
-                ? `&bannerColor=${form.values.bannerColor.replace('#', '')}`
-                : '') +
               (form.values.aboutMe ? `&aboutMe=${encodeURIComponent(form.values.aboutMe)}` : '') +
               (form.values.mood ? `&mood=${form.values.mood}` : '') +
-              (form.values.pronouns ? `&pronouns=${encodeURIComponent(form.values.pronouns)}` : '');
+              (form.values.pronouns
+                ? `&pronouns=${encodeURIComponent(form.values.pronouns)}`
+                : '') +
+              (bannerMode === 'Custom Color' && form.values.bannerColor
+                ? `&bannerColor=${form.values.bannerColor.replace('#', '')}`
+                : '') +
+              (bannerMode === 'Discord Accent Color' ? `&wantAccentColor=true` : '') +
+              (bannerMode === 'Image Banner (Nitro User Only)' ? `&wantBannerImage=true` : '');
+            console.log(
+              `${testing ? disiAPI['dev'] : disiAPI['prod']}/largecard/${data.id}?${largeTail}`
+            );
             setSmallTail(smallTail);
             setLargeTail(largeTail);
             setSmallCardLink(
@@ -131,7 +140,6 @@ const MainContent = () => {
       >
         <TextInput
           {...form.getInputProps('username')}
-          withAsterisk
           required
           id="disi-username"
           label="Username"
@@ -354,45 +362,66 @@ const MainContent = () => {
                 });
               }}
             />
-            <HoverCard shadow="md" openDelay={250}>
-              <HoverCard.Target>
-                <TextInput
-                  placeholder="#FFFFFF"
-                  label="Banner color"
-                  description="For large card"
-                  {...form.getInputProps('bannerColor')}
-                  maxLength={7}
-                  minLength={7}
-                  required
-                  onChange={(e) => {
-                    if (
-                      /^([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) &&
-                      !form.values.bannerColor
-                    )
-                      e.currentTarget.value = `#${e.currentTarget.value.toUpperCase()}`;
-                    if (
-                      /^#([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) ||
-                      e.currentTarget.value === ''
-                    )
+            <NativeSelect
+              label="Banner Mode"
+              data={bannerModeList}
+              onChange={(e) => {
+                setBannerMode(e.currentTarget.value);
+                form.setFieldValue('bannerColor', '');
+              }}
+            />
+            {bannerMode === 'Custom Color' && (
+              <HoverCard shadow="md" openDelay={250}>
+                <HoverCard.Target>
+                  <TextInput
+                    placeholder="#212121"
+                    label="Banner color"
+                    description="Leave blank for dark grey color"
+                    {...form.getInputProps('bannerColor')}
+                    maxLength={7}
+                    minLength={7}
+                    onChange={(e) => {
+                      if (
+                        /^([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) &&
+                        !form.values.bannerColor
+                      )
+                        e.currentTarget.value = `#${e.currentTarget.value.toUpperCase()}`;
+                      if (
+                        /^#([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) ||
+                        e.currentTarget.value === ''
+                      )
+                        form.setValues({
+                          ...form.values,
+                          bannerColor: e.currentTarget.value.toUpperCase(),
+                        });
+                    }}
+                  />
+                </HoverCard.Target>
+                <HoverCard.Dropdown>
+                  <ColorPicker
+                    value={form.values.bannerColor}
+                    onChange={(e) => {
                       form.setValues({
                         ...form.values,
-                        bannerColor: e.currentTarget.value.toUpperCase(),
+                        bannerColor: e.toUpperCase(),
                       });
-                  }}
-                />
-              </HoverCard.Target>
-              <HoverCard.Dropdown>
-                <ColorPicker
-                  value={form.values.bannerColor}
-                  onChange={(e) => {
-                    form.setValues({
-                      ...form.values,
-                      bannerColor: e.toUpperCase(),
-                    });
-                  }}
-                />
-              </HoverCard.Dropdown>
-            </HoverCard>
+                    }}
+                  />
+                </HoverCard.Dropdown>
+              </HoverCard>
+            )}
+            {bannerMode === 'Discord Accent Color' && (
+              <Text mt="md" style={{ fontSize: '15px' }}>
+                This is the color that Discord uses for the accent color (banner color) of your
+                profile. If it is not available, you will get a dark grey banner instead.
+              </Text>
+            )}
+            {bannerMode === 'Image Banner (Nitro User Only)' && (
+              <Text mt="md" style={{ fontSize: '15px' }}>
+                This feature is only available for Nitro users. If you are not a Nitro user, you
+                will get a solid color banner instead (accent color or dark grey).
+              </Text>
+            )}
           </Box>
         ) : null}
         <Button type="submit" mt="xl" mr="md">

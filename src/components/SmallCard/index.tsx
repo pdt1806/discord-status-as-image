@@ -43,7 +43,6 @@ const SmallCard = () => {
 
   function updateStatus() {
     fetch(`${testing ? refinerAPI['dev'] : refinerAPI['prod']}/user/${id}`, {
-      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },

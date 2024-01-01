@@ -79,7 +79,7 @@ app.get('/smallcard/:id', async (req, res) => {
       })
       .then(async (data) => {
         try {
-          created ? (link += `createdDate=${data['created_at']}&`) : null;
+          created && (link += `createdDate=${data['created_at']}&`);
           const browser = await puppeteer.launch({
             executablePath: '/usr/bin/chromium-browser',
             userDataDir: './loaded',
@@ -109,7 +109,17 @@ app.get('/smallcard/:id', async (req, res) => {
 app.get('/largecard/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { bg, bg1, bg2, created, aboutMe, bannerColor, pronouns } = req.query;
+    const {
+      bg,
+      bg1,
+      bg2,
+      created,
+      aboutMe,
+      pronouns,
+      wantBannerImage,
+      wantAccentColor,
+      bannerColor,
+    } = req.query;
     let link = bg1
       ? `${root}/largecard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&`
       : bg
@@ -117,7 +127,6 @@ app.get('/largecard/:id', async (req, res) => {
         : `${root}/largecard?`;
     link += aboutMe ? `aboutMe=${encodeURIComponent(aboutMe)}&` : '';
     link += pronouns ? `pronouns=${pronouns}&` : '';
-    link += `bannerColor=${bannerColor}&`;
     fetch(`http://127.0.0.1:7000/user/${id}`)
       .then((response) => {
         try {
@@ -133,7 +142,16 @@ app.get('/largecard/:id', async (req, res) => {
       })
       .then(async (data) => {
         try {
-          created ? (link += `createdDate=${data['created_at']}&`) : null;
+          created && (link += `createdDate=${data['created_at']}&`);
+          if (wantBannerImage) {
+            data['banner'] && (link += `bannerImage=${data['banner']}&`);
+            data['accent_color'] &&
+              (link += `accentColor=${data['accent_color'].replace('#', '')}&`);
+          }
+          wantAccentColor &&
+            data['accent_color'] &&
+            (link += `accentColor=${data['accent_color'].replace('#', '')}&`);
+          bannerColor && (link += `bannerColor=${bannerColor}&`);
           const browser = await puppeteer.launch({
             executablePath: '/usr/bin/chromium-browser',
             userDataDir: './loaded',
@@ -145,6 +163,10 @@ app.get('/largecard/:id', async (req, res) => {
             `${link}username=${data['username']}&displayName=${data['display_name']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
             { waitUntil: ['networkidle0'] }
           );
+          console.log(
+            `${link}username=${data['username']}&displayName=${data['display_name']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`
+          );
+          await page.waitForSelector('#banner');
           const maxHeight = await page.evaluate(() => {
             const elements = document.querySelectorAll('#disi-large-card');
             let maxElementHeight = 0;

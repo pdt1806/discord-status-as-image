@@ -5,16 +5,18 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import classes from '../style/profile.module.css';
 
-const LargeCard = (props: { scale: number }) => {
+const LargeCard = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
-
   const [username, setUsername] = useState(params.get('username'));
   const [displayName, setDisplayName] = useState(params.get('displayName'));
   const [avatar, setAvatar] = useState(params.get('avatar'));
   const [status, setStatus] = useState(params.get('status'));
   const [createdDate, setCreatedDate] = useState(params.get('createdDate'));
-  // const [activity, setActivity] = useState(params.get('activity'));
+  const [bannerImage, setBannerImage] = useState(params.get('bannerImage'));
+  const [accentColor, setAccentColor] = useState(
+    params.get('accentColor') && `#${params.get('accentColor')}`
+  );
   const id = params.get('id');
   const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#2b2d31';
   let backgroundGradient;
@@ -41,15 +43,13 @@ const LargeCard = (props: { scale: number }) => {
         ? '#202225'
         : 'white';
   }
-  const bannerColor = params.get('bannerColor') ? `#${params.get('bannerColor')}` : '';
-  const bannerImage = params.get('bannerImage') ? params.get('bannerImage') : '';
+  const bannerColor = params.get('bannerColor') ? `#${params.get('bannerColor')}` : '#212121';
   const mood = params.get('mood');
   const aboutMe = decodeURIComponent(params.get('aboutMe') || '');
   const pronouns = decodeURIComponent(params.get('pronouns') || '');
 
   function updateStatus() {
     fetch(`${testing ? refinerAPI['dev'] : refinerAPI['prod']}/user/${id}`, {
-      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -61,17 +61,18 @@ const LargeCard = (props: { scale: number }) => {
         setAvatar(data.avatar);
         setStatus(data.status);
         setStatusImage(setStatusImg(data.status));
-        if (params.get('created') == 'true') {
-          setCreatedDate(data.created_at);
+        if (params.get('created') == 'true') setCreatedDate(data.created_at);
+        if (params.get('wantBannerImage') == 'true') {
+          setBannerImage(data.banner);
+          setAccentColor(data.accent_color);
         }
-        // if (params.get('showActivity') == 'true') {
-        //   setActivity(data.activity);
-        // }
+        if (params.get('wantAccentColor')) setAccentColor(data.accent_color);
       });
   }
 
   useEffect(() => {
     updateStatus();
+    console.log(accentColor);
   }, []);
 
   setTimeout(() => {
@@ -129,16 +130,18 @@ const LargeCard = (props: { scale: number }) => {
         }}
       >
         {bannerImage ? (
-          <Image src={bannerImage} className={classes.banner} w={807} h="auto" />
+          <Image src={bannerImage} className={classes.banner} w={807} h="auto" id="banner" />
         ) : (
           <Box
             h={210}
             w={807}
-            style={{ backgroundColor: bannerColor }}
+            id="banner"
+            style={{
+              backgroundColor: accentColor ?? bannerColor,
+            }}
             className={classes.colorBanner}
           />
         )}
-
         <Box style={{ transform: 'scale(0.8) translate(20px, -180px)', position: 'absolute' }}>
           <Image alt="Avatar" src={avatar} className={classes.avatar} />
           <Avatar
@@ -235,7 +238,3 @@ const LargeCard = (props: { scale: number }) => {
 };
 
 export default LargeCard;
-
-LargeCard.defaultProps = {
-  scale: 1,
-};
