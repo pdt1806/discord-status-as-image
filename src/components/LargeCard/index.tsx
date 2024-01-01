@@ -72,7 +72,6 @@ const LargeCard = () => {
 
   useEffect(() => {
     updateStatus();
-    console.log(accentColor);
   }, []);
 
   setTimeout(() => {

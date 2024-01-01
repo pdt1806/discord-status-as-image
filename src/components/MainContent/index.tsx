@@ -122,9 +122,6 @@ const MainContent = () => {
                 : '') +
               (bannerMode === 'Discord Accent Color' ? `&wantAccentColor=true` : '') +
               (bannerMode === 'Image Banner (Nitro User Only)' ? `&wantBannerImage=true` : '');
-            console.log(
-              `${testing ? disiAPI['dev'] : disiAPI['prod']}/largecard/${data.id}?${largeTail}`
-            );
             setSmallTail(smallTail);
             setLargeTail(largeTail);
             setSmallCardLink(

@@ -163,9 +163,6 @@ app.get('/largecard/:id', async (req, res) => {
             `${link}username=${data['username']}&displayName=${data['display_name']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
             { waitUntil: ['networkidle0'] }
           );
-          console.log(
-            `${link}username=${data['username']}&displayName=${data['display_name']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`
-          );
           await page.waitForSelector('#banner');
           const maxHeight = await page.evaluate(() => {
             const elements = document.querySelectorAll('#disi-large-card');
