@@ -106,7 +106,7 @@ const Home = () => {
           Sponsors. It means a lot to me!
         </Text>
         <Link
-          to="https://bennynguyen.us"
+          to="https://bennynguyen.dev"
           target="_blank"
           style={{ color: 'white', textDecoration: 'none' }}
         >

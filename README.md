@@ -1,11 +1,11 @@
-<p align="center"><img src="https://disi.bennynguyen.us/images/disi-logo.png" width="20%"></img></p>
+<p align="center"><img src="https://disi.bennynguyen.dev/images/disi-logo.png" width="20%"></img></p>
 <h1 align="center">Discord Status as Image</h1>
 
 <p align="center">Turn your Discord status into a simple, eye-catching image for easy sharing and display. With your username and just a few clicks, setting things up is quick and easy!</p>
 
 ## How to Get one?
 
-1. Access this website: https://disi.bennynguyen.us
+1. Access this website: https://disi.bennynguyen.dev
 2. Following the instructions on the website
    1. Click on the invite link to join the server.
    2. Fill out the form with necessary information.

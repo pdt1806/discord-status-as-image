@@ -20,7 +20,7 @@ const Footer = () => {
       <Text mt="xs">
         Copyright © {new Date().getFullYear()}{' '}
         <Link
-          to="https://bennynguyen.us"
+          to="https://bennynguyen.dev"
           target="_blank"
           style={{ textDecoration: 'none', color: 'white' }}
         >

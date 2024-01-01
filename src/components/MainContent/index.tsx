@@ -495,7 +495,7 @@ const MainContent = () => {
               w="fit-content"
               onClick={async () => {
                 await navigator.clipboard.writeText(
-                  `<iframe src="https://disi.bennynguyen.us/smallcard?id=${userID}${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
+                  `<iframe src="https://disi.bennynguyen.dev/smallcard?id=${userID}${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
                 );
                 copiedNotification();
               }}
@@ -548,7 +548,7 @@ const MainContent = () => {
                 w="fit-content"
                 onClick={async () => {
                   await navigator.clipboard.writeText(
-                    `<iframe src="https://disi.bennynguyen.us/largecard?id=${userID}${largeTail}" name="disi-large-card" height="361.51px" width="300px"></iframe>`
+                    `<iframe src="https://disi.bennynguyen.dev/largecard?id=${userID}${largeTail}" name="disi-large-card" height="361.51px" width="300px"></iframe>`
                   );
                   copiedNotification();
                 }}
