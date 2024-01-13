@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite --host",
     "server": "cd server && npx tsx main.ts",
-    "refiner" : "cd .. && cd refiner-discord-bot && python main.py",
+    "refiner": "cd .. && cd refiner-discord-bot && python main.py",
     "build": "tsc && vite build"
   },
   "dependencies": {

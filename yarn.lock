@@ -4832,6 +4832,8 @@ typed-array-length@^1.0.4:
 
 "typescript@^4.3.5 || ^5.0.0", typescript@^5.3.3, typescript@>=4.2.0, typescript@>=4.9.5, typescript@5:
   version "5.3.3"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-5.3.3.tgz"
+  integrity sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==
 
 ufo@^1.3.0:
   version "1.3.2"

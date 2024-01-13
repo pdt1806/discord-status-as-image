@@ -1,1 +1,1 @@
-serve -s dist -p 2011
+serve -s ../../dist -p 2011
