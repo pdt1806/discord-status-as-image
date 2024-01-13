@@ -516,6 +516,7 @@ const MainContent = () => {
                     accept="image/png,image/vnd.mozilla.apng,image/jpeg,image/gif,image/webp,image/avif"
                     label="Upload image"
                     description="Only accept image files."
+                    // @ts-ignore
                     placeholder="Click to upload image"
                     w="max-content"
                     maw="280px"
