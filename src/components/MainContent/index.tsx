@@ -147,11 +147,10 @@ const MainContent = () => {
                   : '';
             if (form.values.created) newTail += '&created=true';
             let newBannerID = '';
-            if (bannerFile) {
+            if (bannerFile && customBannerMode === 'upload') {
               const body = {
                 image: await fileToBase64(bannerFile),
               };
-              console.log(body);
               const response = await fetch(
                 `${testing ? disiAPI['dev'] : disiAPI['prod']}/uploadbanner`,
                 {
@@ -444,6 +443,7 @@ const MainContent = () => {
               onChange={(e) => {
                 setBannerMode(e.currentTarget.value);
                 form.setFieldValue('bannerColor', '');
+                setBannerFile(null);
               }}
             />
             {bannerMode === 'Custom Color' && (

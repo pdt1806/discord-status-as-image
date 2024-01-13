@@ -7,6 +7,8 @@ import { base64toBlob, fetchData } from './utils';
 
 const root = testing ? 'http://localhost:5173' : 'http://localhost:2011';
 
+const origin = testing ? '*' : 'https://disi.bennynguyen.dev';
+
 const minimal_args = [
   '--autoplay-policy=user-gesture-required',
   '--disable-background-networking',
@@ -49,7 +51,7 @@ const minimal_args = [
 const app = express();
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', origin);
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
