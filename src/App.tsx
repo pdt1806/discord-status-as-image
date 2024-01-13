@@ -4,13 +4,33 @@ import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
 import LargeCard from './components/LargeCard';
+import Layout from './components/Layout';
 import SmallCard from './components/SmallCard';
+import Document from './pages/Document';
 import Home from './pages/Home';
 
 const routes: RouteObject[] = [
   {
     path: '/',
-    element: <Home />,
+    element: <Layout />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: '/privacy-policy',
+        element: <Document id="7hlma44bu7vgn4i" />,
+      },
+      {
+        path: '/terms-of-service',
+        element: <Document id="3tplcyq2zeby7ce" />,
+      },
+      {
+        path: '/*',
+        element: <Home />,
+      },
+    ],
   },
   {
     path: '/smallcard',
@@ -19,10 +39,6 @@ const routes: RouteObject[] = [
   {
     path: '/largecard',
     element: <LargeCard />,
-  },
-  {
-    path: '/*',
-    element: <Home />,
   },
 ];
 

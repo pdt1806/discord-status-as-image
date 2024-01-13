@@ -1,4 +1,5 @@
 import { refinerAPI, testing } from '@/env/env';
+import { getBannerImage } from '@/pocketbase_client';
 import { blendColors, formatDate, hexToRgb } from '@/utils/tools';
 import { Avatar, Box, Divider, Image, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
@@ -47,6 +48,7 @@ const LargeCard = () => {
   const mood = params.get('mood');
   const aboutMe = decodeURIComponent(params.get('aboutMe') || '');
   const pronouns = decodeURIComponent(params.get('pronouns') || '');
+  const bannerID = params.get('bannerID');
 
   function updateStatus() {
     fetch(`${testing ? refinerAPI['dev'] : refinerAPI['prod']}/user/${id}`, {
@@ -55,7 +57,7 @@ const LargeCard = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then(async (data) => {
         setUsername(data.username);
         setDisplayName(data.display_name);
         setAvatar(data.avatar);
@@ -71,7 +73,15 @@ const LargeCard = () => {
   }
 
   useEffect(() => {
+    async function getBanner() {
+      if (!bannerID) return;
+      const banner: string = ((await getBannerImage(bannerID, false)) as string) || '';
+      if (!banner) return;
+      setBannerImage(banner);
+    }
+
     updateStatus();
+    getBanner();
   }, []);
 
   setTimeout(() => {
@@ -129,11 +139,9 @@ const LargeCard = () => {
         }}
       >
         {bannerImage ? (
-          <Image src={bannerImage} className={classes.banner} w={807} h="auto" id="banner" />
+          <Image src={bannerImage} className={classes.banner} id="banner" />
         ) : (
           <Box
-            h={210}
-            w={807}
             id="banner"
             style={{
               backgroundColor: accentColor ?? bannerColor,

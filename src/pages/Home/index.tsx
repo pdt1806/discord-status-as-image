@@ -1,5 +1,3 @@
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 import MainContent from '@/components/MainContent';
 import { isMobile } from '@/utils/tools';
 import { Box, Center, Divider, Image, List, Text, Title } from '@mantine/core';
@@ -12,18 +10,7 @@ const Home = () => {
   }, []);
 
   return (
-    <Box
-      w="100vw"
-      bg="#303030"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-        color: 'white',
-      }}
-    >
-      <Header />
-      <Box style={{ flexGrow: '1' }} />
+    <>
       <Box
         h="min-content"
         p="xl"
@@ -93,9 +80,14 @@ const Home = () => {
             The image does not come with a border radius and colored border; you can add them when
             embedding the image into websites.
           </List.Item>
+          <List.Item mb="xs">
+            Gradient background angle is not applicable to large cards in order to match the design
+            on Discord.
+          </List.Item>
           <List.Item>
-            Gradient background angle is not applicable to large cards in order to match with
-            Discord.
+            To achieve the best results, it is recommended to use a banner image with an aspect
+            ratio of 2.69:1 and position the main content in the center. Currently, the uploaded
+            image cannot be cropped.
           </List.Item>
         </List>
         <Title mt="xl" mb="md" order={3}>
@@ -159,8 +151,7 @@ const Home = () => {
           )}
         </Box>
       </Box>
-      <Footer />
-    </Box>
+    </>
   );
 };
 

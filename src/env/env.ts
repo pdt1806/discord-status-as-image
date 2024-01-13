@@ -6,4 +6,4 @@ export const disiAPI = {
   prod: 'https://disi-api.bennynguyen.dev',
   dev: 'http://localhost:1911',
 };
-export const testing = false;
+export const testing = true;

@@ -52,9 +52,43 @@ export function formatDate(date: string) {
 
 export function limitTextarea(value: string) {
   var lines = value.split('\n');
-  lines = lines.map(function(line) {
+  lines = lines.map(function (line) {
     return line.slice(0, 70);
   });
   var newText = lines.slice(0, 5).join('\n');
   return newText;
 }
+
+export function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', (event) => {
+      if (event.target && event.target.result) {
+        const dataUrl = event.target.result.toString();
+        const mimeType = dataUrl.split(';')[0].split(':')[1];
+        return resolve(dataUrl);
+      }
+      reject(new Error('Failed to read the file.'));
+    });
+
+    reader.addEventListener('error', reject);
+
+    reader.readAsDataURL(file);
+  });
+}
+
+export const monthsKey = {
+  '01': 'January',
+  '02': 'February',
+  '03': 'March',
+  '04': 'April',
+  '05': 'May',
+  '06': 'June',
+  '07': 'July',
+  '08': 'August',
+  '09': 'September',
+  10: 'October',
+  11: 'November',
+  12: 'December',
+} as const;

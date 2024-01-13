@@ -1,8 +1,11 @@
 import { smallestHeader } from '@/utils/tools';
 import { Box, Image, Text, Title } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const navigate = useNavigate();
+  const isHome = window.location.pathname === '/';
+
   return (
     <Box
       style={{
@@ -15,8 +18,24 @@ const Header = () => {
       h={100}
     >
       <Box style={{ backgroundColor: '#232525', display: 'flex', alignItems: 'center' }}>
-        <Image src="/images/disi-logo.png" alt="Discord Status as Image" h={100} w={100} />
-        <Title c="white" ml="md" style={{ fontSize: smallestHeader ? '25px' : '35px' }}>
+        <Image
+          src="/images/disi-logo.png"
+          alt="Discord Status as Image"
+          h={100}
+          w={100}
+          style={{ cursor: !isHome ? 'pointer' : '' }}
+          onClick={() => {
+            !isHome && navigate('/');
+          }}
+        />
+        <Title
+          c="white"
+          ml="md"
+          style={{ fontSize: smallestHeader ? '25px' : '35px', cursor: !isHome ? 'pointer' : '' }}
+          onClick={() => {
+            !isHome && navigate('/');
+          }}
+        >
           Discord Status as Image
         </Title>
       </Box>

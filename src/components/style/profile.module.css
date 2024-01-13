@@ -10,7 +10,7 @@
 
 .banner {
   width: 807px !important;
-  height: 250px !important;
+  height: 300px !important;
   overflow: hidden;
   -webkit-mask-image: url('/images/banner_overlay.svg');
   -moz-mask-image: url('/images/banner_overlay.svg');

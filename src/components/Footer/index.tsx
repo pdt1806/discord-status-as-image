@@ -1,4 +1,4 @@
-import { Box, Text } from '@mantine/core';
+import { Box, Space, Text } from '@mantine/core';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -14,7 +14,9 @@ const Footer = () => {
         color: 'white',
       }}
       w="100%"
-      h={100}
+      pt="lg"
+      pb="lg"
+      h="min-content"
     >
       <Text>Made with ❤️</Text>
       <Text mt="xs">
@@ -27,6 +29,16 @@ const Footer = () => {
           <strong>Benny Nguyen</strong>
         </Link>
       </Text>
+      <Space h="md" />
+      <Box display={'flex'}>
+        <Link to="/privacy-policy" style={{ textDecoration: 'none', color: 'white' }}>
+          Privacy Policy
+        </Link>
+        <Text> • </Text>
+        <Link to="/terms-of-service" style={{ textDecoration: 'none', color: 'white' }}>
+          Terms of Service
+        </Link>
+      </Box>
     </Box>
   );
 };
