@@ -1,28 +1,28 @@
-import MainContent from '@/components/MainContent';
-import { isMobile } from '@/utils/tools';
-import { Box, Center, Divider, Image, List, Text, Title } from '@mantine/core';
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import MainContent from "@/components/MainContent"
+import { isMobile } from "@/utils/browser"
+import { Box, Center, Divider, Image, List, Text, Title } from "@mantine/core"
+import { useEffect } from "react"
+import { Link } from "react-router-dom"
 
 const Home = () => {
   useEffect(() => {
-    if (window.location.pathname !== '/') window.location.pathname = '/';
-  }, []);
+    if (window.location.pathname !== "/") window.location.pathname = "/"
+  }, [])
 
   return (
     <>
       <Box
         h="min-content"
         p="xl"
-        mt={isMobile ? '0' : 'xl'}
-        mb={isMobile ? '0' : 'md'}
+        mt={isMobile ? "0" : "xl"}
+        mb={isMobile ? "0" : "md"}
         ml="auto"
         mr="auto"
-        w={isMobile ? '100%' : '85%'}
+        w={isMobile ? "100%" : "85%"}
         style={{
-          backgroundColor: '#00000050',
-          borderRadius: !isMobile ? '25px' : '0',
-          color: 'white',
+          backgroundColor: "#00000050",
+          borderRadius: !isMobile ? "25px" : "0",
+          color: "white",
         }}
       >
         <Center w="100%" h="100%">
@@ -33,7 +33,7 @@ const Home = () => {
       <Box
         w="70%"
         display="flex"
-        style={{ flexDirection: 'column' }}
+        style={{ flexDirection: "column" }}
         ml="auto"
         mr="auto"
         mt="xl"
@@ -100,18 +100,18 @@ const Home = () => {
         <Link
           to="https://bennynguyen.dev"
           target="_blank"
-          style={{ color: 'white', textDecoration: 'none' }}
+          style={{ color: "white", textDecoration: "none" }}
         >
           <Text mb="md" fw="bold">
             Check out my other works here! 👉 🌐
           </Text>
         </Link>
-        <Box display={'flex'} style={{ flexDirection: isMobile ? 'column' : 'row' }}>
+        <Box display={"flex"} style={{ flexDirection: isMobile ? "column" : "row" }}>
           <a
             href="https://www.buymeacoffee.com/pdteggman"
             target="_blank"
             style={{
-              width: 'auto ',
+              width: "auto ",
             }}
           >
             <Image
@@ -129,10 +129,10 @@ const Home = () => {
               height="32"
               width="114"
               style={{
-                border: '0',
-                borderRadius: '6px',
-                marginLeft: isMobile ? '0' : '10px',
-                marginTop: isMobile ? '10px' : '0',
+                border: "0",
+                borderRadius: "6px",
+                marginLeft: isMobile ? "0" : "10px",
+                marginTop: isMobile ? "10px" : "0",
               }}
             ></iframe>
           ) : (
@@ -142,17 +142,17 @@ const Home = () => {
               height="225"
               width="600"
               style={{
-                border: '0',
-                backgroundColor: 'white',
-                borderRadius: '12px',
-                marginLeft: '10px',
+                border: "0",
+                backgroundColor: "white",
+                borderRadius: "12px",
+                marginLeft: "10px",
               }}
             ></iframe>
           )}
         </Box>
       </Box>
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

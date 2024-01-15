@@ -34,3 +34,7 @@
 ## Contributions
 
 Any contribution is appreciated. Just create an issue/pull request and I will review it ASAP.
+
+<!-- ### My Discord
+
+[![My Discord](https://disi-api.bennynguyen.us/smallcard_svg/458550515614351360?created=true)](https://discord.com/users/458550515614351360) -->
