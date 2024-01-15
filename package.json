@@ -9,10 +9,10 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
-    "@mantine/core": "7.2.2",
-    "@mantine/form": "^7.2.2",
-    "@mantine/hooks": "7.2.2",
-    "@mantine/notifications": "^7.2.2",
+    "@mantine/core": "7.4.1",
+    "@mantine/form": "^7.4.1",
+    "@mantine/hooks": "7.4.1",
+    "@mantine/notifications": "^7.4.1",
     "express": "^4.18.2",
     "http-server": "^14.1.1",
     "node-fetch": "^3.3.2",
