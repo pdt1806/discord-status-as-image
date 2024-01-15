@@ -56,7 +56,7 @@ export function formatDate(date: string) {
 export function limitTextarea(value: string) {
   var lines = value.split("\n")
   lines = lines.map(function (line) {
-    return line.slice(0, 70)
+    return line.slice(0, 57)
   })
   var newText = lines.slice(0, 5).join("\n")
   return newText

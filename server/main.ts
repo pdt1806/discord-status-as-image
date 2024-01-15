@@ -59,13 +59,21 @@ const minimal_args = [
 const app = express()
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", origin)
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
-  res.header("Access-Control-Allow-Headers", "Content-Type")
+  res.header({
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Methods": "GET, POST",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Cache-Control": "no-cache, no-store, must-revalidate, proxy-revalidate",
+    Pragma: "no-cache",
+    Expires: "0",
+    "Surrogate-Control": "no-store",
+  })
   next()
 })
 
 app.use(express.json({ limit: "16mb" }))
+
+app.set("etag", false)
 
 app.get("/", (req: Request, res: Response) => {
   res.send({ message: "API of Discord Status as Image" })
@@ -140,6 +148,7 @@ app.get("/smallcard_svg/:id", async (req: Request, res: Response) => {
       const displayName = data["display_name"]
       const titleSize = setSmallCardTitleSize(data["display_name"])
       const createdDate = created ? data["created_at"] : null
+      const etag = new Date().getTime()
       const svgContent = `
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -200,8 +209,10 @@ app.get("/smallcard_svg/:id", async (req: Request, res: Response) => {
         </g>
       </svg>
             `
-      res.set("Content-Type", "image/svg+xml")
-      res.send(svgContent)
+      res.set({
+        "Content-Type": "image/svg+xml",
+      })
+      res.send(`${svgContent}`)
     } catch (error) {
       res.status(500).send("Internal Server Error")
     }

@@ -427,7 +427,7 @@ const MainContent = () => {
               maxRows={5}
               autosize
               {...form.getInputProps("aboutMe")}
-              placeholder="Write something about yourself"
+              placeholder="Write something about yourself. Max characters per line: 53"
               onChange={(e) => {
                 form.setValues({
                   ...form.values,
