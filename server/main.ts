@@ -65,7 +65,8 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Headers": "Content-Type",
     "Cache-Control": "no-cache, no-store, must-revalidate, proxy-revalidate",
     Pragma: "no-cache",
-    Expires: "0",
+    Expires: "Mon, 01 Jan 1990 00:00:00 GMT",
+    "Last-Modified": "Mon, 01 Jan 2999 00:00:00 GMT",
     "Surrogate-Control": "no-store",
   })
   next()
