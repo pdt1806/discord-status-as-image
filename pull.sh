@@ -1,6 +1,6 @@
 git stash
 git pull
-rm -r -f node_modules
+sudo rm -r -f node_modules
 npm install --force
 npm run build
 pm2 restart disi-website

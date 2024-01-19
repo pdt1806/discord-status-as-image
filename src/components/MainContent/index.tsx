@@ -407,7 +407,7 @@ const MainContent = () => {
             }
           }}
         />
-        {wantLargeCard ? (
+        {wantLargeCard && (
           <Box mt="xl">
             <Title order={4}>Details</Title>
             <TextInput
@@ -571,11 +571,11 @@ const MainContent = () => {
               </Text>
             )}
           </Box>
-        ) : null}
+        )}
         <Button type="submit" mt="xl" mr="md">
           Generate
         </Button>
-        {smallCardLink !== "" ? (
+        {smallCardLink !== "" && (
           <Button
             onClick={() => {
               setSmallCardLink("")
@@ -588,7 +588,7 @@ const MainContent = () => {
           >
             Clear result
           </Button>
-        ) : null}
+        )}
       </Box>
     </Table.Td>
   )
@@ -678,7 +678,7 @@ const MainContent = () => {
               🔗 Copy iframe (live card)
             </UnstyledButton>
           </Box>
-          {wantLargeCard && largeCardLink ? (
+          {wantLargeCard && largeCardLink && (
             <Box display={"flex"} style={{ flexDirection: "column" }}>
               <Title order={4} mb="md">
                 Large card
@@ -751,7 +751,7 @@ const MainContent = () => {
                 need to change it to fit your needs.
               </Text>
             </Box>
-          ) : null}
+          )}
         </Box>
       ) : (
         <Box>

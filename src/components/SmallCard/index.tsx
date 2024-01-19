@@ -15,6 +15,7 @@ const SmallCard = () => {
   const [createdDate, setCreatedDate] = useState(params.get("createdDate"))
   const id = params.get("id")
   const backgroundColor = params.get("bg") ? `#${params.get("bg")}` : "#2b2d31"
+  const tag = params.get("tag")
   let backgroundGradient
   let textColor
   if (!params.get("bg1")) {
@@ -127,7 +128,7 @@ const SmallCard = () => {
           >
             {displayName}
           </Title>
-          {createdDate ? (
+          {createdDate && (
             <Box mt="lg" display="flex" style={{ alignItems: "center" }}>
               <Image
                 alt="discord-logo"
@@ -143,7 +144,19 @@ const SmallCard = () => {
                 {formatDate(createdDate)}
               </Title>
             </Box>
-          ) : null}
+          )}
+          {tag && (
+            <Image
+              alt="discord-logo"
+              src="/images/discord-tag.svg"
+              h={90}
+              w={338.8}
+              style={{
+                transform: "translate(603.3px, 70px)",
+                position: "absolute",
+              }}
+            />
+          )}
         </Box>
       </Box>
     </a>

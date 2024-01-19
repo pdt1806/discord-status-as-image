@@ -183,19 +183,19 @@ const LargeCard = () => {
             <Title fw={500} mt={10} size={titleSize - 15} c={textColor}>
               {username}
             </Title>
-            {pronouns ? (
+            {pronouns && (
               <Title fw={400} mt={10} size={25} c={textColor}>
                 {pronouns}
               </Title>
-            ) : null}
-            {mood ? (
+            )}
+            {mood && (
               <Title fw={400} mt={35} size={25} c={textColor}>
                 {mood}
               </Title>
-            ) : null}
+            )}
           </Box>
-          {aboutMe || createdDate ? <Divider w={687} mb={30} mt={30} /> : null}
-          {aboutMe ? (
+          {aboutMe || (createdDate && <Divider w={687} mb={30} mt={30} />)}
+          {aboutMe && (
             <Box>
               <Title size={20} c={textColor}>
                 ABOUT ME
@@ -214,8 +214,8 @@ const LargeCard = () => {
                 {aboutMe}
               </Text>
             </Box>
-          ) : null}
-          {createdDate ? (
+          )}
+          {createdDate && (
             <Box>
               <Title mt={30} size={20} c={textColor}>
                 DISCORD MEMBER SINCE
@@ -224,7 +224,7 @@ const LargeCard = () => {
                 {formatDate(createdDate)}
               </Text>
             </Box>
-          ) : null}
+          )}
         </Box>
       </Box>
     </a>
