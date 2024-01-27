@@ -32,6 +32,7 @@ const MainContent = () => {
       mood: "",
       bannerColor: "",
       pronouns: "",
+      discordLabel: false,
     },
   })
 

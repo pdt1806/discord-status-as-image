@@ -20,6 +20,7 @@ const LargeCard = () => {
   )
   const id = params.get("id")
   const backgroundColor = params.get("bg") ? `#${params.get("bg")}` : "#2b2d31"
+  const discordLabel = params.get("discordlabel")
   let backgroundGradient
   let textColor
   let textColorRaw
@@ -184,7 +185,7 @@ const LargeCard = () => {
               {username}
             </Title>
             {pronouns && (
-              <Title fw={400} mt={10} size={25} c={textColor}>
+              <Title fw={400} mt={15} size={25} c={textColor}>
                 {pronouns}
               </Title>
             )}
@@ -194,7 +195,7 @@ const LargeCard = () => {
               </Title>
             )}
           </Box>
-          {aboutMe || (createdDate && <Divider w={687} mb={30} mt={30} />)}
+          {(aboutMe || createdDate) && <Divider w={687} mb={30} mt={30} />}
           {aboutMe && (
             <Box>
               <Title size={20} c={textColor}>
@@ -226,6 +227,17 @@ const LargeCard = () => {
             </Box>
           )}
         </Box>
+        {discordLabel && (
+          <Image
+            alt="discord-logo"
+            src="/images/discord-label.svg"
+            h={60}
+            w={225.86}
+            style={{
+              transform: "translateX(581.13px)",
+            }}
+          />
+        )}
       </Box>
     </a>
   )

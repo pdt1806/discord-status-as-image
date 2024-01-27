@@ -83,7 +83,7 @@ app.get("/", (req: Request, res: Response) => {
 app.get("/smallcard/:id", async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const { bg, bg1, bg2, angle, created } = req.query
+    const { bg, bg1, bg2, angle, created, discordlabel } = req.query
     let link = bg1
       ? `${root}/smallcard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&angle=${angle}&`
       : bg
@@ -96,6 +96,7 @@ app.get("/smallcard/:id", async (req: Request, res: Response) => {
         return null
       }
       created && (link += `createdDate=${data["created_at"]}&`)
+      discordlabel && (link += `discordlabel=true&`)
       const browser = await puppeteer.launch({
         executablePath: "/usr/bin/chromium-browser",
         userDataDir: "./loaded",
@@ -129,7 +130,7 @@ function monoBackgroundTextColor(bg: string) {
 app.get("/smallcard_svg/:id", async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const { bg, bg1, bg2, angle, created } = req.query
+    const { bg, bg1, bg2, angle, created, discordlabel } = req.query
     try {
       const data = await fetchData(id)
       if (data === null) {
@@ -137,8 +138,8 @@ app.get("/smallcard_svg/:id", async (req: Request, res: Response) => {
         return null
       }
       const avatar = await urlToBase64(data["avatar"])
-      const background = bg ? `#${bg}` : null
-      let textColor
+      const background = bg ? `#${bg}` : "#2b2d31"
+      let textColor = "white"
       if (bg1) {
         const blendColor = blendColors(`#${bg1}`, `#${bg2}`)
         textColor = monoBackgroundTextColor(blendColor!)
@@ -149,7 +150,6 @@ app.get("/smallcard_svg/:id", async (req: Request, res: Response) => {
       const displayName = data["display_name"]
       const titleSize = setSmallCardTitleSize(data["display_name"])
       const createdDate = created ? data["created_at"] : null
-      const etag = new Date().getTime()
       const svgContent = `
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +166,7 @@ app.get("/smallcard_svg/:id", async (req: Request, res: Response) => {
               <stop offset="80%" style="stop-color:#${bg2};stop-opacity:1" />
             </linearGradient>`
         }
-          <style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700');.cls-1{fill:none;}.cls-2{fill:${background ?? "url(#bgGradient)"};}.cls-30{fill:#24934f;fill-rule:evenodd;}.cls-31{fill:#5d5f6b;fill-rule:evenodd;}.cls-32{fill:#f0b232;fill-rule:evenodd;}.cls-33{fill:#ec3e4a;fill-rule:evenodd;}.cls-4{clip-path:url(#clip-path);}.cls-10,.cls-5,.cls-6{isolation:isolate;}.cls-6{font-size:${22 * (titleSize / 100)}px;font-family:Noto Sans TC, system-ui;font-weight:500;}.cls-10,.cls-6,.cls-9{fill:${textColor};}.cls-7{letter-spacing:-0.021em;}.cls-8{letter-spacing:-0.01501em;}.cls-10{font-size:8.85069px;font-family:Noto Sans TC, system-ui; font-weight:400;}}</style>
+          <style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700');.cls-1{fill:none;}.cls-2{fill:${background ?? "url(#bgGradient)"};}.cls-30{fill:#24934f;fill-rule:evenodd;}.cls-31{fill:#5d5f6b;fill-rule:evenodd;}.cls-32{fill:#f0b232;fill-rule:evenodd;}.cls-33{fill:#ec3e4a;fill-rule:evenodd;}.cls-4{clip-path:url(#clip-path);}.cls-10,.cls-5,.cls-6{isolation:isolate;}.cls-6{font-size:${22 * (titleSize / 100)}px;font-family:Noto Sans TC, system-ui;font-weight:500;}.cls-10,.cls-6,.cls-9{fill:${textColor};}.cls-7{letter-spacing:-0.021em;}.cls-8{letter-spacing:-0.01501em;}.cls-10{font-size:8.85069px;font-family:Noto Sans TC, system-ui; font-weight:400;}.cls-11{fill:#5865f2;}.cls-12{fill:#fff;}}</style>
           <clipPath id="clip-path">
             <path
               class="cls-1"
@@ -206,6 +206,21 @@ app.get("/smallcard_svg/:id", async (req: Request, res: Response) => {
                 </text>
               `
             }
+            ${
+              discordlabel == "true" &&
+              `
+            <path class="cls-11" d="M300.42,79.82H228.7a3.32,3.32,0,0,0-3.32,3.33V99.76h75Z" transform="translate(-0.42 0.24)"/>
+            <path class="cls-12" d="M254,86.78h2.92a4.37,4.37,0,0,1,1.79.33,2.39,2.39,0,0,1,1.09.92,2.6,2.6,0,0,1,.37,1.36,2.55,2.55,0,0,1-.38,1.35,2.61,2.61,0,0,1-1.16,1,4.74,4.74,0,0,1-1.92.35H254Zm2.68,3.94a1.52,1.52,0,0,0,1.09-.36,1.42,1.42,0,0,0,0-1.9,1.42,1.42,0,0,0-1-.34h-.91v2.6Z" transform="translate(-0.42 0.24)"/>
+            <path class="cls-12" d="M264.5,92.05a3.72,3.72,0,0,1-1.09-.46V90.34a2.86,2.86,0,0,0,1,.47,4.49,4.49,0,0,0,1.2.19,1,1,0,0,0,.41-.08.2.2,0,0,0,.14-.17.25.25,0,0,0-.08-.18.59.59,0,0,0-.29-.13l-.9-.21a2.3,2.3,0,0,1-1.1-.5,1.2,1.2,0,0,1,0-1.6,1.76,1.76,0,0,1,.81-.5,3.63,3.63,0,0,1,1.23-.18,4.46,4.46,0,0,1,1.15.13,3.3,3.3,0,0,1,.87.35v1.19a3.39,3.39,0,0,0-.81-.34,3.81,3.81,0,0,0-.95-.12c-.47,0-.71.08-.71.24a.18.18,0,0,0,.11.17,1.82,1.82,0,0,0,.4.11l.75.14a2.26,2.26,0,0,1,1.09.45,1.35,1.35,0,0,1-.24,2,3,3,0,0,1-1.69.4A4.82,4.82,0,0,1,264.5,92.05Z" transform="translate(-0.42 0.24)"/>
+            <path class="cls-12" d="M269.81,91.89a2.18,2.18,0,0,1-1-.86,2.28,2.28,0,0,1-.32-1.22,2.21,2.21,0,0,1,.34-1.22,2.25,2.25,0,0,1,1-.84,3.62,3.62,0,0,1,1.56-.3,3.34,3.34,0,0,1,1.86.47V89.3a2.63,2.63,0,0,0-.61-.29,2.1,2.1,0,0,0-.75-.11,2,2,0,0,0-1.09.25.77.77,0,0,0-.29,1,.71.71,0,0,0,.28.29,1.92,1.92,0,0,0,1.11.26,2.64,2.64,0,0,0,.74-.1,3.14,3.14,0,0,0,.62-.27v1.34a3.56,3.56,0,0,1-1.91.49A3.36,3.36,0,0,1,269.81,91.89Z" transform="translate(-0.42 0.24)"/>
+            <path class="cls-12" d="M275.14,91.89a2.24,2.24,0,0,1-1.33-2.09,2.15,2.15,0,0,1,.34-1.21,2.25,2.25,0,0,1,1-.84,4.08,4.08,0,0,1,3.07,0,2.33,2.33,0,0,1,1,.83,2.21,2.21,0,0,1,.34,1.22,2.33,2.33,0,0,1-.34,1.23,2.26,2.26,0,0,1-1,.86,3.9,3.9,0,0,1-3.07,0Zm2.28-1.34a1,1,0,0,0,.27-.72,1,1,0,0,0-.27-.72,1,1,0,0,0-.75-.27,1,1,0,0,0-.75.27,1.07,1.07,0,0,0,0,1.44,1,1,0,0,0,.75.28A1,1,0,0,0,277.42,90.55Z" transform="translate(-0.42 0.24)"/>
+            <path class="cls-12" d="M284,87.72v1.64a1.28,1.28,0,0,0-.74-.19,1.14,1.14,0,0,0-.92.37,1.69,1.69,0,0,0-.32,1.13v1.39h-1.84V87.64H282v1.41a2.24,2.24,0,0,1,.49-1.14,1.1,1.1,0,0,1,.85-.37A1.33,1.33,0,0,1,284,87.72Z" transform="translate(-0.42 0.24)"/>
+            <path class="cls-12" d="M290.14,86.62v5.44H288.3v-1a1.79,1.79,0,0,1-.71.85,2.26,2.26,0,0,1-1.17.29,2,2,0,0,1-1.08-.3,2,2,0,0,1-.73-.84,3,3,0,0,1-.25-1.21,2.67,2.67,0,0,1,.27-1.24,2.09,2.09,0,0,1,.77-.87,2.16,2.16,0,0,1,1.14-.3,1.72,1.72,0,0,1,1.76,1.14v-2ZM288,90.53a1,1,0,0,0,.28-.72.88.88,0,0,0-.28-.68,1.16,1.16,0,0,0-1.49,0,.93.93,0,0,0-.27.69.94.94,0,0,0,.28.71,1.15,1.15,0,0,0,1.48,0Z" transform="translate(-0.42 0.24)"/>
+            <path class="cls-12" d="M247.19,85.47a10.65,10.65,0,0,0-2.81-.87c-.13.24-.25.48-.36.73a10.87,10.87,0,0,0-3.12,0,5.49,5.49,0,0,0-.36-.73,11.16,11.16,0,0,0-2.81.87,11.54,11.54,0,0,0-2,7.78h0A11.55,11.55,0,0,0,239.16,95a8.24,8.24,0,0,0,.74-1.2,6.89,6.89,0,0,1-1.16-.56L239,93a8.07,8.07,0,0,0,6.89,0l.28.21a7.28,7.28,0,0,1-1.16.56,8.24,8.24,0,0,0,.74,1.2,11.55,11.55,0,0,0,3.45-1.74h0A11.51,11.51,0,0,0,247.19,85.47Zm-7,6.21a1.38,1.38,0,1,1,1.23-1.37A1.3,1.3,0,0,1,240.2,91.68Zm4.53,0a1.38,1.38,0,0,1,0-2.74A1.29,1.29,0,0,1,246,90.31,1.3,1.3,0,0,1,244.73,91.68Z" transform="translate(-0.42 0.24)"/>
+            <path class="cls-12" d="M262.59,87.29a.92.92,0,1,1-.92-.83A.88.88,0,0,1,262.59,87.29Z" transform="translate(-0.42 0.24)"/>
+            <path class="cls-12" d="M260.76,88.68a2.33,2.33,0,0,0,1.83,0v3.4h-1.83Z" transform="translate(-0.42 0.24)"/>
+            `
+            }
           </g>
         </g>
       </svg>
@@ -237,6 +252,7 @@ app.get("/largecard/:id", async (req: Request, res: Response) => {
       bannerColor,
       bannerID,
       bannerImage,
+      discordlabel,
     } = req.query as { [key: string]: string }
     let link = bg1
       ? `${root}/largecard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&`
@@ -252,6 +268,7 @@ app.get("/largecard/:id", async (req: Request, res: Response) => {
         return null
       }
       created && (link += `createdDate=${data["created_at"]}&`)
+      discordlabel && (link += `discordlabel=true&`)
       if (bannerID) {
         const banner = await getBannerImage(bannerID, false)
         banner && (link += `bannerImage=${banner}&`)

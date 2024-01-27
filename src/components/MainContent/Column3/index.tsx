@@ -1,5 +1,18 @@
-import { Box, Image, Mark, Table, Text, Title, Tooltip, UnstyledButton } from "@mantine/core"
-import { Link } from "react-router-dom"
+import { disiAPI, testing, web } from "@/env/env"
+import {
+  Box,
+  Combobox,
+  Divider,
+  Image,
+  Input,
+  InputBase,
+  Mark,
+  Table,
+  Text,
+  Title,
+  useCombobox,
+} from "@mantine/core"
+import { useEffect, useState } from "react"
 
 const MainContentColumn3 = ({
   smallCardLink,
@@ -20,6 +33,102 @@ const MainContentColumn3 = ({
   customBannerMode: string
   copiedNotification: () => void
 }) => {
+  const comboboxForSmallCard = useCombobox({
+    onDropdownClose: () => comboboxForSmallCard.resetSelectedOption(),
+  })
+
+  const comboboxForLargeCard = useCombobox({
+    onDropdownClose: () => comboboxForLargeCard.resetSelectedOption(),
+  })
+
+  const [smallCardValue, setSmallCardValue] = useState<string | null>(null)
+  const [largeCardValue, setLargeCardValue] = useState<string | null>(null)
+
+  useEffect(() => {
+    setSmallCardValue(null)
+    setLargeCardValue(null)
+  }, [smallTail, largeTail])
+
+  useEffect(() => {
+    if (smallCardValue) {
+      if (smallCardValue === "🔗 Copy Image URL (.png)") {
+        navigator.clipboard.writeText(smallCardLink)
+        copiedNotification()
+      } else if (smallCardValue === "🔗 Copy Anchor (.png)") {
+        navigator.clipboard.writeText(
+          `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="100px" src="${smallCardLink}"></img></a>`
+        )
+        copiedNotification()
+      } else if (smallCardValue === "🔗 Copy Image URL (.svg)") {
+        navigator.clipboard.writeText(
+          `${testing ? disiAPI["dev"] : disiAPI["prod"]}/smallcard_svg/${userID}?${smallTail}`
+        )
+        copiedNotification()
+      } else if (smallCardValue === "🔗 Copy Markdown (.svg)") {
+        navigator.clipboard.writeText(
+          `[![My Discord](${testing ? disiAPI["dev"] : disiAPI["prod"]}/smallcard_svg/${userID}?${smallTail})](https://discord.com/users/${userID})`
+        )
+        copiedNotification()
+      } else if (smallCardValue === "🔗 Copy iframe (live card)") {
+        navigator.clipboard.writeText(
+          `<iframe src="${testing ? web["dev"] : web["prod"]}/smallcard?id=${userID}?${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
+        )
+        copiedNotification()
+      } else if (smallCardValue === "🌐 View live card") {
+        window.open(`/smallcard?id=${userID}?${smallTail}`, "_blank")
+      }
+    }
+  }, [smallCardValue])
+
+  useEffect(() => {
+    if (largeCardValue) {
+      if (largeCardValue === "🔗 Copy Image URL (.png)") {
+        navigator.clipboard.writeText(largeCardLink)
+        copiedNotification()
+      } else if (largeCardValue === "🔗 Copy Anchor (.png)") {
+        navigator.clipboard.writeText(
+          `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="100px" src="${largeCardLink}"></img></a>`
+        )
+        copiedNotification()
+      } else if (largeCardValue === "🔗 Copy iframe (live card)") {
+        navigator.clipboard.writeText(
+          `<iframe src="${testing ? web["dev"] : web["prod"]}/largecard?id=${userID}?${largeTail}" name="disi-large-card" height="100px" width="300px"></iframe>`
+        )
+        copiedNotification()
+      } else if (largeCardValue === "🌐 View live card") {
+        window.open(`/largecard?id=${userID}?${largeTail}`, "_blank")
+      }
+    }
+  }, [largeCardValue])
+
+  const smallCardOptions = [
+    "🔗 Copy Image URL (.png)",
+    "🔗 Copy Anchor (.png)",
+    "🔗 Copy Image URL (.svg)",
+    "🔗 Copy Markdown (.svg)",
+    "🔗 Copy iframe (live card)",
+    "🌐 View live card",
+  ]
+
+  const smallCardComboboxOptions = smallCardOptions.map((option) => (
+    <Combobox.Option value={option} key={option}>
+      {option}
+    </Combobox.Option>
+  ))
+
+  const largeCardOptions = [
+    "🔗 Copy Image URL (.png)",
+    "🔗 Copy Anchor (.png)",
+    "🔗 Copy iframe (live card)",
+    "🌐 View live card",
+  ]
+
+  const largeCardComboboxOptions = largeCardOptions.map((option) => (
+    <Combobox.Option value={option} key={option}>
+      {option}
+    </Combobox.Option>
+  ))
+
   return (
     <Table.Td>
       {smallCardLink !== "" ? (
@@ -36,77 +145,34 @@ const MainContentColumn3 = ({
             <a href={`https://discord.com/users/${userID}`} target="_blank">
               <Image src={smallCardLink} mb="md" />
             </a>
-            <UnstyledButton
-              w="fit-content"
-              mb="md"
-              onClick={async () => {
-                await navigator.clipboard.writeText(smallCardLink)
-                copiedNotification()
+            <Combobox
+              store={comboboxForSmallCard}
+              onOptionSubmit={(val) => {
+                setSmallCardValue(val)
+                comboboxForSmallCard.closeDropdown()
               }}
             >
-              🔗 Copy Image URL (.png)
-            </UnstyledButton>
-            <UnstyledButton
-              w="fit-content"
-              mb="md"
-              onClick={async () => {
-                await navigator.clipboard.writeText(
-                  `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="100px" src="${smallCardLink}"></img></a>`
-                )
-                copiedNotification()
-              }}
-            >
-              🔗 Copy Anchor (image/png)
-            </UnstyledButton>
-            <UnstyledButton
-              w="fit-content"
-              mb="md"
-              onClick={async () => {
-                await navigator.clipboard.writeText(
-                  `https://disi-api.bennynguyen.dev/smallcard_svg/${userID}?${smallTail}`
-                )
-                copiedNotification()
-              }}
-            >
-              🔗 Copy Image URL (.svg)
-            </UnstyledButton>
-            <UnstyledButton
-              w="fit-content"
-              mb="md"
-              onClick={async () => {
-                await navigator.clipboard.writeText(
-                  `[![My Discord](https://disi-api.bennynguyen.dev/smallcard_svg/${userID}?${smallTail})](https://discord.com/users/${userID})`
-                )
-                copiedNotification()
-              }}
-            >
-              🔗 Copy Markdown (image/svg)
-            </UnstyledButton>
-            <Tooltip label="Reload every 30 seconds" position="right">
-              <UnstyledButton mb="md" w="fit-content">
-                <Link
-                  to={`/smallcard?id=${userID}${smallTail}`}
-                  target="_blank"
-                  style={{ textDecoration: "none", color: "white" }}
+              <Combobox.Target>
+                <InputBase
+                  label="Choose what to do with the Small card"
+                  component="button"
+                  type="button"
+                  pointer
+                  rightSection={<Combobox.Chevron />}
+                  rightSectionPointerEvents="none"
+                  onClick={() => comboboxForSmallCard.toggleDropdown()}
                 >
-                  <UnstyledButton>🌐 View live card</UnstyledButton>
-                </Link>
-              </UnstyledButton>
-            </Tooltip>
-            <UnstyledButton
-              w="fit-content"
-              onClick={async () => {
-                await navigator.clipboard.writeText(
-                  `<iframe src="https://disi.bennynguyen.dev/smallcard?id=${userID}${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
-                )
-                copiedNotification()
-              }}
-            >
-              🔗 Copy iframe (live card)
-            </UnstyledButton>
+                  {smallCardValue || <Input.Placeholder>Pick value</Input.Placeholder>}
+                </InputBase>
+              </Combobox.Target>
+              <Combobox.Dropdown>
+                <Combobox.Options>{smallCardComboboxOptions}</Combobox.Options>
+              </Combobox.Dropdown>
+            </Combobox>
           </Box>
           {wantLargeCard && largeCardLink && (
             <Box display={"flex"} style={{ flexDirection: "column" }}>
+              <Divider mb="xl" mt="lg" />
               <Title order={4} mb="md">
                 Large card
               </Title>
@@ -129,50 +195,30 @@ const MainContentColumn3 = ({
               <a href={`https://discord.com/users/${userID}`} target="_blank">
                 <Image src={largeCardLink} mb="md" />
               </a>
-              <UnstyledButton
-                w="fit-content"
-                mb="md"
-                onClick={async () => {
-                  await navigator.clipboard.writeText(largeCardLink)
-                  copiedNotification()
+              <Combobox
+                store={comboboxForLargeCard}
+                onOptionSubmit={(val) => {
+                  setLargeCardValue(val)
+                  comboboxForLargeCard.closeDropdown()
                 }}
               >
-                🔗 Copy Image URL
-              </UnstyledButton>
-              <UnstyledButton
-                w="fit-content"
-                mb="md"
-                onClick={async () => {
-                  await navigator.clipboard.writeText(
-                    `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="auto" src="${largeCardLink}"></img></a>`
-                  )
-                  copiedNotification()
-                }}
-              >
-                🔗 Copy Anchor (image)
-              </UnstyledButton>
-              <Tooltip label="Reload every 30 seconds" position="right">
-                <UnstyledButton mb="md" w="fit-content">
-                  <Link
-                    to={`/largecard?id=${userID}${largeTail}`}
-                    target="_blank"
-                    style={{ textDecoration: "none", color: "white" }}
+                <Combobox.Target>
+                  <InputBase
+                    label="Choose what to do with the Large card"
+                    component="button"
+                    type="button"
+                    pointer
+                    rightSection={<Combobox.Chevron />}
+                    rightSectionPointerEvents="none"
+                    onClick={() => comboboxForLargeCard.toggleDropdown()}
                   >
-                    <UnstyledButton>🌐 View live card</UnstyledButton>
-                  </Link>
-                </UnstyledButton>
-              </Tooltip>
-              <UnstyledButton
-                w="fit-content"
-                onClick={async () => {
-                  await navigator.clipboard.writeText(
-                    `<iframe src="https://disi.bennynguyen.dev/largecard?id=${userID}${largeTail}" name="disi-large-card" height="256.5px" width="300px"></iframe>`
-                  )
-                  copiedNotification()
-                }}
-              >
-                🔗 Copy iframe (live card)
-              </UnstyledButton>
+                    {largeCardValue || <Input.Placeholder>Pick value</Input.Placeholder>}
+                  </InputBase>
+                </Combobox.Target>
+                <Combobox.Dropdown>
+                  <Combobox.Options>{largeCardComboboxOptions}</Combobox.Options>
+                </Combobox.Dropdown>
+              </Combobox>
               <Text mt="sm" style={{ fontSize: "15px" }}>
                 The size of the iframe is pre-determined to be 300.0 x 256.5 (px). You probably will
                 need to change it to fit your needs.

@@ -1,6 +1,4 @@
-import { disiAPI, refinerAPI, testing } from "@/env/env"
-import { getBannerImage } from "@/pocketbase_client"
-import { fileToBase64, limitTextarea } from "@/utils/tools"
+import { limitTextarea } from "@/utils/tools"
 import {
   Box,
   Button,
@@ -19,6 +17,7 @@ import {
   Title,
 } from "@mantine/core"
 import { notifications } from "@mantine/notifications"
+import { generatingCards } from "./utils"
 
 const MainContentColumn2 = ({
   form,
@@ -72,110 +71,32 @@ const MainContentColumn2 = ({
       <Box
         component="form"
         onSubmit={form.onSubmit(async () => {
-          if (customBannerMode === "upload" && !bannerFile) {
-            notifications.show({
-              title: "Error!",
-              message: "Please upload an image",
-              color: "red",
-              icon: null,
-              autoClose: 3000,
-            })
-            return
-          }
-          if (customBannerMode === "pbid" && !(await getBannerImage(bannerPBID, true))) {
-            notifications.show({
-              title: "Error!",
-              message: "Invalid image ID",
-              color: "red",
-              icon: null,
-              autoClose: 3000,
-            })
-            return
-          }
-          fetch(
-            `${testing ? refinerAPI["dev"] : refinerAPI["prod"]}/username/${form.values.username}`
-          ).then(async (res) => {
-            if (res.status === 404) {
-              notifications.show({
-                title: "Error!",
-                message: "User not found",
-                color: "red",
-                icon: null,
-                autoClose: 3000,
-              })
-              return
-            }
-            const data = await res.json()
-            setUserID(data.id)
-            let newTail =
-              colorMode == "Gradient"
-                ? `&bg1=${form.values.backgroundGradient1.replace(
-                    "#",
-                    ""
-                  )}&bg2=${form.values.backgroundGradient2.replace("#", "")}`
-                : form.values.backgroundSingle
-                  ? `&bg=${form.values.backgroundSingle.replace("#", "")}`
-                  : ""
-            if (form.values.created) newTail += "&created=true"
-            let newBannerID = ""
-            if (bannerFile && customBannerMode === "upload") {
-              const body = {
-                image: await fileToBase64(bannerFile),
-              }
-              const response = await fetch(
-                `${testing ? disiAPI["dev"] : disiAPI["prod"]}/uploadbanner`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(body),
-                }
-              )
-              if (response.status !== 200) {
-                notifications.show({
-                  title: "Error!",
-                  message: "Something went wrong",
-                  color: "red",
-                  icon: null,
-                  autoClose: 3000,
-                })
-                return
-              }
-              const json = await response.json()
-              newBannerID = json.id
-              setBannerFile(null)
-            }
-            const smallTail =
-              newTail +
-              (colorMode == "Gradient" ? `&angle=${form.values.backgroundGradientAngle}` : "")
-            const largeTail =
-              newTail +
-              (form.values.aboutMe ? `&aboutMe=${encodeURIComponent(form.values.aboutMe)}` : "") +
-              (form.values.mood ? `&mood=${form.values.mood}` : "") +
-              (form.values.pronouns
-                ? `&pronouns=${encodeURIComponent(form.values.pronouns)}`
-                : "") +
-              (bannerMode === "Custom Color" && form.values.bannerColor
-                ? `&bannerColor=${form.values.bannerColor.replace("#", "")}`
-                : "") +
-              (bannerMode === "Discord Accent Color" ? `&wantAccentColor=true` : "") +
-              (bannerMode === "Discord Image Banner (Nitro User Only)"
-                ? `&wantBannerImage=true`
-                : "") +
-              (customBannerMode === "upload" ? `&bannerID=${newBannerID}` : "") +
-              (customBannerMode === "pbid" ? `&bannerID=${bannerPBID}` : "") +
-              (customBannerMode === "exturl" ? `&bannerImage=${externalImageURL}` : "")
-            setSmallTail(smallTail)
-            setLargeTail(largeTail)
-            setSmallCardLink(
-              `${testing ? disiAPI["dev"] : disiAPI["prod"]}/smallcard/${data.id}?${smallTail}`
+          try {
+            await generatingCards(
+              form,
+              customBannerMode,
+              bannerFile,
+              bannerPBID,
+              setUserID,
+              colorMode,
+              setSmallTail,
+              setLargeTail,
+              setSmallCardLink,
+              setLargeCardLink,
+              wantLargeCard,
+              bannerMode,
+              externalImageURL,
+              setBannerFile
             )
-            wantLargeCard &&
-              setLargeCardLink(
-                `${testing ? disiAPI["dev"] : disiAPI["prod"]}/largecard/${data.id}?${largeTail}`
-              )
-          })
+          } catch (err) {
+            notifications.show({
+              title: "Error!",
+              message: (err as Error).message,
+              color: "red",
+              icon: null,
+              autoClose: 3000,
+            })
+          }
         })}
         w="90%"
       >
@@ -202,6 +123,17 @@ const MainContentColumn2 = ({
             form.setValues({
               ...form.values,
               created: e.currentTarget.checked,
+            })
+          }}
+        />
+        <Checkbox
+          label="Show Discord label"
+          mt="md"
+          {...form.getInputProps("discordLabel")}
+          onChange={(e) => {
+            form.setValues({
+              ...form.values,
+              discordLabel: e.currentTarget.checked,
             })
           }}
         />

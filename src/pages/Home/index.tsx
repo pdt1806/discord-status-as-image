@@ -84,10 +84,14 @@ const Home = () => {
             Gradient background angle is not applicable to large cards in order to match the design
             on Discord.
           </List.Item>
-          <List.Item>
+          <List.Item mb="xs">
             To achieve the best results, it is recommended to use a banner image with an aspect
             ratio of 2.69:1 and position the main content in the center. Currently, the uploaded
             image cannot be cropped.
+          </List.Item>
+          <List.Item>
+            As of to date, SVG is not supported for the large card. You can use PNG or Live Card
+            instead.
           </List.Item>
         </List>
         <Title mt="xl" mb="md" order={3}>

@@ -15,7 +15,7 @@ const SmallCard = () => {
   const [createdDate, setCreatedDate] = useState(params.get("createdDate"))
   const id = params.get("id")
   const backgroundColor = params.get("bg") ? `#${params.get("bg")}` : "#2b2d31"
-  const tag = params.get("tag")
+  const discordLabel = params.get("discordlabel")
   let backgroundGradient
   let textColor
   if (!params.get("bg1")) {
@@ -145,14 +145,14 @@ const SmallCard = () => {
               </Title>
             </Box>
           )}
-          {tag && (
+          {discordLabel && (
             <Image
               alt="discord-logo"
-              src="/images/discord-tag.svg"
+              src="/images/discord-label.svg"
               h={90}
               w={338.8}
               style={{
-                transform: "translate(603.3px, 70px)",
+                transform: `translate(603.3px, ${createdDate ? "30px" : "70px"})`,
                 position: "absolute",
               }}
             />
