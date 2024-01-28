@@ -162,7 +162,7 @@ const MainContentColumn3 = ({
                   rightSectionPointerEvents="none"
                   onClick={() => comboboxForSmallCard.toggleDropdown()}
                 >
-                  {smallCardValue || <Input.Placeholder>Pick value</Input.Placeholder>}
+                  {smallCardValue || <Input.Placeholder>Select action</Input.Placeholder>}
                 </InputBase>
               </Combobox.Target>
               <Combobox.Dropdown>
@@ -212,7 +212,7 @@ const MainContentColumn3 = ({
                     rightSectionPointerEvents="none"
                     onClick={() => comboboxForLargeCard.toggleDropdown()}
                   >
-                    {largeCardValue || <Input.Placeholder>Pick value</Input.Placeholder>}
+                    {largeCardValue || <Input.Placeholder>Select action</Input.Placeholder>}
                   </InputBase>
                 </Combobox.Target>
                 <Combobox.Dropdown>
