@@ -11,7 +11,7 @@
    2. Fill out the form with necessary information.
    3. Hit Generate and you're all set.
 
-![](https://cdn.discordapp.com/attachments/1190763499081699428/1191170076573966436/localhost_5173_.png?ex=65a47695&is=65920195&hm=dbbb08fe350bb25fe37020416ade6b55733987e789d882c388c822bcb9b9274d&)
+![](https://disi.bennynguyen.dev/images/disi-readme.png)
 
 ## Technology
 
@@ -34,7 +34,3 @@
 ## Contributions
 
 Any contribution is appreciated. Just create an issue/pull request and I will review it ASAP.
-
-<!-- ### My Discord
-
-[![My Discord](https://disi-api.bennynguyen.us/smallcard_svg/458550515614351360?created=true)](https://discord.com/users/458550515614351360) -->
