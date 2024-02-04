@@ -11,7 +11,7 @@
    2. Fill out the form with necessary information.
    3. Hit Generate and you're all set.
 
-![](https://disi.bennynguyen.dev/images/disi-readme.png)
+![](https://raw.githubusercontent.com/pdt1806/discord-status-as-image/main/public/images/disi-readme.png)
 
 ## Technology
 
