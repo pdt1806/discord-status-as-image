@@ -118,7 +118,7 @@ export function UserCardImage() {
         size="md"
         variant="default"
         onClick={() => {
-          window.open("https://github.com/sponsors/pdt1806")
+          window.open("https://www.buymeacoffee.com/pdteggman")
         }}
       >
         <Group>
