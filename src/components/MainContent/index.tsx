@@ -1,6 +1,6 @@
-import { isMobile } from "@/utils/browser"
-import { Table } from "@mantine/core"
+import { Space, Table } from "@mantine/core"
 import { useForm } from "@mantine/form"
+import { useMediaQuery } from "@mantine/hooks"
 import { notifications } from "@mantine/notifications"
 import { useEffect, useState } from "react"
 import MainContentColumn1 from "./Column1"
@@ -50,6 +50,8 @@ const MainContent = () => {
 
   const [colorMode, setColorMode] = useState("Single")
 
+  const isMobile = useMediaQuery("(max-width: 1080px)")
+
   function copiedNotification() {
     notifications.show({
       title: "Copied!",
@@ -63,7 +65,7 @@ const MainContent = () => {
   const pcTable = (
     <Table w="95%" h="90%" style={{ fontSize: "30px" }}>
       <Table.Thead>
-        <Table.Tr>
+        <Table.Tr style={{ border: "none" }}>
           <Table.Th w="33%">Step 1 - Join the Discord Server</Table.Th>
           <Table.Th w="33%">Step 2 - Enter your username</Table.Th>
           <Table.Th w="33%">Step 3 - Enjoy!</Table.Th>
@@ -114,7 +116,7 @@ const MainContent = () => {
   const mobileTable = (
     <Table w="95%" h="90%" style={{ fontSize: "30px" }}>
       <Table.Thead>
-        <Table.Tr>
+        <Table.Tr style={{ border: "none" }}>
           <Table.Th w="100%">Step 1 - Join the Discord Server</Table.Th>
         </Table.Tr>
       </Table.Thead>
@@ -123,8 +125,9 @@ const MainContent = () => {
           <MainContentColumn1 />
         </Table.Tr>
       </Table.Tbody>
+      <Space h="xl" />
       <Table.Thead>
-        <Table.Tr>
+        <Table.Tr style={{ border: "none" }}>
           <Table.Th w="100%">Step 2 - Enter your username</Table.Th>
         </Table.Tr>
       </Table.Thead>
@@ -156,8 +159,9 @@ const MainContent = () => {
           />
         </Table.Tr>
       </Table.Tbody>
+      <Space h="xl" />
       <Table.Thead>
-        <Table.Tr>
+        <Table.Tr style={{ border: "none" }}>
           <Table.Th w="100%">Step 3 - Enjoy!</Table.Th>
         </Table.Tr>
       </Table.Thead>

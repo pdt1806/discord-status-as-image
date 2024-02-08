@@ -121,10 +121,12 @@ const MainContentColumn3 = ({
     "🔗 Copy Anchor (.png)",
     "🔗 Copy iframe (live card)",
     "🌐 View live card",
+    "🔗 Copy Image URL (.svg) - Unsupported",
+    "🔗 Copy Markdown (.svg) - Unsupported",
   ]
 
   const largeCardComboboxOptions = largeCardOptions.map((option) => (
-    <Combobox.Option value={option} key={option}>
+    <Combobox.Option value={option} key={option} disabled={option.includes(".svg")}>
       {option}
     </Combobox.Option>
   ))

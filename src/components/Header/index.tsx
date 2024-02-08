@@ -1,28 +1,29 @@
-import { smallestHeader } from "@/utils/browser"
 import { Box, Image, Text, Title } from "@mantine/core"
+import { useMediaQuery } from "@mantine/hooks"
 import { Link, useNavigate } from "react-router-dom"
 
 const Header = () => {
   const navigate = useNavigate()
   const isHome = window.location.pathname === "/"
+  const smallestHeader = useMediaQuery("(max-width: 400px)")
 
   return (
     <Box
       style={{
-        backgroundColor: "#232525",
+        backgroundColor: "#121212",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
       }}
       w="100%"
-      h={100}
+      h={80}
     >
-      <Box style={{ backgroundColor: "#232525", display: "flex", alignItems: "center" }}>
+      <Box style={{ backgroundColor: "#121212", display: "flex", alignItems: "center" }}>
         <Image
           src="/images/disi-logo.png"
           alt="Discord Status as Image"
-          h={100}
-          w={100}
+          h={80}
+          w={80}
           style={{ cursor: !isHome ? "pointer" : "" }}
           onClick={() => {
             !isHome && navigate("/")
@@ -31,7 +32,7 @@ const Header = () => {
         <Title
           c="white"
           ml="md"
-          style={{ fontSize: smallestHeader ? "25px" : "35px", cursor: !isHome ? "pointer" : "" }}
+          style={{ fontSize: smallestHeader ? "20px" : "25px", cursor: !isHome ? "pointer" : "" }}
           onClick={() => {
             !isHome && navigate("/")
           }}
@@ -39,7 +40,7 @@ const Header = () => {
           Discord Status as Image
         </Title>
       </Box>
-      <Text mr="xl" style={{ fontSize: "20px" }} c="white" visibleFrom="smallHeader">
+      <Text mr="xl" style={{ fontSize: "18px" }} c="white" visibleFrom="smallHeader">
         Created by{" "}
         <Link
           to="https://github.com/pdt1806"

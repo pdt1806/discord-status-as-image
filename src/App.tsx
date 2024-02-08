@@ -50,7 +50,7 @@ export default function App() {
       theme={createTheme({
         fontFamily: "Noto Sans TC, sans-serif",
         breakpoints: {
-          smallHeader: "800px",
+          smallHeader: "600px",
         },
       })}
     >

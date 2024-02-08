@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <Box
       style={{
-        backgroundColor: "#232525",
+        backgroundColor: "#121212",
         textAlign: "center",
         display: "flex",
         alignItems: "center",
