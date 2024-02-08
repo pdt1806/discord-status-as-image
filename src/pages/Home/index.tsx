@@ -117,7 +117,7 @@ const Home = () => {
           <SimpleGrid cols={{ base: 1, sm: 2, xl: 4 }} spacing="xl" verticalSpacing="xl">
             <FAQCard
               question="Is the status always accurate?"
-              answer="The provided status image is not guaranteed to be accurate. That being said, we implement non-caching logic to fetch the status every time the image is loaded."
+              answer="The provided status image is not guaranteed to be accurate. That being said, we implement no-caching logic to fetch the status every time the image is loaded."
             />
             <FAQCard
               question="Why is the gradient background angle not applicable to large cards?"
