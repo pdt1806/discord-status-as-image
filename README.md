@@ -13,7 +13,7 @@
 
 ![](https://raw.githubusercontent.com/pdt1806/discord-status-as-image/main/public/images/disi-readme.png)
 
-## Technology
+## Technologies
 
 - [React](https://reactjs.org/)
 - [Mantine](https://mantine.dev/)
