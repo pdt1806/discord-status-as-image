@@ -96,7 +96,6 @@ const Home = () => {
             <HowToCard
               image="images/showcase/disi-showcase-3.png"
               main="1. Join the Discord Server to have your live status captured"
-              description=""
             />
             <HowToCard
               image="images/showcase/disi-showcase-4.png"
@@ -106,7 +105,7 @@ const Home = () => {
             <HowToCard
               image="images/showcase/disi-showcase-5.png"
               main="3. Click the 'Generate' button and you are all set!"
-              description=""
+              description="The cards can be embedded in various formats, such as .png, .svg, Markdown, or HTML."
             />
           </Group>
         </Flex>
