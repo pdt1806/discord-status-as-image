@@ -147,7 +147,6 @@ const Home = () => {
             w={isMobile ? "100%" : "50%"}
             h="auto"
             mt="xl"
-            mb="xl"
             ml="auto"
             mr={isMobile ? "auto" : "0"}
           >

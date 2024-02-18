@@ -1,10 +1,8 @@
-import { Box, Image, Text, Title } from "@mantine/core"
+import { Anchor, Box, Image, Text, Title } from "@mantine/core"
 import { useMediaQuery } from "@mantine/hooks"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 const Header = () => {
-  const navigate = useNavigate()
-  const isHome = window.location.pathname === "/"
   const smallestHeader = useMediaQuery("(max-width: 400px)")
 
   return (
@@ -16,31 +14,31 @@ const Header = () => {
         justifyContent: "space-between",
       }}
       w="100%"
-      h={80}
+      h={100}
     >
-      <Box style={{ backgroundColor: "#121212", display: "flex", alignItems: "center" }}>
+      <Anchor
+        href="/"
+        style={{
+          backgroundColor: "#121212",
+          display: "flex",
+          alignItems: "center",
+          textDecoration: "none",
+          color: "white",
+        }}
+        ml="sm"
+      >
         <Image
           src="/images/disi-logo.png"
           alt="Discord Status as Image"
-          h={80}
-          w={80}
-          style={{ cursor: !isHome ? "pointer" : "" }}
-          onClick={() => {
-            !isHome && navigate("/")
-          }}
+          h={75}
+          w={75}
+          style={{ borderRadius: "15%" }}
         />
-        <Title
-          c="white"
-          ml="md"
-          style={{ fontSize: smallestHeader ? "20px" : "25px", cursor: !isHome ? "pointer" : "" }}
-          onClick={() => {
-            !isHome && navigate("/")
-          }}
-        >
+        <Title c="white" ml="md" style={{ fontSize: smallestHeader ? "20px" : "25px" }}>
           Discord Status as Image
         </Title>
-      </Box>
-      <Text mr="xl" style={{ fontSize: "18px" }} c="white" visibleFrom="smallHeader">
+      </Anchor>
+      <Text mr="lg" style={{ fontSize: "18px" }} c="white" visibleFrom="smallHeader">
         Created by{" "}
         <Link
           to="https://github.com/pdt1806"
