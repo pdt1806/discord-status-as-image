@@ -1,4 +1,4 @@
-export function base64toBlob(base64: string): Blob | null {
+export function base64toFile(base64: string): File | null {
   const match = base64.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,(.+)$/)
 
   if (!match) {
@@ -14,7 +14,12 @@ export function base64toBlob(base64: string): Blob | null {
     byteNumbers[i] = byteCharacters.charCodeAt(i)
   }
   const byteArray = new Uint8Array(byteNumbers)
-  return new Blob([byteArray], { type: contentType })
+
+  const blob = new Blob([byteArray], { type: contentType })
+
+  const fileName = `${Math.random().toString(36).substring(2, 8)}`
+
+  return new File([blob], fileName, { type: contentType })
 }
 
 export const fetchData = async (id: string) => {

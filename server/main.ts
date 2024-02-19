@@ -11,7 +11,7 @@ import {
 } from "../src/utils/tools"
 import { iconsListSmall } from "./icons"
 import { uploadBannerImage } from "./pocketbase_server"
-import { base64toBlob, fetchData, urlToBase64 } from "./utils"
+import { base64toFile, fetchData, urlToBase64 } from "./utils"
 
 const root = testing ? "http://localhost:5173" : "http://localhost:2011"
 
@@ -325,7 +325,7 @@ app.post("/uploadbanner", async (req, res) => {
       res.status(400).send("Bad Request")
       return null
     }
-    const blob = base64toBlob(image)
+    const blob = base64toFile(image)
     if (!blob) {
       res.status(400).send("Bad Request")
       return null
