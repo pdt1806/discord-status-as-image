@@ -33,23 +33,23 @@ export function bgIsLight(color: { r: number; g: number; b: number }) {
   return brightness > 186
 }
 
-const monthNames = {
-  "01": "Jan",
-  "02": "Feb",
-  "03": "Mar",
-  "04": "Apr",
+export const monthsKey = {
+  "01": "January",
+  "02": "February",
+  "03": "March",
+  "04": "April",
   "05": "May",
-  "06": "Jun",
-  "07": "Jul",
-  "08": "Aug",
-  "09": "Sep",
-  "10": "Oct",
-  "11": "Nov",
-  "12": "Dec",
+  "06": "June",
+  "07": "July",
+  "08": "August",
+  "09": "September",
+  "10": "October",
+  "11": "November",
+  "12": "December",
 } as const
 
 export function formatDate(date: string) {
-  return `${monthNames[date.slice(0, 2) as keyof typeof monthNames]}${" "}
+  return `${monthsKey[date.slice(0, 2) as keyof typeof monthsKey].slice(0, 3)}${" "}
   ${date.slice(3, 5)}, ${date.slice(6, 10)}`
 }
 
@@ -80,21 +80,6 @@ export function fileToBase64(file: File): Promise<string> {
     reader.readAsDataURL(file)
   })
 }
-
-export const monthsKey = {
-  "01": "January",
-  "02": "February",
-  "03": "March",
-  "04": "April",
-  "05": "May",
-  "06": "June",
-  "07": "July",
-  "08": "August",
-  "09": "September",
-  10: "October",
-  11: "November",
-  12: "December",
-} as const
 
 export function setSmallCardTitleSize(displayName: string | undefined) {
   if (displayName?.length! > 30) {
