@@ -7,6 +7,7 @@ import LargeCard from "./components/LargeCard"
 import Layout from "./components/Layout"
 import SmallCard from "./components/SmallCard"
 import Document from "./pages/Document"
+import { Error404 } from "./pages/Error/404"
 import Home from "./pages/Home"
 
 const routes: RouteObject[] = [
@@ -28,7 +29,7 @@ const routes: RouteObject[] = [
       },
       {
         path: "/*",
-        element: <Home />,
+        element: <Error404 />,
       },
     ],
   },
