@@ -1,10 +1,10 @@
-import { refinerAPI, testing } from "@/env/env"
 import { getBannerImage } from "@/pocketbase_client"
-import { blendColors, formatDate, hexToRgb, setLargeCardTitleSize } from "@/utils/tools"
+import { formatDate, setLargeCardTitleSize } from "@/utils/tools"
 import { Avatar, Box, Divider, Image, Text, Title } from "@mantine/core"
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import classes from "../style/profile.module.css"
+import { BG1TextColor, notBG1TextColor, setStatusImg, updateStatus } from "./utils"
 
 const LargeCard = () => {
   const { search } = useLocation()
@@ -15,62 +15,38 @@ const LargeCard = () => {
   const [status, setStatus] = useState(params.get("status"))
   const [createdDate, setCreatedDate] = useState(params.get("createdDate"))
   const [bannerImage, setBannerImage] = useState(params.get("bannerImage"))
+  const [statusImage, setStatusImage] = useState(setStatusImg(status || "offline"))
   const [accentColor, setAccentColor] = useState(
     params.get("accentColor") && `#${params.get("accentColor")}`
   )
   const id = params.get("id")
   const backgroundColor = params.get("bg") ? `#${params.get("bg")}` : "#2b2d31"
   const discordLabel = params.get("discordlabel")
-  let backgroundGradient
-  let textColor
-  let textColorRaw
-  if (!params.get("bg1")) {
-    const textColorRaw = hexToRgb(backgroundColor || "")
-    textColor =
-      textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186
-        ? "#202225"
-        : "white"
-  } else {
-    const gradient1Raw = hexToRgb(params.get("bg1") || "")
-    const gradient2Raw = hexToRgb(params.get("bg2") || "")
-    const gradient1 = gradient1Raw ? `${gradient1Raw.r}, ${gradient1Raw.g}, ${gradient1Raw.b}` : ""
-    const gradient2 = gradient2Raw ? `${gradient2Raw.r}, ${gradient2Raw.g}, ${gradient2Raw.b}` : ""
-    backgroundGradient =
-      gradient1 && gradient2
-        ? `linear-gradient(180deg, rgb(${gradient1}) 0%, rgb(${gradient2}) 100%)`
-        : ""
-    textColorRaw = hexToRgb(blendColors(params.get("bg1") || "", params.get("bg2") || "") || "")
-    textColor =
-      textColorRaw!.r * 0.299 + textColorRaw!.g * 0.587 + textColorRaw!.b * 0.114 > 186
-        ? "#202225"
-        : "white"
-  }
   const bannerColor = params.get("bannerColor") ? `#${params.get("bannerColor")}` : "#212121"
   const mood = params.get("mood")
   const aboutMe = decodeURIComponent(params.get("aboutMe") || "")
   const pronouns = decodeURIComponent(params.get("pronouns") || "")
   const bannerID = params.get("bannerID")
 
-  function updateStatus() {
-    fetch(`${testing ? refinerAPI["dev"] : refinerAPI["prod"]}/user/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then(async (data) => {
-        setUsername(data.username)
-        setDisplayName(data.display_name)
-        setAvatar(data.avatar)
-        setStatus(data.status)
-        setStatusImage(setStatusImg(data.status))
-        if (params.get("created") == "true") setCreatedDate(data.created_at)
-        if (params.get("wantBannerImage") == "true") {
-          setBannerImage(data.banner)
-          setAccentColor(data.accent_color)
-        }
-        if (params.get("wantAccentColor")) setAccentColor(data.accent_color)
-      })
+  let backgroundGradient
+  let textColor
+  if (params.get("bg1") && params.get("bg2")) {
+    const colors = BG1TextColor(params)
+    backgroundGradient = colors[0]
+    textColor = colors[1]
+  } else textColor = notBG1TextColor(backgroundColor)
+
+  const updateStatusArgs = {
+    params,
+    id,
+    setUsername,
+    setDisplayName,
+    setAvatar,
+    setStatus,
+    setStatusImage,
+    setCreatedDate,
+    setBannerImage,
+    setAccentColor,
   }
 
   useEffect(() => {
@@ -81,34 +57,17 @@ const LargeCard = () => {
       setBannerImage(banner)
     }
 
-    updateStatus()
+    updateStatus(updateStatusArgs)
     getBanner()
   }, [])
 
   setTimeout(() => {
     try {
-      updateStatus()
+      updateStatus(updateStatusArgs)
     } catch {}
   }, 15000)
 
-  function setStatusImg(status?: string) {
-    switch (status) {
-      case "online":
-        return "/images/icons/online.svg"
-      case "idle":
-        return "/images/icons/idle.svg"
-      case "dnd":
-        return "/images/icons/dnd.svg"
-      case "offline":
-        return "/images/icons/offline.svg"
-      default:
-        return "/images/icons/offline.svg"
-    }
-  }
-
   let titleSize = setLargeCardTitleSize(displayName || "")
-
-  const [statusImage, setStatusImage] = useState(setStatusImg(status || "offline"))
 
   const ratio = window.innerWidth / 807
 

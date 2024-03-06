@@ -66,6 +66,17 @@ const MainContentColumn2 = ({
   setBannerPBID: (pbid: string) => void
   smallCardLink: string
 }) => {
+  function formatAndUpdateHex({ value, propertyName }: { value: string; propertyName: string }) {
+    if (/^([A-Fa-f0-9]{1,6})?$/.test(value) && !form.values[propertyName])
+      value = `#${value.toUpperCase()}`
+    if (/^#([A-Fa-f0-9]{1,6})?$/.test(value) || value === "") {
+      form.setValues({
+        ...form.values,
+        [propertyName]: value.toUpperCase(),
+      })
+    }
+  }
+
   return (
     <Table.Td h="100%" display={"flex"} style={{ alignItems: "start", flexDirection: "column" }}>
       <Box
@@ -165,23 +176,12 @@ const MainContentColumn2 = ({
                   {...form.getInputProps("backgroundSingle")}
                   maxLength={7}
                   minLength={7}
-                  onChange={(e) => {
-                    if (
-                      /^([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) &&
-                      !form.values.backgroundSingle
-                    )
-                      e.currentTarget.value = `#${e.currentTarget.value.toUpperCase()}`
-                    if (
-                      /^#([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) ||
-                      e.currentTarget.value === ""
-                    ) {
-                      const finalValue = e.currentTarget.value.toUpperCase()
-                      form.setValues({
-                        ...form.values,
-                        backgroundSingle: finalValue,
-                      })
-                    }
-                  }}
+                  onChange={(e) =>
+                    formatAndUpdateHex({
+                      value: e.currentTarget.value,
+                      propertyName: "backgroundSingle",
+                    })
+                  }
                 />
               </HoverCard.Target>
               <HoverCard.Dropdown>
@@ -207,23 +207,12 @@ const MainContentColumn2 = ({
                     maxLength={7}
                     minLength={7}
                     required
-                    onChange={(e) => {
-                      if (
-                        /^([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) &&
-                        !form.values.backgroundGradient1
-                      )
-                        e.currentTarget.value = `#${e.currentTarget.value.toUpperCase()}`
-                      if (
-                        /^#([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) ||
-                        e.currentTarget.value === ""
-                      ) {
-                        const finalValue = e.currentTarget.value.toUpperCase()
-                        form.setValues({
-                          ...form.values,
-                          backgroundGradient1: finalValue,
-                        })
-                      }
-                    }}
+                    onChange={(e) =>
+                      formatAndUpdateHex({
+                        value: e.currentTarget.value,
+                        propertyName: "backgroundGradient1",
+                      })
+                    }
                   />
                 </HoverCard.Target>
                 <HoverCard.Dropdown>
@@ -249,21 +238,12 @@ const MainContentColumn2 = ({
                     maxLength={7}
                     minLength={7}
                     required
-                    onChange={(e) => {
-                      if (
-                        /^([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) &&
-                        !form.values.backgroundGradient2
-                      )
-                        e.currentTarget.value = `#${e.currentTarget.value.toUpperCase()}`
-                      if (
-                        /^#([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) ||
-                        e.currentTarget.value === ""
-                      )
-                        form.setValues({
-                          ...form.values,
-                          backgroundGradient2: e.currentTarget.value.toUpperCase(),
-                        })
-                    }}
+                    onChange={(e) =>
+                      formatAndUpdateHex({
+                        value: e.currentTarget.value,
+                        propertyName: "backgroundGradient2",
+                      })
+                    }
                   />
                 </HoverCard.Target>
                 <HoverCard.Dropdown>
@@ -360,19 +340,10 @@ const MainContentColumn2 = ({
                     maxLength={7}
                     minLength={7}
                     onChange={(e) => {
-                      if (
-                        /^([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) &&
-                        !form.values.bannerColor
-                      )
-                        e.currentTarget.value = `#${e.currentTarget.value.toUpperCase()}`
-                      if (
-                        /^#([A-Fa-f0-9]{1,6})?$/.test(e.currentTarget.value) ||
-                        e.currentTarget.value === ""
-                      )
-                        form.setValues({
-                          ...form.values,
-                          bannerColor: e.currentTarget.value.toUpperCase(),
-                        })
+                      formatAndUpdateHex({
+                        value: e.currentTarget.value,
+                        propertyName: "bannerColor",
+                      })
                     }}
                   />
                 </HoverCard.Target>

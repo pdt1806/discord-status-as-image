@@ -51,83 +51,131 @@ const MainContentColumn3 = ({
 
   useEffect(() => {
     if (smallCardValue) {
-      if (smallCardValue === "🔗 Copy Image URL (.png)") {
-        navigator.clipboard.writeText(smallCardLink)
-        copiedNotification()
-      } else if (smallCardValue === "🔗 Copy Anchor (.png)") {
-        navigator.clipboard.writeText(
-          `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="100px" src="${smallCardLink}"></img></a>`
-        )
-        copiedNotification()
-      } else if (smallCardValue === "🔗 Copy Image URL (.svg)") {
-        navigator.clipboard.writeText(
-          `${testing ? disiAPI["dev"] : disiAPI["prod"]}/smallcard_svg/${userID}?${smallTail}`
-        )
-        copiedNotification()
-      } else if (smallCardValue === "🔗 Copy Markdown (.svg)") {
-        navigator.clipboard.writeText(
-          `[![My Discord](${testing ? disiAPI["dev"] : disiAPI["prod"]}/smallcard_svg/${userID}?${smallTail})](https://discord.com/users/${userID})`
-        )
-        copiedNotification()
-      } else if (smallCardValue === "🔗 Copy iframe (live card)") {
-        navigator.clipboard.writeText(
-          `<iframe src="${testing ? web["dev"] : web["prod"]}/smallcard?id=${userID}?${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
-        )
-        copiedNotification()
-      } else if (smallCardValue === "🌐 View live card") {
-        window.open(`/smallcard?id=${userID}?${smallTail}`, "_blank")
-      }
+      smallCardOptions.forEach((option) => {
+        if (option.value === smallCardValue) {
+          option.execute()
+        }
+      })
     }
   }, [smallCardValue])
 
   useEffect(() => {
     if (largeCardValue) {
-      if (largeCardValue === "🔗 Copy Image URL (.png)") {
-        navigator.clipboard.writeText(largeCardLink)
-        copiedNotification()
-      } else if (largeCardValue === "🔗 Copy Anchor (.png)") {
-        navigator.clipboard.writeText(
-          `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="100px" src="${largeCardLink}"></img></a>`
-        )
-        copiedNotification()
-      } else if (largeCardValue === "🔗 Copy iframe (live card)") {
-        navigator.clipboard.writeText(
-          `<iframe src="${testing ? web["dev"] : web["prod"]}/largecard?id=${userID}?${largeTail}" name="disi-large-card" height="100px" width="300px"></iframe>`
-        )
-        copiedNotification()
-      } else if (largeCardValue === "🌐 View live card") {
-        window.open(`/largecard?id=${userID}?${largeTail}`, "_blank")
-      }
+      largeCardOptions.forEach((option) => {
+        if (option.value === largeCardValue) {
+          option.execute()
+        }
+      })
     }
   }, [largeCardValue])
 
   const smallCardOptions = [
-    "🔗 Copy Image URL (.png)",
-    "🔗 Copy Anchor (.png)",
-    "🔗 Copy Image URL (.svg)",
-    "🔗 Copy Markdown (.svg)",
-    "🔗 Copy iframe (live card)",
-    "🌐 View live card",
+    {
+      value: "🔗 Copy Image URL (.png)",
+      execute: () => {
+        navigator.clipboard.writeText(smallCardLink)
+        copiedNotification()
+      },
+    },
+    {
+      value: "🔗 Copy Anchor (.png)",
+      execute: () => {
+        navigator.clipboard.writeText(
+          `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="100px" src="${smallCardLink}"></img></a>`
+        )
+        copiedNotification()
+      },
+    },
+    {
+      value: "🔗 Copy Image URL (.svg)",
+      execute: () => {
+        navigator.clipboard.writeText(
+          `${testing ? disiAPI["dev"] : disiAPI["prod"]}/smallcard_svg/${userID}?${smallTail}`
+        )
+        copiedNotification()
+      },
+    },
+    {
+      value: "🔗 Copy Markdown (.svg)",
+      execute: () => {
+        navigator.clipboard.writeText(
+          `[![My Discord](${testing ? disiAPI["dev"] : disiAPI["prod"]}/smallcard_svg/${userID}?${smallTail})](https://discord.com/users/${userID})`
+        )
+        copiedNotification()
+      },
+    },
+    {
+      value: "🔗 Copy iframe (live card)",
+      execute: () => {
+        navigator.clipboard.writeText(
+          `<iframe src="${testing ? web["dev"] : web["prod"]}/smallcard?id=${userID}?${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
+        )
+        copiedNotification()
+      },
+    },
+    {
+      value: "🌐 View live card",
+      execute: () => {
+        window.open(`/smallcard?id=${userID}?${smallTail}`, "_blank")
+      },
+    },
   ]
 
   const smallCardComboboxOptions = smallCardOptions.map((option) => (
-    <Combobox.Option value={option} key={option}>
-      {option}
+    <Combobox.Option value={option.value} key={option.value}>
+      {option.value}
     </Combobox.Option>
   ))
 
   const largeCardOptions = [
-    "🔗 Copy Image URL (.png)",
-    "🔗 Copy Anchor (.png)",
-    "🔗 Copy iframe (live card)",
-    "🌐 View live card",
-    "🔗 Copy Image URL (.svg) - Unsupported",
-    "🔗 Copy Markdown (.svg) - Unsupported",
+    {
+      value: "🔗 Copy Image URL (.png)",
+      execute: () => {
+        navigator.clipboard.writeText(largeCardLink)
+        copiedNotification()
+      },
+    },
+    {
+      value: "🔗 Copy Anchor (.png)",
+      execute: () => {
+        navigator.clipboard.writeText(
+          `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="256.5px" src="${largeCardLink}"></img></a>`
+        )
+        copiedNotification()
+      },
+    },
+    {
+      value: "🔗 Copy iframe (live card)",
+      execute: () => {
+        navigator.clipboard.writeText(
+          `<iframe src="${testing ? web["dev"] : web["prod"]}/largecard?id=${userID}?${largeTail}" name="disi-large-card" height="256.5px" width="300px"></iframe>`
+        )
+        copiedNotification()
+      },
+    },
+    {
+      value: "🌐 View live card",
+      execute: () => {
+        window.open(`/largecard?id=${userID}?${largeTail}`, "_blank")
+      },
+    },
+    {
+      value: "🔗 Copy Image URL (.svg) - Unsupported",
+      execute: () => {},
+    },
+    {
+      value: "🔗 Copy Markdown (.svg) - Unsupported",
+      execute: () => {},
+    },
   ]
 
   const largeCardComboboxOptions = largeCardOptions.map((option) => (
-    <Combobox.Option value={option} key={option} disabled={option.includes(".svg")}>
-      {option}
+    <Combobox.Option
+      value={option.value}
+      key={option.value}
+      disabled={option.value.includes(".svg")}
+    >
+      {option.value}
     </Combobox.Option>
   ))
 
