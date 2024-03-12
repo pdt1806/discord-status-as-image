@@ -7,7 +7,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--mantine-spacing-lg);
+  padding-top: var(--mantine-spacing-xl);
+  padding-bottom: var(--mantine-spacing-xl);
+  padding-left: var(--mantine-spacing-lg);
+  padding-right: var(--mantine-spacing-lg);
 
   @media (max-width: $mantine-breakpoint-sm) {
     flex-direction: column;

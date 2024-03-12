@@ -1,4 +1,4 @@
-import { Anchor, Group, Image, Text, ThemeIcon, Title } from "@mantine/core"
+import { Anchor, Group, Image, Text, Title } from "@mantine/core"
 import { useMediaQuery } from "@mantine/hooks"
 import classes from "./index.module.css"
 
@@ -25,15 +25,13 @@ export default function Footer() {
           style={{ textDecoration: "none", color: "white" }}
         >
           <Group>
-            <ThemeIcon size={50} radius="md" color="rgba(60, 60, 60, 0.5)">
-              <Image
-                src="https://bennynguyen.dev/icon/webIcon.png"
-                alt="Logo"
-                width={40}
-                height={40}
-                style={{ pointerEvents: "none" }}
-              />
-            </ThemeIcon>
+            <Image
+              src="https://bennynguyen.dev/icons/webIcon.svg"
+              alt="Logo"
+              width={35}
+              height={35}
+              style={{ pointerEvents: "none", filter: "grayscale(100%) brightness(0) invert(1)" }}
+            />
             <Title order={4}>Benny Nguyen</Title>
           </Group>
         </Anchor>
