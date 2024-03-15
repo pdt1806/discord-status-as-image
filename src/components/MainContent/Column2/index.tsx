@@ -77,6 +77,13 @@ const MainContentColumn2 = ({
     }
   }
 
+  const scrollToSection = (id: string) => {
+    const section = document.getElementById(id)
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
   return (
     <Table.Td h="100%" display={"flex"} style={{ alignItems: "start", flexDirection: "column" }}>
       <Box
@@ -445,23 +452,29 @@ const MainContentColumn2 = ({
             )}
           </Box>
         )}
-        <Button type="submit" mt="xl" mr="md">
-          Generate
-        </Button>
-        {smallCardLink !== "" && (
-          <Button
-            onClick={() => {
-              setSmallCardLink("")
-              setLargeCardLink("")
-              setSmallTail("")
-              setLargeTail("")
-            }}
-            mt="xl"
-            color="orange"
+        <Group mt="xl" gap="sm">
+          <Button type="submit">Generate</Button>
+          {smallCardLink !== "" && (
+            <Button
+              onClick={() => {
+                setSmallCardLink("")
+                setLargeCardLink("")
+                setSmallTail("")
+                setLargeTail("")
+              }}
+              color="orange"
+            >
+              Clear result
+            </Button>
+          )}
+          <Text
+            style={{ fontSize: "15px", textDecoration: "underline", cursor: "pointer" }}
+            w="max-content"
+            onClick={() => scrollToSection("how-to")}
           >
-            Clear result
-          </Button>
-        )}
+            Need help?
+          </Text>
+        </Group>
       </Box>
     </Table.Td>
   )

@@ -28,7 +28,7 @@ const Document = ({ id }: { id: string }) => {
   if (!document)
     return (
       <Center>
-        <Loader size="lg" />
+        <Loader size="lg" color="white" />
       </Center>
     )
 
