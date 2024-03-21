@@ -132,5 +132,3 @@ dist
 .DS_Store
 
 server/loaded
-
-src/env
