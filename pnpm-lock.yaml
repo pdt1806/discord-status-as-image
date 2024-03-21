@@ -67,9 +67,27 @@ devDependencies:
   '@types/dotenv':
     specifier: ^8.2.0
     version: 8.2.0
+  '@types/eslint':
+    specifier: ~8.56.6
+    version: 8.56.6
   '@types/express':
     specifier: ^4.17.21
     version: 4.17.21
+  '@types/http-server':
+    specifier: ~0.12.4
+    version: 0.12.4
+  '@types/identity-obj-proxy':
+    specifier: ~3.0.2
+    version: 3.0.2
+  '@types/jsdom':
+    specifier: ~21.1.6
+    version: 21.1.6
+  '@types/node':
+    specifier: ^20.11.30
+    version: 20.11.30
+  '@types/prop-types':
+    specifier: ~15.7.11
+    version: 15.7.11
   '@types/react':
     specifier: ^18.2.36
     version: 18.2.67
@@ -1214,6 +1232,17 @@ packages:
       dotenv: 16.4.5
     dev: true
 
+  /@types/eslint@8.56.6:
+    resolution: {integrity: sha512-ymwc+qb1XkjT/gfoQwxIeHZ6ixH23A+tCT2ADSA/DPVKzAjwYkTXBMCQ/f6fe4wEa85Lhp26VPeUxI7wMhAi7A==}
+    dependencies:
+      '@types/estree': 1.0.5
+      '@types/json-schema': 7.0.15
+    dev: true
+
+  /@types/estree@1.0.5:
+    resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
+    dev: true
+
   /@types/express-serve-static-core@4.17.43:
     resolution: {integrity: sha512-oaYtiBirUOPQGSWNGPWnzyAFJ0BP3cwvN4oWZQY+zUBwpVIGsKUkpBpSztp74drYcjavs7SKFZ4DX1V2QeN8rg==}
     dependencies:
@@ -1234,6 +1263,24 @@ packages:
 
   /@types/http-errors@2.0.4:
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
+    dev: true
+
+  /@types/http-server@0.12.4:
+    resolution: {integrity: sha512-vsn4pvP2oRFALLuM5Rca6qUmSPG7u0VNjOuqvL57l3bKldQRWdUZPeSiARhzagDxgfNCHn/o8WlWk4KinBauUg==}
+    dependencies:
+      '@types/connect': 3.4.38
+    dev: true
+
+  /@types/identity-obj-proxy@3.0.2:
+    resolution: {integrity: sha512-0WfmImclMEjbt2oOC4BvvoypsR9Bgsp6OeqEjzSpNBYa1FEHbMGwxADaW/y5liIcnUyMotWtntl3WGWUbSebEw==}
+    dev: true
+
+  /@types/jsdom@21.1.6:
+    resolution: {integrity: sha512-/7kkMsC+/kMs7gAYmmBR9P0vGTnOoLhQhyhQJSlXGI5bzTHp6xdo0TtKWQAsz6pmSAeVqKSbqeyP6hytqr9FDw==}
+    dependencies:
+      '@types/node': 20.11.30
+      '@types/tough-cookie': 4.0.5
+      parse5: 7.1.2
     dev: true
 
   /@types/json-schema@7.0.15:
@@ -1309,6 +1356,10 @@ packages:
       '@types/http-errors': 2.0.4
       '@types/mime': 3.0.4
       '@types/node': 20.11.30
+    dev: true
+
+  /@types/tough-cookie@4.0.5:
+    resolution: {integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==}
     dev: true
 
   /@types/yauzl@2.10.3:
