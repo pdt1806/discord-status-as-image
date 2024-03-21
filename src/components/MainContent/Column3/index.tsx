@@ -270,8 +270,8 @@ const MainContentColumn3 = ({
                 </Combobox.Dropdown>
               </Combobox>
               <Text mt="sm" style={{ fontSize: "15px" }}>
-                The size of the iframe is pre-determined to be 300.0 x 256.5 (px). You probably will
-                need to change it to fit your needs.
+                The size of the iframe and anchor image is pre-determined to be 300.0 x 256.5 (px).
+                You probably will need to change it to fit your needs.
               </Text>
             </Box>
           )}

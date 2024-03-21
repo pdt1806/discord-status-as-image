@@ -13,7 +13,7 @@ import { iconsListSmall } from "./icons"
 import { uploadBannerImage } from "./pocketbase_server"
 import { base64toFile, fetchData, urlToBase64 } from "./utils"
 
-const root = testing ? "http://localhost:5173" : "http://localhost:2011"
+const root = testing ? "http://localhost:5173" : "https://disi.bennynguyen.dev"
 
 const origin = testing ? "*" : "https://disi.bennynguyen.dev"
 
