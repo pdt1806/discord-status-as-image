@@ -17,6 +17,7 @@
 
 - [React](https://reactjs.org/)
 - [Mantine](https://mantine.dev/)
+- [Cloudflare Pages](https://pages.cloudflare.com/)
 - [Node.js](https://nodejs.org/en/)
 - [Express](https://expressjs.com/)
 - [Puppeteer](https://pptr.dev/)
