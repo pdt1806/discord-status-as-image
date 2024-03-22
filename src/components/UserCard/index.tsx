@@ -1,27 +1,27 @@
-import { Avatar, Button, Card, Group, Text } from "@mantine/core"
-import { IconBrandGithubFilled, IconCoffee, IconHeart, IconWorld } from "@tabler/icons-react"
-import { useEffect, useState } from "react"
-import classes from "./index.module.css"
+import { Avatar, Button, Card, Group, Text } from '@mantine/core';
+import { IconBrandGithubFilled, IconCoffee, IconHeart, IconWorld } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import classes from './index.module.css';
 
 interface UserData {
-  followers: number
-  following: number
-  public_repos: number
-  bio: string
+  followers: number;
+  following: number;
+  public_repos: number;
+  bio: string;
 }
 
 export function UserCardImage() {
-  const [info, setInfo] = useState<UserData | null>(null)
-  const [items, setItems] = useState<Array<JSX.Element>>([])
+  const [info, setInfo] = useState<UserData | null>(null);
+  const [items, setItems] = useState<Array<JSX.Element>>([]);
 
   useEffect(() => {
-    fetch("https://api.github.com/users/pdt1806")
+    fetch('https://api.github.com/users/pdt1806')
       .then((response) => response.json())
-      .then((data) => setInfo(data))
-  }, [])
+      .then((data) => setInfo(data));
+  }, []);
 
   useEffect(() => {
-    if (!info) return
+    if (!info) return;
     setItems([
       <div key={info.followers}>
         <Text ta="center" fz="lg" fw={500}>
@@ -47,16 +47,16 @@ export function UserCardImage() {
           Public Repos
         </Text>
       </div>,
-    ])
-  }, [info])
+    ]);
+  }, [info]);
 
   return (
     <Card withBorder padding="xl" radius="md" className={classes.card}>
       <Card.Section
         h={220}
         style={{
-          backgroundImage: "url(/images/showcase/disi-showcase-6.jpg)",
-          backgroundSize: "cover",
+          backgroundImage: 'url(/images/showcase/disi-showcase-6.jpg)',
+          backgroundSize: 'cover',
         }}
       />
       <Avatar
@@ -70,7 +70,7 @@ export function UserCardImage() {
         pdt1806
       </Text>
       <Text ta="center" fz="sm" c="dimmed">
-        {info?.bio || "Software Developer"}
+        {info?.bio || 'Software Developer'}
       </Text>
       <Group mt="md" justify="center" gap={30}>
         {items}
@@ -84,7 +84,7 @@ export function UserCardImage() {
         size="md"
         variant="default"
         onClick={() => {
-          window.open("https://github.com/pdt1806")
+          window.open('https://github.com/pdt1806');
         }}
       >
         <Group>
@@ -101,7 +101,7 @@ export function UserCardImage() {
         size="md"
         variant="default"
         onClick={() => {
-          window.open("https://bennynguyen.dev")
+          window.open('https://bennynguyen.dev');
         }}
       >
         <Group>
@@ -118,7 +118,7 @@ export function UserCardImage() {
         size="md"
         variant="default"
         onClick={() => {
-          window.open("https://www.buymeacoffee.com/pdteggman")
+          window.open('https://www.buymeacoffee.com/pdteggman');
         }}
       >
         <Group>
@@ -135,7 +135,7 @@ export function UserCardImage() {
         size="md"
         variant="default"
         onClick={() => {
-          window.open("https://github.com/sponsors/pdt1806")
+          window.open('https://github.com/sponsors/pdt1806');
         }}
       >
         <Group>
@@ -144,5 +144,5 @@ export function UserCardImage() {
         </Group>
       </Button>
     </Card>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import HowToCard from "@/components/HowToCard"
-import MainContent from "@/components/MainContent"
-import { UserCardImage } from "@/components/UserCard"
+import HowToCard from '@/components/HowToCard';
+import MainContent from '@/components/MainContent';
+import { UserCardImage } from '@/components/UserCard';
 import {
   Accordion,
   Box,
@@ -14,61 +14,61 @@ import {
   Overlay,
   Text,
   Title,
-} from "@mantine/core"
-import { useMediaQuery } from "@mantine/hooks"
-import { useEffect } from "react"
-import { Link } from "react-router-dom"
-import classes from "./index.module.css"
+} from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import classes from './index.module.css';
 
 const Home = () => {
   useEffect(() => {
-    if (window.location.pathname !== "/") window.location.pathname = "/"
-  }, [])
+    if (window.location.pathname !== '/') window.location.pathname = '/';
+  }, []);
 
-  const isMobile = useMediaQuery("(max-width: 1080px)")
+  const isMobile = useMediaQuery('(max-width: 1080px)');
 
   const faqs = [
     {
-      value: "accuracy",
-      question: "Is the status always accurate?",
+      value: 'accuracy',
+      question: 'Is the status always accurate?',
       answer:
-        "The provided status image is not guaranteed to be accurate. That being said, we implement no-caching logic to fetch the status every time the image is loaded.",
+        'The provided status image is not guaranteed to be accurate. That being said, the service is implemented with logic that avoids caching, instead fetching the status every time the image is loaded.',
     },
     {
-      value: "gradient",
-      question: "Why is the gradient background angle not applicable to large cards?",
+      value: 'gradient',
+      question: 'Why is the gradient background angle not applicable to large cards?',
       answer:
-        "Gradient background angle is not applicable to large cards in order to match the design on Discord.",
+        'Gradient background angle is not applicable to large cards in order to match the design on Discord.',
     },
     {
-      value: "ratio",
+      value: 'ratio',
       question:
-        "What are the recommended specifications for a banner image to achieve the best results?",
+        'What are the recommended specifications for a banner image to achieve the best results?',
       answer:
-        "To achieve the best results, it is recommended to use a banner image with an aspect ratio of 2.69:1 and position the main content in the center. Currently, the uploaded image cannot be cropped.",
+        'To achieve the best results, it is recommended to use a banner image with an aspect ratio of 2.69:1 and position the main content in the center. Currently, the uploaded image cannot be cropped.',
     },
     {
-      value: "radius",
-      question: "How to set a border radius and colored border for the image?",
+      value: 'radius',
+      question: 'How to set a border radius and colored border for the image?',
       answer:
-        "The image does not come with a border radius and colored border; you can add them when embedding the image into websites.",
+        'The image does not come with a border radius and colored border; you can add them when embedding the image into websites.',
     },
-  ]
+  ];
 
   return (
     <>
       <Box
         h="min-content"
         p="xl"
-        mt={isMobile ? "0" : "xl"}
-        mb={isMobile ? "0" : "md"}
+        mt={isMobile ? '0' : 'xl'}
+        mb={isMobile ? '0' : 'md'}
         ml="auto"
         mr="auto"
-        w={isMobile ? "100%" : "85%"}
+        w={isMobile ? '100%' : '85%'}
         style={{
-          backgroundColor: !isMobile ? "#121212" : "transparent",
-          borderRadius: !isMobile ? "15px" : "0",
-          color: "white",
+          backgroundColor: !isMobile ? '#121212' : 'transparent',
+          borderRadius: !isMobile ? '15px' : '0',
+          color: 'white',
         }}
       >
         <Center w="100%" h="100%">
@@ -82,7 +82,7 @@ const Home = () => {
       </Center>
       <Divider w="90%" ml="auto" mr="auto" mb="sm" mt="xl" />
       <Center>
-        <Box style={{ position: "relative" }} w={isMobile ? "90%" : "80%"} mih={500}>
+        <Box style={{ position: 'relative' }} w={isMobile ? '90%' : '80%'} mih={500}>
           <Overlay h="auto" mt="xl" mb="md" radius="md" p="lg">
             <Flex align="center" direction="column" justify="center" h="100%">
               <Image
@@ -90,7 +90,7 @@ const Home = () => {
                 alt="Discord Status as Image"
                 h={150}
                 w={150}
-                style={{ borderRadius: "15%" }}
+                style={{ borderRadius: '15%' }}
                 mb="md"
               />
               <Title mb="lg" ta="center">
@@ -116,14 +116,14 @@ const Home = () => {
       <Box
         w="80%"
         display="flex"
-        style={{ flexDirection: "column" }}
+        style={{ flexDirection: 'column' }}
         ml="auto"
         mr="auto"
         mt="xl"
         mb="xl"
       >
-        <Flex align="center" mb="xl" direction={isMobile ? "column" : "row"}>
-          <Box w={isMobile ? "100%" : "45%"}>
+        <Flex align="center" mb="xl" direction={isMobile ? 'column' : 'row'}>
+          <Box w={isMobile ? '100%' : '45%'}>
             <Title mt="xl" mb="md" order={2}>
               Why should you get a DISI card?
             </Title>
@@ -135,14 +135,14 @@ const Home = () => {
           </Box>
           <Image
             src="/images/showcase/disi-showcase-2.png"
-            w={isMobile ? "100%" : "50%"}
-            maw={isMobile ? "600px" : "none"}
+            w={isMobile ? '100%' : '50%'}
+            maw={isMobile ? '600px' : 'none'}
             h="auto"
             mt="xl"
             mb="xl"
             radius="md"
             ml="auto"
-            mr={isMobile ? "auto" : "0"}
+            mr={isMobile ? 'auto' : '0'}
           />
         </Flex>
         <Flex direction="column" align="center" justify="center" mb="xl" id="how-to">
@@ -170,20 +170,20 @@ const Home = () => {
           <Container size="lg">
             <Grid id="faq-grid" gutter={50}>
               <Grid.Col span={{ base: 12, md: 5 }}>
-                <Image src={"images/faq.svg"} alt="Frequently Asked Questions" />
+                <Image src={'images/faq.svg'} alt="Frequently Asked Questions" />
                 <Text size="sm" c="dimmed" ta="center" mt="xl">
                   <Link
                     to="https://www.freepik.com/free-vector/faqs-concept-illustration_12781054.htm#fromView=search&page=1&position=4&uuid=d1a11e29-d943-4a51-922c-0acd0f3725e7"
                     target="_blank"
-                    style={{ color: "white" }}
+                    style={{ color: 'white' }}
                   >
                     Image by storyset
-                  </Link>{" "}
+                  </Link>{' '}
                   on Freepik
                 </Text>
               </Grid.Col>
               <Grid.Col span={{ base: 12, md: 7 }}>
-                <Title order={2} ta={isMobile ? "center" : "left"} mb="xl">
+                <Title order={2} ta={isMobile ? 'center' : 'left'} mb="xl">
                   Frequently Asked Questions
                 </Title>
                 <Accordion chevronPosition="right" variant="separated">
@@ -198,8 +198,8 @@ const Home = () => {
             </Grid>
           </Container>
         </div>
-        <Flex align="center" direction={isMobile ? "column" : "row"}>
-          <Box w={isMobile ? "100%" : "45%"}>
+        <Flex align="center" direction={isMobile ? 'column' : 'row'}>
+          <Box w={isMobile ? '100%' : '45%'}>
             <Title mt="xl" mb="md" order={2}>
               Love My Work?
             </Title>
@@ -210,18 +210,18 @@ const Home = () => {
             </Text>
           </Box>
           <Box
-            w={isMobile ? "100%" : "50%"}
+            w={isMobile ? '100%' : '50%'}
             h="auto"
             mt="xl"
             ml="auto"
-            mr={isMobile ? "auto" : "0"}
+            mr={isMobile ? 'auto' : '0'}
           >
             <UserCardImage />
           </Box>
         </Flex>
       </Box>
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
