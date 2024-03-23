@@ -18,11 +18,23 @@ const Layout = () => {
   useEffect(() => {
     const testAPIandPB = async () => {
       try {
-        const responseAPI = await fetch(testing ? disiAPI['dev'] : disiAPI['prod']);
-        const responsePB = await fetch('https://disi-pb.bennynguyen.dev');
-        const responseRefiner = await fetch(testing ? refinerAPI['dev'] : refinerAPI['prod']);
-        if (!(responseAPI.ok && responsePB.ok && responseRefiner.ok)) {
-          setPage(<Error500 proceedToDemo={proceedToDemo} />);
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        const timeoutId = setTimeout(() => {
+          controller.abort();
+        }, 1000);
+
+        const responseAPI = await fetch(testing ? disiAPI['dev'] : disiAPI['prod'], { signal });
+        const responsePB = await fetch('https://disi-pb.bennynguyen.dev/_/', { signal });
+        const responseRefiner = await fetch(testing ? refinerAPI['dev'] : refinerAPI['prod'], {
+          signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (![responseAPI, responsePB, responseRefiner].every((response) => response.ok)) {
+          throw new Error('One or more requests failed');
         }
       } catch (e) {
         setPage(<Error500 proceedToDemo={proceedToDemo} />);
