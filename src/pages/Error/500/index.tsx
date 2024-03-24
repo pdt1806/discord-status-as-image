@@ -10,9 +10,31 @@ import {
   Text,
   Title,
 } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import classes from './index.module.css';
 
 export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
+  const [maintenanceMessage, setMaintenanceMessage] = useState<string[]>();
+
+  useEffect(() => {
+    const fetchMaintenanceMessage = async () => {
+      try {
+        const response = await fetch(
+          `https://api.allorigins.win/raw?url=https://pastebin.com/raw/xPgJnKkA`,
+          { cache: 'no-store' }
+        );
+        if (response.ok) {
+          const text = await response.text();
+          text.length > 0 && setMaintenanceMessage(text.split('\n'));
+        }
+      } catch (e) {
+        // pass
+      }
+    };
+
+    fetchMaintenanceMessage();
+  }, []);
+
   return (
     <div className={classes.root}>
       <Container>
@@ -31,18 +53,19 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
           </Center>
         </Box>
         <Divider my="xl" />
-        <Badge color="orange" variant="light" size="lg">
-          Effective March 20, 2024
-        </Badge>
-        <Title order={3} mb="lg" mt="lg">
-          Server Maintenance Notice
-        </Title>
-        <Text>
-          The server may experience temporary downtime due to the relocation of the website creator,
-          Benny Nguyen. I am working hard to minimize any disruption and will restore service
-          promptly. Thank you for your understanding.
-        </Text>
-        <Title order={5} mt="xl">
+        {!!maintenanceMessage && (
+          <>
+            <Badge color="orange" variant="light" size="lg">
+              {maintenanceMessage[0]}
+            </Badge>
+            <Title order={3} mb="lg" mt="lg">
+              {maintenanceMessage[1]}
+            </Title>
+            <Text>{maintenanceMessage[2]}</Text>
+            <Divider my="xl" />
+          </>
+        )}
+        <Title order={5}>
           Click the button below if you still want to proceed to the app (the images will not work!)
         </Title>
         <Button
