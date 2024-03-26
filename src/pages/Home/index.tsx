@@ -3,6 +3,7 @@ import MainContent from '@/components/MainContent';
 import { UserCardImage } from '@/components/UserCard';
 import {
   Accordion,
+  Alert,
   Box,
   Center,
   Container,
@@ -16,7 +17,7 @@ import {
   Title,
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classes from './index.module.css';
 
@@ -55,8 +56,36 @@ const Home = () => {
     },
   ];
 
+  const [maintenanceMessage, setMaintenanceMessage] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchMaintenanceMessage = async () => {
+      try {
+        const response = await fetch(
+          `https://api.allorigins.win/raw?url=https://pastebin.com/raw/xPgJnKkA`,
+          { cache: 'no-store' }
+        );
+        if (response.ok) {
+          const text = await response.text();
+          text.length > 0 && setMaintenanceMessage(text.split('\n'));
+        }
+      } catch (e) {
+        // pass
+      }
+    };
+
+    fetchMaintenanceMessage();
+  }, []);
+
   return (
     <>
+      {!!maintenanceMessage[3] && !maintenanceMessage[3].startsWith('//') && (
+        <Alert color="red" w={isMobile ? '100%' : '85%'} ml="auto" mr="auto" mt="md" radius="md">
+          <Text c="white" fw="bold" ta="center">
+            {maintenanceMessage[3]}
+          </Text>
+        </Alert>
+      )}
       <Box
         h="min-content"
         p="xl"
