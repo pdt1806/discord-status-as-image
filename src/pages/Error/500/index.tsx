@@ -1,4 +1,5 @@
 import {
+  Anchor,
   Badge,
   Box,
   Button,
@@ -53,18 +54,39 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
           </Center>
         </Box>
         <Divider my="xl" />
-        {!!maintenanceMessage && (
-          <>
-            <Badge color="orange" variant="light" size="lg">
-              {maintenanceMessage[0]}
-            </Badge>
-            <Title order={3} mb="lg" mt="lg">
-              {maintenanceMessage[1]}
-            </Title>
-            <Text>{maintenanceMessage[2]}</Text>
-            <Divider my="xl" />
-          </>
-        )}
+        {!!maintenanceMessage ? (
+          maintenanceMessage[4].includes('500') ? (
+            <>
+              <Badge color="orange" variant="light" size="lg">
+                {maintenanceMessage[0]}
+              </Badge>
+              <Title order={3} mb="lg" mt="lg">
+                {maintenanceMessage[1]}
+              </Title>
+              <Text>{maintenanceMessage[2]}</Text>
+              <Divider my="xl" />
+            </>
+          ) : (
+            <>
+              <Badge color="orange" variant="light" size="lg">
+                NEW ISSUE
+              </Badge>
+              <Title order={3} mb="lg" mt="lg">
+                This issue has not been known yet
+              </Title>
+              <Text>
+                Please send a message to{' '}
+                <span>
+                  <Anchor c="orange" href="mailto:disi@bennynguyen.dev">
+                    disi@bennynguyen.dev
+                  </Anchor>
+                </span>{' '}
+                to notify me of this issue and I will work on it ASAP. Thank you in advance.
+              </Text>
+              <Divider my="xl" />
+            </>
+          )
+        ) : null}
         <Title order={5}>
           Click the button below if you still want to proceed to the app (the images will not work!)
         </Title>

@@ -79,7 +79,7 @@ const Home = () => {
 
   return (
     <>
-      {!!maintenanceMessage[3] && !maintenanceMessage[3].startsWith('//') && (
+      {!!maintenanceMessage[3] && maintenanceMessage[4].includes('SCHEDULED') && (
         <Alert color="red" w={isMobile ? '100%' : '85%'} ml="auto" mr="auto" mt="md" radius="md">
           <Text c="white" fw="bold" ta="center">
             {maintenanceMessage[3]}
