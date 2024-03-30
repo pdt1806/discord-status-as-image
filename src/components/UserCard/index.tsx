@@ -10,6 +10,37 @@ interface UserData {
   bio: string;
 }
 
+const buttons = [
+  {
+    icon: IconBrandGithubFilled,
+    text: 'GitHub',
+    link: 'https://github.com/pdt1806',
+    bg: 'black',
+    c: 'white',
+  },
+  {
+    icon: IconWorld,
+    text: 'My Website',
+    link: 'https://bennynguyen.dev',
+    bg: 'blue',
+    c: 'white',
+  },
+  {
+    icon: IconCoffee,
+    text: 'Buy me a coffee!',
+    link: 'https://www.buymeacoffee.com/pdteggman',
+    bg: '#fbe13b',
+    c: 'black',
+  },
+  {
+    icon: IconHeart,
+    text: 'Sponsor me!',
+    link: 'https://github.com/sponsors/pdt1806',
+    bg: 'pink',
+    c: 'white',
+  },
+];
+
 export function UserCardImage() {
   const [info, setInfo] = useState<UserData | null>(null);
   const [items, setItems] = useState<Array<JSX.Element>>([]);
@@ -52,18 +83,10 @@ export function UserCardImage() {
 
   return (
     <Card withBorder padding="xl" radius="md" className={classes.card}>
-      <Card.Section
-        h={220}
-        style={{
-          backgroundImage: 'url(/images/showcase/disi-showcase-6.jpg)',
-          backgroundSize: 'cover',
-        }}
-      />
+      <Card.Section className={classes.cardSection} />
       <Avatar
         src="https://avatars.githubusercontent.com/u/78996937"
         size={120}
-        mx="auto"
-        mt={-50}
         className={classes.avatar}
       />
       <Text ta="center" fz="lg" fw={500} mt="sm">
@@ -72,77 +95,29 @@ export function UserCardImage() {
       <Text ta="center" fz="sm" c="dimmed">
         {info?.bio || 'Software Developer'}
       </Text>
-      <Group mt="md" justify="center" gap={30}>
+      <Group mt="md" mb="md" justify="center" gap={30}>
         {items}
       </Group>
-      <Button
-        fullWidth
-        bg="black"
-        c="white"
-        radius="md"
-        mt="xl"
-        size="md"
-        variant="default"
-        onClick={() => {
-          window.open('https://github.com/pdt1806');
-        }}
-      >
-        <Group>
-          <IconBrandGithubFilled size={20} />
-          <Text fw={600}>GitHub</Text>
-        </Group>
-      </Button>
-      <Button
-        fullWidth
-        bg="blue"
-        c="white"
-        radius="md"
-        mt="md"
-        size="md"
-        variant="default"
-        onClick={() => {
-          window.open('https://bennynguyen.dev');
-        }}
-      >
-        <Group>
-          <IconWorld size={20} />
-          <Text fw={600}>My Website</Text>
-        </Group>
-      </Button>
-      <Button
-        fullWidth
-        bg="#fbe13b"
-        c="black"
-        radius="md"
-        mt="md"
-        size="md"
-        variant="default"
-        onClick={() => {
-          window.open('https://www.buymeacoffee.com/pdteggman');
-        }}
-      >
-        <Group>
-          <IconCoffee size={20} />
-          <Text fw={600}>Buy me a coffee!</Text>
-        </Group>
-      </Button>
-      <Button
-        fullWidth
-        bg="pink"
-        c="white"
-        radius="md"
-        mt="md"
-        size="md"
-        variant="default"
-        onClick={() => {
-          window.open('https://github.com/sponsors/pdt1806');
-        }}
-      >
-        <Group>
-          <IconHeart size={20} />
-          <Text fw={600}>Sponsor me!</Text>
-        </Group>
-      </Button>
+      {buttons.map((button) => (
+        <Button
+          key={button.text}
+          fullWidth
+          bg={button.bg}
+          c={button.c}
+          radius="md"
+          mt="md"
+          size="md"
+          variant="default"
+          onClick={() => {
+            window.open(button.link);
+          }}
+        >
+          <Group>
+            <button.icon size={20} />
+            <Text fw={600}>{button.text}</Text>
+          </Group>
+        </Button>
+      ))}
     </Card>
   );
 }

@@ -4,4 +4,11 @@
 
 .avatar {
   border: rem(2px) solid var(--mantine-color-body);
+  margin: -50px auto 0 auto;
+}
+
+.cardSection {
+  height: 220px;
+  background-image: url(/images/showcase/disi-showcase-6.jpg);
+  background-size: cover;
 }

@@ -1,4 +1,4 @@
-import { limitTextarea } from "@/utils/tools"
+import { formatAndUpdateHex, limitTextarea, scrollToSection } from '@/utils/tools';
 import {
   Box,
   Button,
@@ -15,9 +15,9 @@ import {
   TextInput,
   Textarea,
   Title,
-} from "@mantine/core"
-import { notifications } from "@mantine/notifications"
-import { generatingCards } from "./utils"
+} from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { generatingCards } from './utils';
 
 const MainContentColumn2 = ({
   form,
@@ -43,49 +43,31 @@ const MainContentColumn2 = ({
   setBannerPBID,
   smallCardLink,
 }: {
-  form: any
-  customBannerMode: string
-  bannerFile: File | null
-  bannerPBID: string
-  setUserID: (id: string) => void
-  colorMode: string
-  setBannerFile: (file: File | null) => void
-  bannerMode: string
-  externalImageURL: string
-  setSmallTail: (tail: string) => void
-  setLargeTail: (tail: string) => void
-  setSmallCardLink: (link: string) => void
-  setLargeCardLink: (link: string) => void
-  wantLargeCard: boolean
-  setColorMode: (mode: string) => void
-  setWantLargeCard: (want: boolean) => void
-  setCustomBannerMode: (mode: string) => void
-  setBannerMode: (mode: string) => void
-  bannerModeList: string[]
-  setExternalImageURL: (url: string) => void
-  setBannerPBID: (pbid: string) => void
-  smallCardLink: string
+  form: any;
+  customBannerMode: string;
+  bannerFile: File | null;
+  bannerPBID: string;
+  setUserID: (id: string) => void;
+  colorMode: string;
+  setBannerFile: (file: File | null) => void;
+  bannerMode: string;
+  externalImageURL: string;
+  setSmallTail: (tail: string) => void;
+  setLargeTail: (tail: string) => void;
+  setSmallCardLink: (link: string) => void;
+  setLargeCardLink: (link: string) => void;
+  wantLargeCard: boolean;
+  setColorMode: (mode: string) => void;
+  setWantLargeCard: (want: boolean) => void;
+  setCustomBannerMode: (mode: string) => void;
+  setBannerMode: (mode: string) => void;
+  bannerModeList: string[];
+  setExternalImageURL: (url: string) => void;
+  setBannerPBID: (pbid: string) => void;
+  smallCardLink: string;
 }) => {
-  function formatAndUpdateHex({ value, propertyName }: { value: string; propertyName: string }) {
-    if (/^([A-Fa-f0-9]{1,6})?$/.test(value) && !form.values[propertyName])
-      value = `#${value.toUpperCase()}`
-    if (/^#([A-Fa-f0-9]{1,6})?$/.test(value) || value === "") {
-      form.setValues({
-        ...form.values,
-        [propertyName]: value.toUpperCase(),
-      })
-    }
-  }
-
-  const scrollToSection = (id: string) => {
-    const section = document.getElementById(id)
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" })
-    }
-  }
-
   return (
-    <Table.Td h="100%" display={"flex"} style={{ alignItems: "start", flexDirection: "column" }}>
+    <Table.Td h="100%" display={'flex'} style={{ alignItems: 'start', flexDirection: 'column' }}>
       <Box
         component="form"
         onSubmit={form.onSubmit(async () => {
@@ -105,21 +87,21 @@ const MainContentColumn2 = ({
               bannerMode,
               externalImageURL,
               setBannerFile
-            )
+            );
           } catch (err) {
             notifications.show({
-              title: "Error!",
+              title: 'Error!',
               message: (err as Error).message,
-              color: "red",
+              color: 'red',
               icon: null,
               autoClose: 3000,
-            })
+            });
           }
         })}
         w="90%"
       >
         <TextInput
-          {...form.getInputProps("username")}
+          {...form.getInputProps('username')}
           required
           id="disi-username"
           label="Username"
@@ -130,63 +112,64 @@ const MainContentColumn2 = ({
             form.setValues({
               ...form.values,
               username: e.currentTarget.value,
-            })
+            });
           }}
         />
         <Checkbox
           label="Show account created date"
           mt="md"
-          {...form.getInputProps("created")}
+          {...form.getInputProps('created')}
           onChange={(e) => {
             form.setValues({
               ...form.values,
               created: e.currentTarget.checked,
-            })
+            });
           }}
         />
         <Checkbox
           label="Show Discord label"
           mt="md"
-          {...form.getInputProps("discordLabel")}
+          {...form.getInputProps('discordLabel')}
           onChange={(e) => {
             form.setValues({
               ...form.values,
               discordLabel: e.currentTarget.checked,
-            })
+            });
           }}
         />
         <Box mt="xl">
           <Title order={4}>Background color</Title>
           <NativeSelect
-            {...form.getInputProps("colorMode")}
+            {...form.getInputProps('colorMode')}
             label="Color mode"
-            data={["Single", "Gradient"]}
+            data={['Single', 'Gradient']}
             onChange={(e) => {
-              setColorMode(e.currentTarget.value)
+              setColorMode(e.currentTarget.value);
               form.setValues({
                 ...form.values,
-                backgroundGradient1: "",
-                backgroundGradient2: "",
+                backgroundGradient1: '',
+                backgroundGradient2: '',
                 backgroundGradientAngle: 0,
-                backgroundSingle: "",
-              })
-              form.setFieldValue("colorMode", e.currentTarget.value)
+                backgroundSingle: '',
+              });
+              form.setFieldValue('colorMode', e.currentTarget.value);
             }}
           />
-          {colorMode === "Single" ? (
+          {colorMode === 'Single' ? (
             <HoverCard shadow="md" openDelay={250}>
               <HoverCard.Target>
                 <TextInput
                   placeholder="#2B2D31"
                   description="Leave blank for default Discord color"
                   label="Color"
-                  {...form.getInputProps("backgroundSingle")}
+                  {...form.getInputProps('backgroundSingle')}
                   maxLength={7}
                   minLength={7}
                   onChange={(e) =>
                     formatAndUpdateHex({
                       value: e.currentTarget.value,
-                      propertyName: "backgroundSingle",
+                      propertyName: 'backgroundSingle',
+                      form,
                     })
                   }
                 />
@@ -198,26 +181,27 @@ const MainContentColumn2 = ({
                     form.setValues({
                       ...form.values,
                       backgroundSingle: e.toUpperCase(),
-                    })
+                    });
                   }}
                 />
               </HoverCard.Dropdown>
             </HoverCard>
           ) : (
-            <Box display={"flex"} style={{ justifyContent: "space-between" }} w="100%">
+            <Box display={'flex'} style={{ justifyContent: 'space-between' }} w="100%">
               <HoverCard shadow="md" openDelay={250}>
                 <HoverCard.Target>
                   <TextInput
                     placeholder="#1E1E1E"
                     label="Gradient 1"
-                    {...form.getInputProps("backgroundGradient1")}
+                    {...form.getInputProps('backgroundGradient1')}
                     maxLength={7}
                     minLength={7}
                     required
                     onChange={(e) =>
                       formatAndUpdateHex({
                         value: e.currentTarget.value,
-                        propertyName: "backgroundGradient1",
+                        propertyName: 'backgroundGradient1',
+                        form,
                       })
                     }
                   />
@@ -229,7 +213,7 @@ const MainContentColumn2 = ({
                       form.setValues({
                         ...form.values,
                         backgroundGradient1: e.toUpperCase(),
-                      })
+                      });
                     }}
                   />
                 </HoverCard.Dropdown>
@@ -241,14 +225,15 @@ const MainContentColumn2 = ({
                     pl={10}
                     pr={10}
                     label="Gradient 2"
-                    {...form.getInputProps("backgroundGradient2")}
+                    {...form.getInputProps('backgroundGradient2')}
                     maxLength={7}
                     minLength={7}
                     required
                     onChange={(e) =>
                       formatAndUpdateHex({
                         value: e.currentTarget.value,
-                        propertyName: "backgroundGradient2",
+                        propertyName: 'backgroundGradient2',
+                        form,
                       })
                     }
                   />
@@ -260,7 +245,7 @@ const MainContentColumn2 = ({
                       form.setValues({
                         ...form.values,
                         backgroundGradient2: e.toUpperCase(),
-                      })
+                      });
                     }}
                   />
                 </HoverCard.Dropdown>
@@ -268,7 +253,7 @@ const MainContentColumn2 = ({
               <NumberInput
                 placeholder="0"
                 label="Angle"
-                {...form.getInputProps("backgroundGradientAngle")}
+                {...form.getInputProps('backgroundGradientAngle')}
                 allowDecimal={false}
                 clampBehavior="strict"
                 max={360}
@@ -278,7 +263,7 @@ const MainContentColumn2 = ({
                   form.setValues({
                     ...form.values,
                     backgroundGradientAngle: e as number,
-                  })
+                  });
                 }}
               />
             </Box>
@@ -288,11 +273,11 @@ const MainContentColumn2 = ({
           label="Get a large card"
           mt="lg"
           onChange={(e) => {
-            const checked = e.currentTarget.checked
-            setWantLargeCard(checked)
+            const checked = e.currentTarget.checked;
+            setWantLargeCard(checked);
             if (!checked) {
-              setCustomBannerMode("")
-              setBannerMode("Custom Color")
+              setCustomBannerMode('');
+              setBannerMode('Custom Color');
             }
           }}
         />
@@ -300,14 +285,14 @@ const MainContentColumn2 = ({
           <Box mt="xl">
             <Title order={4}>Details</Title>
             <TextInput
-              {...form.getInputProps("pronouns")}
+              {...form.getInputProps('pronouns')}
               label="Pronouns"
               placeholder="Enter your pronouns"
               onChange={(e) => {
                 form.setValues({
                   ...form.values,
-                  pronouns: e.currentTarget.value.trim().length != 0 ? e.currentTarget.value : "",
-                })
+                  pronouns: e.currentTarget.value.trim().length != 0 ? e.currentTarget.value : '',
+                });
               }}
             />
             <Textarea
@@ -315,7 +300,7 @@ const MainContentColumn2 = ({
               minRows={5}
               maxRows={5}
               autosize
-              {...form.getInputProps("aboutMe")}
+              {...form.getInputProps('aboutMe')}
               placeholder={`Write something about yourself.\nMax characters per line: 53`}
               onChange={(e) => {
                 form.setValues({
@@ -323,34 +308,35 @@ const MainContentColumn2 = ({
                   aboutMe:
                     e.currentTarget.value.trim().length != 0
                       ? limitTextarea(e.currentTarget.value)
-                      : "",
-                })
+                      : '',
+                });
               }}
             />
             <NativeSelect
               label="Banner Mode"
               data={bannerModeList}
               onChange={(e) => {
-                setBannerMode(e.currentTarget.value)
-                form.setFieldValue("bannerColor", "")
-                setBannerFile(null)
+                setBannerMode(e.currentTarget.value);
+                form.setFieldValue('bannerColor', '');
+                setBannerFile(null);
               }}
             />
-            {bannerMode === "Custom Color" && (
+            {bannerMode === 'Custom Color' && (
               <HoverCard shadow="md" openDelay={250}>
                 <HoverCard.Target>
                   <TextInput
                     placeholder="#212121"
                     label="Banner color"
                     description="Leave blank for dark grey color"
-                    {...form.getInputProps("bannerColor")}
+                    {...form.getInputProps('bannerColor')}
                     maxLength={7}
                     minLength={7}
                     onChange={(e) => {
                       formatAndUpdateHex({
                         value: e.currentTarget.value,
-                        propertyName: "bannerColor",
-                      })
+                        propertyName: 'bannerColor',
+                        form,
+                      });
                     }}
                   />
                 </HoverCard.Target>
@@ -361,22 +347,22 @@ const MainContentColumn2 = ({
                       form.setValues({
                         ...form.values,
                         bannerColor: e.toUpperCase(),
-                      })
+                      });
                     }}
                   />
                 </HoverCard.Dropdown>
               </HoverCard>
             )}
-            {bannerMode === "Custom Image Banner" && (
+            {bannerMode === 'Custom Image Banner' && (
               <>
                 <Box>
                   <Radio.Group
                     name="customImageBannerOptions"
                     onChange={(e) => {
-                      setCustomBannerMode(e)
-                      setExternalImageURL("")
-                      setBannerPBID("")
-                      setBannerFile(null)
+                      setCustomBannerMode(e);
+                      setExternalImageURL('');
+                      setBannerPBID('');
+                      setBannerFile(null);
                     }}
                     value={customBannerMode}
                     label="Options"
@@ -390,7 +376,7 @@ const MainContentColumn2 = ({
                     </Group>
                   </Radio.Group>
                 </Box>
-                {customBannerMode === "upload" && (
+                {customBannerMode === 'upload' && (
                   <FileInput
                     required
                     value={bannerFile}
@@ -402,11 +388,11 @@ const MainContentColumn2 = ({
                     w="max-content"
                     maw="280px"
                     onChange={(e) => {
-                      if (e) setBannerFile(e)
+                      if (e) setBannerFile(e);
                     }}
                   />
                 )}
-                {customBannerMode === "pbid" && (
+                {customBannerMode === 'pbid' && (
                   <TextInput
                     w="max-content"
                     required
@@ -415,22 +401,22 @@ const MainContentColumn2 = ({
                     placeholder="1kdufzpk70fors1"
                     value={bannerPBID}
                     onChange={(e) => {
-                      const value = e.currentTarget.value.trim()
-                      if (/^[a-z0-9]+$/.test(value) || value === "") {
-                        setBannerPBID(value)
+                      const value = e.currentTarget.value.trim();
+                      if (/^[a-z0-9]+$/.test(value) || value === '') {
+                        setBannerPBID(value);
                       }
                     }}
                     label="Image ID"
                     description="ID of the image stored on the database"
                   />
                 )}
-                {customBannerMode === "exturl" && (
+                {customBannerMode === 'exturl' && (
                   <TextInput
                     required
                     placeholder="https://example.com/image.png"
                     value={externalImageURL}
                     onChange={(e) => {
-                      setExternalImageURL(e.currentTarget.value.trim())
+                      setExternalImageURL(e.currentTarget.value.trim());
                     }}
                     label="Image URL"
                     description="Make sure it is a valid one."
@@ -438,14 +424,14 @@ const MainContentColumn2 = ({
                 )}
               </>
             )}
-            {bannerMode === "Discord Accent Color" && (
-              <Text mt="md" style={{ fontSize: "15px" }}>
+            {bannerMode === 'Discord Accent Color' && (
+              <Text mt="md" style={{ fontSize: '15px' }}>
                 This is the color that Discord uses for the accent color (banner color) of your
                 profile. If it is not available, you will get a dark grey banner instead.
               </Text>
             )}
-            {bannerMode === "Discord Image Banner (Nitro User Only)" && (
-              <Text mt="md" style={{ fontSize: "15px" }}>
+            {bannerMode === 'Discord Image Banner (Nitro User Only)' && (
+              <Text mt="md" style={{ fontSize: '15px' }}>
                 This feature is only available for Nitro users. If you are not a Nitro user, you
                 will get a solid color banner instead (accent color or dark grey).
               </Text>
@@ -454,13 +440,13 @@ const MainContentColumn2 = ({
         )}
         <Group mt="xl" gap="sm">
           <Button type="submit">Generate</Button>
-          {smallCardLink !== "" && (
+          {smallCardLink !== '' && (
             <Button
               onClick={() => {
-                setSmallCardLink("")
-                setLargeCardLink("")
-                setSmallTail("")
-                setLargeTail("")
+                setSmallCardLink('');
+                setLargeCardLink('');
+                setSmallTail('');
+                setLargeTail('');
               }}
               color="orange"
             >
@@ -468,16 +454,16 @@ const MainContentColumn2 = ({
             </Button>
           )}
           <Text
-            style={{ fontSize: "15px", textDecoration: "underline", cursor: "pointer" }}
+            style={{ fontSize: '15px', textDecoration: 'underline', cursor: 'pointer' }}
             w="max-content"
-            onClick={() => scrollToSection("how-to")}
+            onClick={() => scrollToSection('how-to')}
           >
             Need help?
           </Text>
         </Group>
       </Box>
     </Table.Td>
-  )
-}
+  );
+};
 
-export default MainContentColumn2
+export default MainContentColumn2;
