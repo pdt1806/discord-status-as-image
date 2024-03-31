@@ -3,7 +3,9 @@ import { bgIsLight, blendColors, formatDate, hexToRgb, setSmallCardTitleSize } f
 import { Avatar, Box, Image, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { setStatusImg } from '../LargeCard/utils';
 import classes from '../style/profile.module.css';
+import innerClasses from './index.module.css';
 
 const SmallCard = () => {
   const { search } = useLocation();
@@ -13,6 +15,8 @@ const SmallCard = () => {
   const [avatar, setAvatar] = useState(params.get('avatar'));
   const [status, setStatus] = useState(params.get('status'));
   const [createdDate, setCreatedDate] = useState(params.get('createdDate'));
+  const [statusImage, setStatusImage] = useState(setStatusImg(status || 'offline'));
+
   const id = params.get('id');
   const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#2b2d31';
   const discordLabel = params.get('discordlabel');
@@ -66,57 +70,22 @@ const SmallCard = () => {
     }, 15000);
   });
 
-  function setStatusImg(status?: string) {
-    switch (status) {
-      case 'online':
-        return '/images/icons/online.svg';
-      case 'idle':
-        return '/images/icons/idle.svg';
-      case 'dnd':
-        return '/images/icons/dnd.svg';
-      case 'offline':
-        return '/images/icons/offline.svg';
-      default:
-        return '/images/icons/offline.svg';
-    }
-  }
-
   let titleSize = setSmallCardTitleSize(displayName || '');
-
-  const [statusImage, setStatusImage] = useState(setStatusImg(status || 'offline'));
 
   const ratio = window.innerWidth / 1350;
 
   return (
     <a href={`https://discord.com/users/${id}`} target="_blank">
       <Box
-        w={1350}
-        h={450}
         style={{
           background: backgroundGradient ? backgroundGradient : backgroundColor,
-          position: 'absolute',
-          alignItems: 'center',
-          padding: '30px 30px 30px 70px',
           transform: `${ratio < 1 ? `scale(${ratio})` : ''}`,
-          transformOrigin: 'top left',
         }}
-        display="flex"
+        className={innerClasses.smallCard}
       >
         <Image alt="Avatar" src={avatar} className={classes.avatar} />
-        <Avatar
-          w={75}
-          h={75}
-          src={statusImage}
-          style={{
-            transform: 'translate(-72px, 100px)',
-            background: 'transparent',
-          }}
-        />
-        <Box
-          style={{
-            transform: 'translateX(-10px)',
-          }}
-        >
+        <Avatar className={innerClasses.statusImage} src={statusImage} />
+        <Box style={{ transform: 'translateX(-10px)' }}>
           <Title
             fw={500}
             size={titleSize}
@@ -133,9 +102,7 @@ const SmallCard = () => {
               <Image
                 alt="discord-logo"
                 src="/images/discord.svg"
-                w={60}
-                h={60}
-                mr="lg"
+                className={innerClasses.discordLogo}
                 style={{
                   filter:
                     status != 'offline' || (status == 'offline' && textColor == 'white')
@@ -160,12 +127,8 @@ const SmallCard = () => {
             <Image
               alt="discord-logo"
               src="/images/discord-label.svg"
-              h={90}
-              w={338.8}
-              style={{
-                transform: `translate(603.3px, ${createdDate ? '30px' : '70px'})`,
-                position: 'absolute',
-              }}
+              className={innerClasses.discordLabel}
+              style={{ transform: `translate(603.3px, ${createdDate ? '30px' : '70px'})` }}
             />
           )}
         </Box>

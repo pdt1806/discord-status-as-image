@@ -1,0 +1,51 @@
+.largeCard {
+  width: 807px;
+  height: min-content;
+  position: absolute;
+  align-items: center;
+  transform-origin: top left;
+}
+
+.statusImage {
+  width: 75px;
+  height: 75px;
+  transform: translate(202px, -72px);
+  background: transparent;
+}
+
+.friendRequest {
+  position: absolute;
+  background-color: #28944c;
+  padding: 8px 18px 8px 18px;
+  color: white;
+  font-size: 20px;
+  font-weight: 400;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0px #00000050;
+  transform: translate(548px, 30px);
+}
+
+.name {
+  transform: translateX(30px);
+  border-radius: 15px;
+  z-index: 0;
+  width: 747px;
+  padding: 30px;
+  margin-top: 150px;
+  margin-bottom: 30px;
+  height: max-content;
+}
+
+.aboutMe {
+  margin-top: var(--mantine-spacing-sm);
+  font-size: 22px;
+  max-width: 700px;
+  word-wrap: break-word;
+  white-space: pre-line;
+}
+
+.discordLabel {
+  height: 60px;
+  width: 225.86px;
+  transform: translateX(581.13px);
+}

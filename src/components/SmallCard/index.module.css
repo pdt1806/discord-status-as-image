@@ -1,0 +1,28 @@
+.smallCard {
+  width: 1350px;
+  height: 450px;
+  position: absolute;
+  align-items: center;
+  padding: 30px 30px 30px 70px;
+  transform-origin: top left;
+  display: flex;
+}
+
+.statusImage {
+  width: 75px;
+  height: 75px;
+  transform: translate(-72px, 100px);
+  background: transparent;
+}
+
+.discordLogo {
+  width: 60px;
+  height: 60px;
+  margin-right: var(--mantine-spacing-lg);
+}
+
+.discordLabel {
+  height: 90px;
+  width: 338.8px;
+  position: absolute;
+}
