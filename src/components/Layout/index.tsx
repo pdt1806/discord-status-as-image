@@ -2,12 +2,14 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { disiAPI, refinerAPI, testing } from '@/env/env';
 import { Error500 } from '@/pages/Error/500';
-import { Box } from '@mantine/core';
+import { Box, Loader } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 const Layout = () => {
-  const [page, setPage] = useState(<Outlet />);
+  const [page, setPage] = useState(
+    <Loader color="rgba(255, 255, 255, 1)" type="bars" ml="auto" mr="auto" />
+  );
   const navigate = useNavigate();
 
   const proceedToDemo = () => {
@@ -23,10 +25,10 @@ const Layout = () => {
 
         const timeoutId = setTimeout(() => {
           controller.abort();
-        }, 1000);
+        }, 3000);
 
         const responseAPI = await fetch(testing ? disiAPI['dev'] : disiAPI['prod'], { signal });
-        const responsePB = await fetch('https://disi-pb.bennynguyen.dev/_/', { signal });
+        const responsePB = await fetch('https://disi-pb.bennynguyen.dev/api', { signal });
         const responseRefiner = await fetch(testing ? refinerAPI['dev'] : refinerAPI['prod'], {
           signal,
         });
@@ -36,6 +38,8 @@ const Layout = () => {
         if (![responseAPI, responsePB, responseRefiner].every((response) => response.ok)) {
           throw new Error('One or more requests failed');
         }
+
+        setPage(<Outlet />);
       } catch (e) {
         setPage(<Error500 proceedToDemo={proceedToDemo} />);
       }
