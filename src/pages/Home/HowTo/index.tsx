@@ -1,29 +1,28 @@
-import { Box, Flex, Image, Text, Title } from '@mantine/core';
+import HowToCard from '@/components/HowToCard';
+import { Flex, Group, Title } from '@mantine/core';
 
 export default function HowTo({ isMobile }: { isMobile: boolean | undefined }) {
   return (
-    <Flex align="center" mb="xl" direction={isMobile ? 'column' : 'row'}>
-      <Box w={isMobile ? '100%' : '45%'}>
-        <Title mt="xl" mb="md" order={2}>
-          Why should you get a DISI card?
-        </Title>
-        <Text>
-          You can easily embed the image into your website or markdown file, and your Discord status
-          will be shown and updated automatically for people who are not yet your friends. Moreover,
-          they can click on the image and send you a friend request.
-        </Text>
-      </Box>
-      <Image
-        src="/images/showcase/disi-showcase-2.png"
-        w={isMobile ? '100%' : '50%'}
-        maw={isMobile ? '600px' : 'none'}
-        h="auto"
-        mt="xl"
-        mb="xl"
-        radius="md"
-        ml="auto"
-        mr={isMobile ? 'auto' : '0'}
-      />
+    <Flex direction="column" align="center" justify="center" mb="xl" id="how-to">
+      <Title mb="xl" order={2} ta="center">
+        How to get a DISI card?
+      </Title>
+      <Group mt="md" justify="center" gap={30}>
+        <HowToCard
+          image="images/showcase/disi-showcase-3.png"
+          main="1. Join the Discord Server to have your live status captured"
+        />
+        <HowToCard
+          image="images/showcase/disi-showcase-4.png"
+          main="2. Fill out the form"
+          description="At least the username is required to get your live status."
+        />
+        <HowToCard
+          image="images/showcase/disi-showcase-5.png"
+          main="3. Click the 'Generate' button and you are all set!"
+          description="The cards can be embedded in various formats, such as .png, .svg, Markdown, or HTML."
+        />
+      </Group>
     </Flex>
   );
 }
