@@ -1,155 +1,155 @@
-import express, { Request, Response } from "express"
-import puppeteer from "puppeteer-core"
-import { testing } from "../src/env/env"
-import { getBannerImage } from "../src/pocketbase_client/index"
+import express, { Request, Response } from 'express';
+import puppeteer from 'puppeteer-core';
+import { testing } from '../src/env/env';
+import { getBannerImage } from '../src/pocketbase_client/index';
 import {
   bgIsLight,
   blendColors,
   formatDate,
   hexToRgb,
   setSmallCardTitleSize,
-} from "../src/utils/tools"
-import { iconsListSmall } from "./icons"
-import { uploadBannerImage } from "./pocketbase_server"
-import { base64toFile, fetchData, urlToBase64 } from "./utils"
+} from '../src/utils/tools';
+import { iconsListSmall } from './icons';
+import { uploadBannerImage } from './pocketbase_server';
+import { base64toFile, fetchData, urlToBase64 } from './utils';
 
-const root = testing ? "http://localhost:5173" : "https://disi.bennynguyen.dev"
+const root = testing ? 'http://localhost:5173' : 'https://disi.bennynguyen.dev';
 
-const origin = testing ? "*" : "https://disi.bennynguyen.dev"
+const origin = testing ? '*' : 'https://disi.bennynguyen.dev';
 
 const minimal_args = [
-  "--autoplay-policy=user-gesture-required",
-  "--disable-background-networking",
-  "--disable-background-timer-throttling",
-  "--disable-backgrounding-occluded-windows",
-  "--disable-breakpad",
-  "--disable-client-side-phishing-detection",
-  "--disable-component-update",
-  "--disable-default-apps",
-  "--disable-dev-shm-usage",
-  "--disable-domain-reliability",
-  "--disable-extensions",
-  "--disable-features=AudioServiceOutOfProcess",
-  "--disable-hang-monitor",
-  "--disable-ipc-flooding-protection",
-  "--disable-notifications",
-  "--disable-offer-store-unmasked-wallet-cards",
-  "--disable-popup-blocking",
-  "--disable-print-preview",
-  "--disable-prompt-on-repost",
-  "--disable-renderer-backgrounding",
-  "--disable-setuid-sandbox",
-  "--disable-speech-api",
-  "--disable-sync",
-  "--hide-scrollbars",
-  "--ignore-gpu-blacklist",
-  "--metrics-recording-only",
-  "--mute-audio",
-  "--no-default-browser-check",
-  "--no-first-run",
-  "--no-pings",
-  "--no-sandbox",
-  "--no-zygote",
-  "--password-store=basic",
-  "--use-gl=swiftshader",
-  "--use-mock-keychain",
-  "--headless",
-]
+  '--autoplay-policy=user-gesture-required',
+  '--disable-background-networking',
+  '--disable-background-timer-throttling',
+  '--disable-backgrounding-occluded-windows',
+  '--disable-breakpad',
+  '--disable-client-side-phishing-detection',
+  '--disable-component-update',
+  '--disable-default-apps',
+  '--disable-dev-shm-usage',
+  '--disable-domain-reliability',
+  '--disable-extensions',
+  '--disable-features=AudioServiceOutOfProcess',
+  '--disable-hang-monitor',
+  '--disable-ipc-flooding-protection',
+  '--disable-notifications',
+  '--disable-offer-store-unmasked-wallet-cards',
+  '--disable-popup-blocking',
+  '--disable-print-preview',
+  '--disable-prompt-on-repost',
+  '--disable-renderer-backgrounding',
+  '--disable-setuid-sandbox',
+  '--disable-speech-api',
+  '--disable-sync',
+  '--hide-scrollbars',
+  '--ignore-gpu-blacklist',
+  '--metrics-recording-only',
+  '--mute-audio',
+  '--no-default-browser-check',
+  '--no-first-run',
+  '--no-pings',
+  '--no-sandbox',
+  '--no-zygote',
+  '--password-store=basic',
+  '--use-gl=swiftshader',
+  '--use-mock-keychain',
+  '--headless',
+];
 
-const app = express()
+const app = express();
 
 app.use((req, res, next) => {
   res.header({
-    "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Methods": "GET, POST",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Cache-Control": "no-cache, no-store, must-revalidate, proxy-revalidate",
-    Pragma: "no-cache",
-    Expires: "Mon, 01 Jan 1990 00:00:00 GMT",
-    "Last-Modified": "Mon, 01 Jan 2999 00:00:00 GMT",
-    "Surrogate-Control": "no-store",
-  })
-  next()
-})
+    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Methods': 'GET, POST',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Cache-Control': 'no-cache, no-store, must-revalidate, proxy-revalidate',
+    Pragma: 'no-cache',
+    Expires: 'Mon, 01 Jan 1990 00:00:00 GMT',
+    'Last-Modified': 'Mon, 01 Jan 2999 00:00:00 GMT',
+    'Surrogate-Control': 'no-store',
+  });
+  next();
+});
 
-app.use(express.json({ limit: "16mb" }))
+app.use(express.json({ limit: '16mb' }));
 
-app.set("etag", false)
+app.set('etag', false);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send({ message: "API of Discord Status as Image" })
-})
+app.get('/', (req: Request, res: Response) => {
+  res.send({ message: 'API of Discord Status as Image' });
+});
 
-app.get("/smallcard/:id", async (req: Request, res: Response) => {
+app.get('/smallcard/:id', async (req: Request, res: Response) => {
   try {
-    const { id } = req.params
-    const { bg, bg1, bg2, angle, created, discordlabel } = req.query
+    const { id } = req.params;
+    const { bg, bg1, bg2, angle, created, discordlabel } = req.query;
     let link = bg1
       ? `${root}/smallcard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&angle=${angle}&`
       : bg
         ? `${root}/smallcard?bg=${bg}&`
-        : `${root}/smallcard?`
+        : `${root}/smallcard?`;
     try {
-      const data = await fetchData(id)
+      const data = await fetchData(id);
       if (data === null) {
-        res.status(404).send("User not found")
-        return null
+        res.status(404).send('User not found');
+        return null;
       }
-      created && (link += `createdDate=${data["created_at"]}&`)
-      discordlabel && (link += `discordlabel=true&`)
+      created && (link += `createdDate=${data['created_at']}&`);
+      discordlabel && (link += `discordlabel=true&`);
       const browser = await puppeteer.launch({
-        executablePath: "/usr/bin/chromium-browser",
-        userDataDir: "./loaded",
+        executablePath: '/usr/bin/chromium-browser',
+        userDataDir: './loaded',
         args: minimal_args,
-      })
-      const page = await browser.newPage()
-      await page.setViewport({ width: 1350, height: 450 })
+      });
+      const page = await browser.newPage();
+      await page.setViewport({ width: 1350, height: 450 });
       await page.goto(
-        `${link}displayName=${data["display_name"]}&avatar=${data["avatar"]}&status=${data["status"]}&id=${id}`,
-        { waitUntil: ["networkidle0"] }
-      )
+        `${link}displayName=${data['display_name']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
+        { waitUntil: ['networkidle0'] }
+      );
       const screenshotBuffer = await page.screenshot({
         clip: { x: 0, y: 0, width: 1350, height: 450 },
-      })
-      res.set("Content-Type", "image/png")
-      res.send(screenshotBuffer)
-      await browser.close()
+      });
+      res.set('Content-Type', 'image/png');
+      res.send(screenshotBuffer);
+      await browser.close();
     } catch (error) {
-      res.status(500).send("Internal Server Error")
+      res.status(500).send('Internal Server Error');
     }
   } catch (error) {
-    res.status(500).send("Internal Server Error")
+    res.status(500).send('Internal Server Error');
   }
-})
+});
 
 function monoBackgroundTextColor(bg: string) {
-  const color = hexToRgb(bg)
-  return bgIsLight(color!) ? "#202225" : "white"
+  const color = hexToRgb(bg);
+  return bgIsLight(color!) ? '#202225' : 'white';
 }
 
-app.get("/smallcard_svg/:id", async (req: Request, res: Response) => {
+app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
   try {
-    const { id } = req.params
-    const { bg, bg1, bg2, angle, created, discordlabel } = req.query
+    const { id } = req.params;
+    const { bg, bg1, bg2, angle, created, discordlabel } = req.query;
     try {
-      const data = await fetchData(id)
+      const data = await fetchData(id);
       if (data === null) {
-        res.status(404).send("User not found")
-        return null
+        res.status(404).send('User not found');
+        return null;
       }
-      const avatar = await urlToBase64(data["avatar"])
-      const background = bg ? `#${bg}` : "#2b2d31"
-      let textColor = "white"
+      const avatar = await urlToBase64(data['avatar']);
+      const background = bg ? `#${bg}` : '#2b2d31';
+      let textColor = 'white';
       if (bg1) {
-        const blendColor = blendColors(`#${bg1}`, `#${bg2}`)
-        textColor = monoBackgroundTextColor(blendColor!)
+        const blendColor = blendColors(`#${bg1}`, `#${bg2}`);
+        textColor = monoBackgroundTextColor(blendColor!);
       }
-      if (bg) textColor = monoBackgroundTextColor(`#${bg}`)
-      if (data["status"] == "offline" && textColor === "#202225") textColor = "#5d5f6b"
-      const statusImage = iconsListSmall[data["status"]]
-      const displayName = data["display_name"]
-      const titleSize = setSmallCardTitleSize(data["display_name"])
-      const createdDate = created ? data["created_at"] : null
+      if (bg) textColor = monoBackgroundTextColor(`#${bg}`);
+      if (data['status'] == 'offline' && textColor === '#202225') textColor = '#5d5f6b';
+      const statusImage = iconsListSmall[data['status']];
+      const displayName = data['display_name'];
+      const titleSize = setSmallCardTitleSize(data['display_name']);
+      const createdDate = created ? data['created_at'] : null;
       const svgContent = `
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +166,7 @@ app.get("/smallcard_svg/:id", async (req: Request, res: Response) => {
               <stop offset="80%" style="stop-color:#${bg2};stop-opacity:1" />
             </linearGradient>`
         }
-          <style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700');.cls-1{fill:none;}.cls-2{fill:${bg1 ? "url(#bgGradient)" : background};}.cls-30{fill:#24934f;fill-rule:evenodd;}.cls-31{fill:#5d5f6b;fill-rule:evenodd;}.cls-32{fill:#f0b232;fill-rule:evenodd;}.cls-33{fill:#ec3e4a;fill-rule:evenodd;}.cls-4{clip-path:url(#clip-path);}.cls-10,.cls-5,.cls-6{isolation:isolate;}.cls-6{font-size:${22 * (titleSize / 100)}px;font-family:Noto Sans TC, system-ui;font-weight:500;}.cls-10,.cls-6,.cls-9{fill:${textColor};}.cls-7{letter-spacing:-0.021em;}.cls-8{letter-spacing:-0.01501em;}.cls-10{font-size:8.85069px;font-family:Noto Sans TC, system-ui; font-weight:400;}.cls-11{fill:#5865f2;}.cls-12{fill:#fff;}}</style>
+          <style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700');.cls-1{fill:none;}.cls-2{fill:${bg1 ? 'url(#bgGradient)' : background};}.cls-30{fill:#24934f;fill-rule:evenodd;}.cls-31{fill:#5d5f6b;fill-rule:evenodd;}.cls-32{fill:#f0b232;fill-rule:evenodd;}.cls-33{fill:#ec3e4a;fill-rule:evenodd;}.cls-4{clip-path:url(#clip-path);}.cls-10,.cls-5,.cls-6{isolation:isolate;}.cls-6{font-size:${22 * (titleSize / 100)}px;font-family:Noto Sans TC,Trebuchet MS,system-ui;font-weight:500;}.cls-10,.cls-6,.cls-9{fill:${textColor};}.cls-7{letter-spacing:-0.021em;}.cls-8{letter-spacing:-0.01501em;}.cls-10{font-size:8.85069px;font-family:Noto Sans TC, system-ui; font-weight:400;}.cls-11{fill:#5865f2;}.cls-12{fill:#fff;}}</style>
           <clipPath id="clip-path">
             <path
               class="cls-1"
@@ -190,7 +190,7 @@ app.get("/smallcard_svg/:id", async (req: Request, res: Response) => {
             </g>
             <text
               class="cls-6"
-              transform="translate(90.67773 ${createdDate ? "50.64147" : "59.5"})"
+              transform="translate(90.67773 ${createdDate ? '50.64147' : '59.5'})"
             >
               ${displayName}
             </text>
@@ -207,7 +207,7 @@ app.get("/smallcard_svg/:id", async (req: Request, res: Response) => {
               `
             }
             ${
-              discordlabel == "true" &&
+              discordlabel == 'true' &&
               `
             <path class="cls-11" d="M300.42,79.82H228.7a3.32,3.32,0,0,0-3.32,3.33V99.76h75Z" transform="translate(-0.42 0.24)"/>
             <path class="cls-12" d="M254,86.78h2.92a4.37,4.37,0,0,1,1.79.33,2.39,2.39,0,0,1,1.09.92,2.6,2.6,0,0,1,.37,1.36,2.55,2.55,0,0,1-.38,1.35,2.61,2.61,0,0,1-1.16,1,4.74,4.74,0,0,1-1.92.35H254Zm2.68,3.94a1.52,1.52,0,0,0,1.09-.36,1.42,1.42,0,0,0,0-1.9,1.42,1.42,0,0,0-1-.34h-.91v2.6Z" transform="translate(-0.42 0.24)"/>
@@ -224,22 +224,22 @@ app.get("/smallcard_svg/:id", async (req: Request, res: Response) => {
           </g>
         </g>
       </svg>
-            `
+            `;
       res.set({
-        "Content-Type": "image/svg+xml",
-      })
-      res.send(`${svgContent}`)
+        'Content-Type': 'image/svg+xml',
+      });
+      res.send(`${svgContent}`);
     } catch (error) {
-      res.status(500).send("Internal Server Error")
+      res.status(500).send('Internal Server Error');
     }
   } catch (error) {
-    res.status(500).send("Internal Server Error")
+    res.status(500).send('Internal Server Error');
   }
-})
+});
 
-app.get("/largecard/:id", async (req: Request, res: Response) => {
+app.get('/largecard/:id', async (req: Request, res: Response) => {
   try {
-    const { id } = req.params
+    const { id } = req.params;
     const {
       bg,
       bg1,
@@ -253,88 +253,88 @@ app.get("/largecard/:id", async (req: Request, res: Response) => {
       bannerID,
       bannerImage,
       discordlabel,
-    } = req.query as { [key: string]: string }
+    } = req.query as { [key: string]: string };
     let link = bg1
       ? `${root}/largecard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&`
       : bg
         ? `${root}/largecard?bg=${bg}&`
-        : `${root}/largecard?`
-    link += aboutMe ? `aboutMe=${encodeURIComponent(aboutMe)}&` : ""
-    link += pronouns ? `pronouns=${pronouns}&` : ""
+        : `${root}/largecard?`;
+    link += aboutMe ? `aboutMe=${encodeURIComponent(aboutMe)}&` : '';
+    link += pronouns ? `pronouns=${pronouns}&` : '';
     try {
-      const data = await fetchData(id)
+      const data = await fetchData(id);
       if (data === null) {
-        res.status(404).send("User not found")
-        return null
+        res.status(404).send('User not found');
+        return null;
       }
-      created && (link += `createdDate=${data["created_at"]}&`)
-      discordlabel && (link += `discordlabel=true&`)
+      created && (link += `createdDate=${data['created_at']}&`);
+      discordlabel && (link += `discordlabel=true&`);
       if (bannerID) {
-        const banner = await getBannerImage(bannerID, false)
-        banner && (link += `bannerImage=${banner}&`)
+        const banner = await getBannerImage(bannerID, false);
+        banner && (link += `bannerImage=${banner}&`);
       }
       if (wantBannerImage) {
-        data["banner"] && (link += `bannerImage=${data["banner"]}&`)
-        data["accent_color"] && (link += `accentColor=${data["accent_color"].replace("#", "")}&`)
+        data['banner'] && (link += `bannerImage=${data['banner']}&`);
+        data['accent_color'] && (link += `accentColor=${data['accent_color'].replace('#', '')}&`);
       }
-      bannerImage && (link += `bannerImage=${bannerImage}&`)
+      bannerImage && (link += `bannerImage=${bannerImage}&`);
       wantAccentColor &&
-        data["accent_color"] &&
-        (link += `accentColor=${data["accent_color"].replace("#", "")}&`)
-      bannerColor && (link += `bannerColor=${bannerColor}&`)
+        data['accent_color'] &&
+        (link += `accentColor=${data['accent_color'].replace('#', '')}&`);
+      bannerColor && (link += `bannerColor=${bannerColor}&`);
       const browser = await puppeteer.launch({
-        executablePath: "/usr/bin/chromium-browser",
-        userDataDir: "./loaded",
+        executablePath: '/usr/bin/chromium-browser',
+        userDataDir: './loaded',
         args: minimal_args,
-      })
-      const page = await browser.newPage()
-      await page.setViewport({ width: 807, height: 1200 })
+      });
+      const page = await browser.newPage();
+      await page.setViewport({ width: 807, height: 1200 });
       await page.goto(
-        `${link}username=${data["username"]}&displayName=${data["display_name"]}&avatar=${data["avatar"]}&status=${data["status"]}&id=${id}`,
-        { waitUntil: ["networkidle0"] }
-      )
-      await page.waitForSelector("#banner")
+        `${link}username=${data['username']}&displayName=${data['display_name']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
+        { waitUntil: ['networkidle0'] }
+      );
+      await page.waitForSelector('#banner');
       const maxHeight = await page.evaluate(() => {
-        const elements = document.querySelectorAll("#disi-large-card")
-        let maxElementHeight = 0
+        const elements = document.querySelectorAll('#disi-large-card');
+        let maxElementHeight = 0;
 
         elements.forEach((element) => {
-          const { height } = element.getBoundingClientRect()
-          maxElementHeight = Math.max(maxElementHeight, height)
-        })
-        return maxElementHeight
-      })
+          const { height } = element.getBoundingClientRect();
+          maxElementHeight = Math.max(maxElementHeight, height);
+        });
+        return maxElementHeight;
+      });
       const screenshotBuffer = await page.screenshot({
         clip: { x: 0, y: 0, width: 807, height: maxHeight },
-      })
-      res.set("Content-Type", "image/png")
-      res.send(screenshotBuffer)
-      await browser.close()
+      });
+      res.set('Content-Type', 'image/png');
+      res.send(screenshotBuffer);
+      await browser.close();
     } catch (error) {
-      res.status(500).send("Internal Server Error")
+      res.status(500).send('Internal Server Error');
     }
   } catch (error) {
-    res.status(500).send("Internal Server Error")
+    res.status(500).send('Internal Server Error');
   }
-})
+});
 
-app.post("/uploadbanner", async (req, res) => {
+app.post('/uploadbanner', async (req, res) => {
   try {
-    const { image } = req.body as { image: string }
+    const { image } = req.body as { image: string };
     if (!image) {
-      res.status(400).send("Bad Request")
-      return null
+      res.status(400).send('Bad Request');
+      return null;
     }
-    const blob = base64toFile(image)
+    const blob = base64toFile(image);
     if (!blob) {
-      res.status(400).send("Bad Request")
-      return null
+      res.status(400).send('Bad Request');
+      return null;
     }
-    const id = await uploadBannerImage(blob)
-    res.status(200).json({ id })
+    const id = await uploadBannerImage(blob);
+    res.status(200).json({ id });
   } catch (error) {
-    res.status(500).send(error.message)
+    res.status(500).send(error.message);
   }
-})
+});
 
-app.listen(1911, () => console.log("Server is running on http://localhost:1911"))
+app.listen(1911, () => console.log('Server is running on http://localhost:1911'));
