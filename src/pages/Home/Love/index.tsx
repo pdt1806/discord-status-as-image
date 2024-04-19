@@ -1,4 +1,4 @@
-import { UserCardImage } from '@/components/UserCard';
+import UserCard from '@/components/UserCard';
 import { Box, Flex, Text, Title } from '@mantine/core';
 
 export default function Love({ isMobile }: { isMobile: boolean | undefined }) {
@@ -15,7 +15,7 @@ export default function Love({ isMobile }: { isMobile: boolean | undefined }) {
         </Text>
       </Box>
       <Box w={isMobile ? '100%' : '50%'} h="auto" mt="xl" ml="auto" mr={isMobile ? 'auto' : '0'}>
-        <UserCardImage />
+        <UserCard />
       </Box>
     </Flex>
   );

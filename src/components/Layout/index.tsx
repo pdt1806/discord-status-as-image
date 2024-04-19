@@ -7,9 +7,7 @@ import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 const Layout = () => {
-  const [page, setPage] = useState(
-    <Loader color="rgba(255, 255, 255, 1)" type="bars" ml="auto" mr="auto" />
-  );
+  const [page, setPage] = useState(<Loader color="white" type="bars" ml="auto" mr="auto" />);
   const navigate = useNavigate();
 
   const proceedToDemo = () => {

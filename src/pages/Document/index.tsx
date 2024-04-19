@@ -1,36 +1,31 @@
-import { getDocument } from "@/pocketbase_client"
-import { monthsKey } from "@/utils/tools"
-import { Box, Center, Container, Loader, Paper, Text, Title } from "@mantine/core"
-import { useEffect, useState } from "react"
+import { getDocument } from '@/pocketbase_client';
+import { monthsKey } from '@/utils/tools';
+import { Box, Container, Loader, Paper, Text, Title } from '@mantine/core';
+import { useEffect, useState } from 'react';
 
 export type DocumentProps = {
-  id: string
-  title: string
-  content: string
-  created: string
-  updated: string
-}
+  id: string;
+  title: string;
+  content: string;
+  created: string;
+  updated: string;
+};
 
 const Document = ({ id }: { id: string }) => {
-  const [document, setDocument] = useState<DocumentProps | null>(null)
+  const [document, setDocument] = useState<DocumentProps | null>(null);
 
   useEffect(() => {
-    setDocument(null)
+    setDocument(null);
     async function document() {
-      const document = await getDocument(id)
-      if (!document) return
-      setDocument(document)
+      const document = await getDocument(id);
+      if (!document) return;
+      setDocument(document);
     }
-    document()
-    window.scrollTo(0, 0)
-  }, [window.location.pathname])
+    document();
+    window.scrollTo(0, 0);
+  }, [window.location.pathname]);
 
-  if (!document)
-    return (
-      <Center>
-        <Loader size="lg" color="white" />
-      </Center>
-    )
+  if (!document) return <Loader color="white" type="bars" ml="auto" mr="auto" />;
 
   return (
     <Container mt="xl" mb="xl">
@@ -38,13 +33,13 @@ const Document = ({ id }: { id: string }) => {
         <Box m="lg">
           <Title mb="md">{document.title}</Title>
           <Text mb="sm">
-            Effective Date: {document.created.slice(8, 10)}{" "}
-            {monthsKey[document.created.slice(5, 7) as keyof typeof monthsKey]},{" "}
+            Effective Date: {document.created.slice(8, 10)}{' '}
+            {monthsKey[document.created.slice(5, 7) as keyof typeof monthsKey]},{' '}
             {document.created.slice(0, 4)}
           </Text>
           <Text mb="xl">
-            Last Updated: {document.updated.slice(8, 10)}{" "}
-            {monthsKey[document.updated.slice(5, 7) as keyof typeof monthsKey]},{" "}
+            Last Updated: {document.updated.slice(8, 10)}{' '}
+            {monthsKey[document.updated.slice(5, 7) as keyof typeof monthsKey]},{' '}
             {document.updated.slice(0, 4)}
           </Text>
           <Box
@@ -55,7 +50,7 @@ const Document = ({ id }: { id: string }) => {
         </Box>
       </Paper>
     </Container>
-  )
-}
+  );
+};
 
-export default Document
+export default Document;

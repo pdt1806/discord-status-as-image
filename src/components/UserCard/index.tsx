@@ -41,7 +41,7 @@ const buttons = [
   },
 ];
 
-export function UserCardImage() {
+export default function UserCard() {
   const [info, setInfo] = useState<UserData | null>(null);
   const [items, setItems] = useState<Array<JSX.Element>>([]);
 
@@ -109,7 +109,7 @@ export function UserCardImage() {
           size="md"
           variant="default"
           onClick={() => {
-            window.open(button.link);
+            window.location.href = button.link;
           }}
         >
           <Group>
