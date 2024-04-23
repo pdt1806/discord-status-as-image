@@ -2,6 +2,7 @@ import { getDocument } from '@/pocketbase_client';
 import { monthsKey } from '@/utils/tools';
 import { Box, Container, Loader, Paper, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 
 export type DocumentProps = {
   id: string;
@@ -29,6 +30,13 @@ const Document = ({ id }: { id: string }) => {
 
   return (
     <Container mt="xl" mb="xl">
+      <Helmet>
+        <title>{document.title} - Discord Status as Image</title>
+        <link
+          rel="canonical"
+          href={`https://disi.bennynguyen.dev/${document.title.toLowerCase().replaceAll(' ', '-')}`}
+        />
+      </Helmet>
       <Paper shadow="xl" p="xl" bg="dark">
         <Box m="lg">
           <Title mb="md">{document.title}</Title>

@@ -1,10 +1,15 @@
-import { Box, Button, Container, Image, SimpleGrid, Text, Title } from "@mantine/core"
-import { Link } from "react-router-dom"
-import classes from "./index.module.css"
+import { Box, Button, Container, Image, SimpleGrid, Text, Title } from '@mantine/core';
+import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
+import classes from './index.module.css';
 
 export function Error404() {
   return (
     <Container className={classes.root}>
+      <Helmet>
+        <title>404 Not Found - Discord Status as Image</title>
+        <link rel="canonical" href="https://disi.bennynguyen.dev/404" />
+      </Helmet>
       <SimpleGrid spacing={{ base: 40, sm: 80 }} cols={{ base: 1, sm: 2 }}>
         <Box className={classes.mobileImage}>
           <Image src="/images/errors/404.svg" className={classes.mobileImage} />
@@ -12,10 +17,10 @@ export function Error404() {
             <Link
               to="https://www.freepik.com/free-vector/page-found-concept-illustration_7887410.htm#query=404%20page&position=4&from_view=keyword&track=ais&uuid=4f5238cf-1545-49fa-9cc2-c9a7012eeb9b"
               target="_blank"
-              style={{ color: "white" }}
+              style={{ color: 'white' }}
             >
               Image by storyset
-            </Link>{" "}
+            </Link>{' '}
             on Freepik
           </Text>
         </Box>
@@ -42,14 +47,14 @@ export function Error404() {
             <Link
               to="https://www.freepik.com/free-vector/page-found-concept-illustration_7887410.htm#query=404%20page&position=4&from_view=keyword&track=ais&uuid=4f5238cf-1545-49fa-9cc2-c9a7012eeb9b"
               target="_blank"
-              style={{ color: "white" }}
+              style={{ color: 'white' }}
             >
               Image by storyset
-            </Link>{" "}
+            </Link>{' '}
             on Freepik
           </Text>
         </Box>
       </SimpleGrid>
     </Container>
-  )
+  );
 }

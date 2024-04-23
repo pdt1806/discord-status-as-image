@@ -12,6 +12,7 @@ import {
   Title,
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import classes from './index.module.css';
 
 export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
@@ -38,6 +39,9 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
 
   return (
     <div className={classes.root}>
+      <Helmet>
+        <title>500 Internal Server Error - Discord Status as Image</title>
+      </Helmet>
       <Container>
         <Box>
           <div className={classes.label}>500</div>

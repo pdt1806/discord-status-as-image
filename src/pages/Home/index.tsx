@@ -3,6 +3,7 @@ import { fetchMaintenanceMessage } from '@/utils/tools';
 import { Alert, Box, Center, Divider, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import FAQs from './FAQs';
 import HowTo from './HowTo';
 import Intro from './Intro';
@@ -25,6 +26,10 @@ const Home = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Discord Status as Image</title>
+        <link rel="canonical" href="https://disi.bennynguyen.dev/" />
+      </Helmet>
       {!!maintenanceMessage[3] && maintenanceMessage[4].includes('SCHEDULED') && (
         <Alert color="red" className={classes.alert}>
           <Text c="white" fw="bold" ta="center">
