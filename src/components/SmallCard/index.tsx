@@ -105,9 +105,11 @@ const SmallCard = () => {
                 className={innerClasses.discordLogo}
                 style={{
                   filter:
-                    status != 'offline' || (status == 'offline' && textColor == 'white')
+                    textColor == 'white'
                       ? 'invert(1)'
-                      : 'brightness(0) saturate(100%) invert(34%) sepia(6%) saturate(770%) hue-rotate(194deg) brightness(102%) contrast(87%)',
+                      : status != 'offline'
+                        ? 'brightness(0) saturate(100%) invert(7%) sepia(6%) saturate(1299%) hue-rotate(177deg) brightness(96%) contrast(85%)'
+                        : 'brightness(0) saturate(100%) invert(34%) sepia(6%) saturate(770%) hue-rotate(194deg) brightness(102%) contrast(87%)',
                 }}
               />
               <Title
