@@ -49,7 +49,7 @@ const Layout = () => {
   return (
     <Box
       w="100vw"
-      bg="#1c1c1c"
+      bg="#111111"
       style={{
         display: 'flex',
         flexDirection: 'column',

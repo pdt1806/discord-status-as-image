@@ -61,11 +61,11 @@ export default function FAQs() {
             <Title order={2} ta={isMd ? 'center' : 'left'} mb="xl">
               Frequently Asked Questions
             </Title>
-            <Accordion chevronPosition="right" variant="separated">
+            <Accordion chevronPosition="right" variant="separated" >
               {faqs.map((faq) => (
-                <Accordion.Item className={classes.item} value={faq.value} key={faq.value}>
-                  <Accordion.Control>{faq.question}</Accordion.Control>
-                  <Accordion.Panel>{faq.answer}</Accordion.Panel>
+                <Accordion.Item className={classes.item} value={faq.value} key={faq.value} bg="var(--mantine-color-dark-filled)" style={{border: "1px solid #333"}}>
+                  <Accordion.Control c="white">{faq.question}</Accordion.Control>
+                  <Accordion.Panel c="white">{faq.answer}</Accordion.Panel>
                 </Accordion.Item>
               ))}
             </Accordion>

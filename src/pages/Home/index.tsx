@@ -47,7 +47,7 @@ const Home = () => {
           <strong>Discord Status as Image</strong> is not affiliated with Discord.
         </Text>
       </Center>
-      <Divider w="90%" ml="auto" mr="auto" mb="sm" mt="xl" />
+      <Divider w="90%" ml="auto" mr="auto" mb="sm" mt="xl" color="#333" />
       <Intro isMobile={isMobile} />
       <Box className={classes.info}>
         <HowTo isMobile={isMobile} />

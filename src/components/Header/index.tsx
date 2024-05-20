@@ -8,7 +8,8 @@ const Header = () => {
   return (
     <Box
       style={{
-        backgroundColor: "#121212",
+        borderBottom: "1px solid #333",
+        backgroundColor: "#1a1a1a",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -19,7 +20,7 @@ const Header = () => {
       <Anchor
         href="/"
         style={{
-          backgroundColor: "#121212",
+          backgroundColor: "#1a1a1a",
           display: "flex",
           alignItems: "center",
           textDecoration: "none",
