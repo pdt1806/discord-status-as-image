@@ -1,8 +1,9 @@
-import { refinerAPI, testing } from '@/env/env';
-import { bgIsLight, blendColors, formatDate, hexToRgb, setSmallCardTitleSize } from '@/utils/tools';
 import { Avatar, Box, Image, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+
+import { refinerAPI, testing } from '@/env/env';
+import { bgIsLight, blendColors, formatDate, hexToRgb, setSmallCardTitleSize } from '@/utils/tools';
 import { setStatusImg } from '../LargeCard/utils';
 import classes from '../style/profile.module.css';
 import innerClasses from './index.module.css';
@@ -41,7 +42,7 @@ const SmallCard = () => {
   }
 
   function updateStatus() {
-    fetch(`${testing ? refinerAPI['dev'] : refinerAPI['prod']}/user/${id}`, {
+    fetch(`${testing ? refinerAPI.dev : refinerAPI.prod}/user/${id}`, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -52,7 +53,7 @@ const SmallCard = () => {
         setAvatar(data.avatar);
         setStatus(data.status);
         setStatusImage(setStatusImg(data.status));
-        if (params.get('created') == 'true') {
+        if (params.get('created') === 'true') {
           setCreatedDate(data.created_at);
         }
       });
@@ -66,19 +67,21 @@ const SmallCard = () => {
     setTimeout(() => {
       try {
         updateStatus();
-      } catch {}
+      } catch {
+        // pass
+      }
     }, 15000);
   });
 
-  let titleSize = setSmallCardTitleSize(displayName || '');
+  const titleSize = setSmallCardTitleSize(displayName || '');
 
   const ratio = window.innerWidth / 1350;
 
   return (
-    <a href={`https://discord.com/users/${id}`} target="_blank">
+    <a href={`https://discord.com/users/${id}`} target="_blank" rel="noreferrer">
       <Box
         style={{
-          background: backgroundGradient ? backgroundGradient : backgroundColor,
+          background: backgroundGradient || backgroundColor,
           transform: `${ratio < 1 ? `scale(${ratio})` : ''}`,
         }}
         className={innerClasses.smallCard}
@@ -90,7 +93,7 @@ const SmallCard = () => {
             fw={500}
             size={titleSize}
             c={
-              status != 'offline' || (status == 'offline' && textColor == 'white')
+              status !== 'offline' || (status === 'offline' && textColor === 'white')
                 ? textColor
                 : '#5d5f6b'
             }
@@ -105,9 +108,9 @@ const SmallCard = () => {
                 className={innerClasses.discordLogo}
                 style={{
                   filter:
-                    textColor == 'white'
+                    textColor === 'white'
                       ? 'invert(1)'
-                      : status != 'offline'
+                      : status !== 'offline'
                         ? 'brightness(0) saturate(100%) invert(7%) sepia(6%) saturate(1299%) hue-rotate(177deg) brightness(96%) contrast(85%)'
                         : 'brightness(0) saturate(100%) invert(34%) sepia(6%) saturate(770%) hue-rotate(194deg) brightness(102%) contrast(87%)',
                 }}
@@ -115,7 +118,7 @@ const SmallCard = () => {
               <Title
                 size={40}
                 c={
-                  status != 'offline' || (status == 'offline' && textColor == 'white')
+                  status !== 'offline' || (status === 'offline' && textColor === 'white')
                     ? textColor
                     : '#5d5f6b'
                 }

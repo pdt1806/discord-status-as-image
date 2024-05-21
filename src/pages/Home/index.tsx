@@ -1,9 +1,10 @@
-import MainContent from '@/components/MainContent';
-import { fetchMaintenanceMessage } from '@/utils/tools';
 import { Alert, Box, Center, Divider, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
+
+import MainContent from '@/components/MainContent';
+import { fetchMaintenanceMessage } from '@/utils/tools';
 import FAQs from './FAQs';
 import HowTo from './HowTo';
 import Intro from './Intro';
@@ -50,7 +51,7 @@ const Home = () => {
       <Divider w="90%" ml="auto" mr="auto" mb="sm" mt="xl" color="#333" />
       <Intro isMobile={isMobile} />
       <Box className={classes.info}>
-        <HowTo isMobile={isMobile} />
+        <HowTo />
         <FAQs />
         <Love isMobile={isMobile} />
       </Box>

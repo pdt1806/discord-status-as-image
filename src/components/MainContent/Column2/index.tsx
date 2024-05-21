@@ -1,4 +1,5 @@
 import { formatAndUpdateHex, limitTextarea, scrollToSection } from '@/utils/tools';
+import { DISIForm } from '@/utils/types';
 import {
   Box,
   Button,
@@ -16,6 +17,7 @@ import {
   Textarea,
   Title,
 } from '@mantine/core';
+import { UseFormReturnType } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { generatingCards } from './utils';
 
@@ -43,7 +45,7 @@ const MainContentColumn2 = ({
   setBannerPBID,
   smallCardLink,
 }: {
-  form: any;
+  form: UseFormReturnType<DISIForm, (values: DISIForm) => DISIForm>;
   customBannerMode: string;
   bannerFile: File | null;
   bannerPBID: string;
@@ -383,7 +385,6 @@ const MainContentColumn2 = ({
                     accept="image/png,image/vnd.mozilla.apng,image/jpeg,image/gif,image/webp,image/avif"
                     label="Upload image"
                     description="Only accept image files."
-                    // @ts-ignore
                     placeholder="Click to upload image"
                     w="max-content"
                     maw="280px"

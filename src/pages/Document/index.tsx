@@ -14,12 +14,21 @@ export type DocumentProps = {
 
 const Document = ({ id }: { id: string }) => {
   const [document, setDocument] = useState<DocumentProps | null>(null);
+  const [loadedDocuments, setLoadedDocuments] = useState<DocumentProps[]>([]);
 
   useEffect(() => {
     setDocument(null);
     async function document() {
+      const doc = loadedDocuments.find((doc) => doc.id === id);
+      if (doc) {
+        setDocument(doc);
+        return;
+      }
+
       const document = await getDocument(id);
       if (!document) return;
+
+      setLoadedDocuments([...loadedDocuments, document]);
       setDocument(document);
     }
     document();
@@ -37,7 +46,7 @@ const Document = ({ id }: { id: string }) => {
           href={`https://disi.bennynguyen.dev/${document.title.toLowerCase().replaceAll(' ', '-')}`}
         />
       </Helmet>
-      <Paper shadow="xl" p="xl" bg="dark">
+      <Paper shadow="xl" p="xl" bg="#1a1a1a">
         <Box m="lg">
           <Title mb="md">{document.title}</Title>
           <Text mb="sm">

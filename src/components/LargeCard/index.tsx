@@ -1,8 +1,9 @@
-import { getBannerImage } from '@/pocketbase_client';
-import { formatDate, setLargeCardTitleSize } from '@/utils/tools';
 import { Avatar, Box, Divider, Image, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+
+import { getBannerImage } from '@/pocketbase_client';
+import { formatDate, setLargeCardTitleSize } from '@/utils/tools';
 import classes from '../style/profile.module.css';
 import innerClasses from './index.module.css';
 import { BG1TextColor, notBG1TextColor, setStatusImg, updateStatus } from './utils';
@@ -33,8 +34,7 @@ const LargeCard = () => {
   let textColor;
   if (params.get('bg1') && params.get('bg2')) {
     const colors = BG1TextColor(params);
-    backgroundGradient = colors[0];
-    textColor = colors[1];
+    [backgroundGradient, textColor] = colors;
   } else textColor = notBG1TextColor(backgroundColor);
 
   const updateStatusArgs = {
@@ -65,20 +65,22 @@ const LargeCard = () => {
   setTimeout(() => {
     try {
       updateStatus(updateStatusArgs);
-    } catch {}
+    } catch {
+      // pass
+    }
   }, 15000);
 
-  let titleSize = setLargeCardTitleSize(displayName || '');
+  const titleSize = setLargeCardTitleSize(displayName || '');
 
   const ratio = window.innerWidth / 807;
 
   return (
-    <a href={`https://discord.com/users/${id}`} target="_blank">
+    <a href={`https://discord.com/users/${id}`} target="_blank" rel="noreferrer">
       <Box
         id="disi-large-card"
         className={innerClasses.largeCard}
         style={{
-          background: backgroundGradient ? backgroundGradient : backgroundColor,
+          background: backgroundGradient || backgroundColor,
           transform: `${ratio < 1 ? `scale(${ratio})` : ''}`,
         }}
       >
@@ -97,7 +99,7 @@ const LargeCard = () => {
         </Box>
         <Box className={innerClasses.friendRequest}>Send Friend Request</Box>
         <Box
-          style={{ backgroundColor: textColor == 'white' ? '#111111' : '#ffffff' }}
+          style={{ backgroundColor: textColor === 'white' ? '#111111' : '#ffffff' }}
           className={innerClasses.name}
         >
           <Box mb={15}>

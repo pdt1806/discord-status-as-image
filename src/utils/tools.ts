@@ -1,5 +1,8 @@
+import { UseFormReturnType } from '@mantine/form';
+import { DISIForm } from './types';
+
 export function hexToRgb(hex: string) {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
         r: parseInt(result[1], 16),
@@ -24,7 +27,8 @@ export function blendColors(colorA: string, colorB: string) {
   const b = Math.round(bA + (bB - bA) * 0.5)
     .toString(16)
     .padStart(2, '0');
-  return '#' + r + g + b;
+  // eslint-disable-next-line consistent-return
+  return `#${r}${g}${b}`;
 }
 
 export function bgIsLight(color: { r: number; g: number; b: number }) {
@@ -43,9 +47,9 @@ export const monthsKey = {
   '07': 'July',
   '08': 'August',
   '09': 'September',
-  '10': 'October',
-  '11': 'November',
-  '12': 'December',
+  10: 'October',
+  11: 'November',
+  12: 'December',
 } as const;
 
 export function formatDate(date: string) {
@@ -54,12 +58,11 @@ export function formatDate(date: string) {
 }
 
 export function limitTextarea(value: string) {
-  var lines = value.split('\n');
-  lines = lines.map(function (line) {
-    return line.slice(0, 57);
-  });
-  var newText = lines.slice(0, 5).join('\n');
-  return newText;
+  return value
+    .split('\n')
+    .map((line) => line.slice(0, 57))
+    .slice(0, 5)
+    .join('\n');
 }
 
 export function fileToBase64(file: File): Promise<string> {
@@ -69,10 +72,10 @@ export function fileToBase64(file: File): Promise<string> {
     reader.addEventListener('load', (event) => {
       if (event.target && event.target.result) {
         const dataUrl = event.target.result.toString();
-        const mimeType = dataUrl.split(';')[0].split(':')[1];
         return resolve(dataUrl);
       }
       reject(new Error('Failed to read the file.'));
+      return null;
     });
 
     reader.addEventListener('error', reject);
@@ -82,7 +85,9 @@ export function fileToBase64(file: File): Promise<string> {
 }
 
 export function setSmallCardTitleSize(displayName: string | undefined) {
-  const length = displayName?.length!;
+  const length = displayName?.length;
+
+  if (!length) return 45;
 
   if (length > 30) return 45;
   if (length > 25) return 50;
@@ -92,7 +97,9 @@ export function setSmallCardTitleSize(displayName: string | undefined) {
 }
 
 export function setLargeCardTitleSize(displayName: string | undefined) {
-  const length = displayName?.length!;
+  const length = displayName?.length;
+
+  if (!length) return 25;
 
   if (length > 30) return 25;
   if (length > 25) return 30;
@@ -108,10 +115,12 @@ export function formatAndUpdateHex({
 }: {
   value: string;
   propertyName: string;
-  form: any;
+  form: UseFormReturnType<DISIForm, (values: DISIForm) => DISIForm>;
 }) {
-  if (/^([A-Fa-f0-9]{1,6})?$/.test(value) && !form.values[propertyName])
+  const property = form.values[propertyName as keyof DISIForm];
+  if (/^([A-Fa-f0-9]{1,6})?$/.test(value) && !property) {
     value = `#${value.toUpperCase()}`;
+  }
   if (/^#([A-Fa-f0-9]{1,6})?$/.test(value) || value === '') {
     form.setValues({
       ...form.values,
@@ -131,7 +140,7 @@ export const fetchMaintenanceMessage = async () => {
   let message: string[] = [];
   try {
     const response = await fetch(
-      `https://api.allorigins.win/raw?url=https://pastebin.com/raw/xPgJnKkA`,
+      'https://api.allorigins.win/raw?url=https://pastebin.com/raw/xPgJnKkA',
       { cache: 'no-store' }
     );
     if (response.ok) {

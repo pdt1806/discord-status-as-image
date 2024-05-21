@@ -58,7 +58,7 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
           </Center>
         </Box>
         <Divider my="xl" />
-        {!!maintenanceMessage ? (
+        {maintenanceMessage ? (
           maintenanceMessage[4].includes('500') ? (
             <>
               <Badge color="orange" variant="light" size="lg">
