@@ -1,5 +1,5 @@
-import HowToCard from '@/components/HowToCard';
 import { Flex, Group, Title } from '@mantine/core';
+import HowToCard from '../../../components/HowToCard';
 
 export default function HowTo() {
   return (

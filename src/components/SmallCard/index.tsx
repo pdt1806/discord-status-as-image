@@ -1,9 +1,15 @@
-import { Avatar, Box, Image, Title } from '@mantine/core';
+import { Avatar, Box, Flex, Image, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { refinerAPI, testing } from '@/env/env';
-import { bgIsLight, blendColors, formatDate, hexToRgb, setSmallCardTitleSize } from '@/utils/tools';
+import { refinerAPI, testing } from '../../env/env';
+import {
+  bgIsLight,
+  blendColors,
+  formatDate,
+  hexToRgb,
+  setSmallCardTitleSize,
+} from '../../utils/tools';
 import { setStatusImg } from '../LargeCard/utils';
 import classes from '../style/profile.module.css';
 import innerClasses from './index.module.css';
@@ -89,17 +95,20 @@ const SmallCard = () => {
         <Image alt="Avatar" src={avatar} className={classes.avatar} />
         <Avatar className={innerClasses.statusImage} src={statusImage} />
         <Box style={{ transform: 'translateX(-10px)' }}>
-          <Title
-            fw={500}
-            size={titleSize}
-            c={
-              status !== 'offline' || (status === 'offline' && textColor === 'white')
-                ? textColor
-                : '#5d5f6b'
-            }
-          >
-            {displayName}
-          </Title>
+          <Flex mih={130} direction="column" justify="end">
+            <Title
+              mt="auto"
+              fw={500}
+              size={titleSize}
+              c={
+                status !== 'offline' || (status === 'offline' && textColor === 'white')
+                  ? textColor
+                  : '#5d5f6b'
+              }
+            >
+              {displayName}
+            </Title>
+          </Flex>
           {createdDate && (
             <Box mt="lg" display="flex" style={{ alignItems: 'center' }}>
               <Image
@@ -133,7 +142,9 @@ const SmallCard = () => {
               alt="discord-logo"
               src="/images/discord-label.svg"
               className={innerClasses.discordLabel}
-              style={{ transform: `translate(603.3px, ${createdDate ? '30px' : '70px'})` }}
+              style={{
+                transform: `translate(603.3px, ${createdDate ? '30px' : '70px'})`,
+              }}
             />
           )}
         </Box>

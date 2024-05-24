@@ -1,6 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Box, Flex, Text, Title } from '@mantine/core';
-
-import UserCard from '@/components/UserCard';
+import UserCard from '../../../components/UserCard';
 
 export default function Love({ isMobile }: { isMobile: boolean | undefined }) {
   return (

@@ -3,8 +3,8 @@ import { useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 
-import MainContent from '@/components/MainContent';
-import { fetchMaintenanceMessage } from '@/utils/tools';
+import MainContent from '../../components/MainContent';
+import { fetchMaintenanceMessage } from '../../utils/tools';
 import FAQs from './FAQs';
 import HowTo from './HowTo';
 import Intro from './Intro';

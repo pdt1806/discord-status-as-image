@@ -2,8 +2,8 @@ import { Avatar, Box, Divider, Image, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { getBannerImage } from '@/pocketbase_client';
-import { formatDate, setLargeCardTitleSize } from '@/utils/tools';
+import { getBannerImage } from '../../pocketbase_client';
+import { formatDate, setLargeCardTitleSize } from '../../utils/tools';
 import classes from '../style/profile.module.css';
 import innerClasses from './index.module.css';
 import { BG1TextColor, notBG1TextColor, setStatusImg, updateStatus } from './utils';

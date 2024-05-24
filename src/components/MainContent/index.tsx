@@ -1,9 +1,9 @@
-import { DISIForm } from '@/utils/types';
 import { Space, Table } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useMediaQuery } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
+import { DISIForm } from '../../utils/types';
 import MainContentColumn1 from './Column1';
 import MainContentColumn2 from './Column2';
 import MainContentColumn3 from './Column3';

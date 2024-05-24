@@ -1,8 +1,9 @@
-import { getDocument } from '@/pocketbase_client';
-import { monthsKey } from '@/utils/tools';
 import { Box, Container, Loader, Paper, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
+// eslint-disable-next-line import/no-cycle
+import { getDocument } from '../../pocketbase_client';
+import { monthsKey } from '../../utils/tools';
 
 export type DocumentProps = {
   id: string;
@@ -18,20 +19,20 @@ const Document = ({ id }: { id: string }) => {
 
   useEffect(() => {
     setDocument(null);
-    async function document() {
-      const doc = loadedDocuments.find((doc) => doc.id === id);
-      if (doc) {
-        setDocument(doc);
+    async function documentProcedure() {
+      const docID = loadedDocuments.find((doc) => doc.id === id);
+      if (docID) {
+        setDocument(docID);
         return;
       }
 
-      const document = await getDocument(id);
-      if (!document) return;
+      const fetchedDocument = await getDocument(id);
+      if (!fetchedDocument) return;
 
-      setLoadedDocuments([...loadedDocuments, document]);
-      setDocument(document);
+      setLoadedDocuments([...loadedDocuments, fetchedDocument]);
+      setDocument(fetchedDocument);
     }
-    document();
+    documentProcedure();
     window.scrollTo(0, 0);
   }, [window.location.pathname]);
 
