@@ -1,6 +1,7 @@
 .footer {
   margin-top: calc(var(--mantine-spacing-xl) * 2);
-  background-color: #121212;
+  background-color: #1a1a1a;
+  border-top: 1px solid #333;
 }
 
 .inner {

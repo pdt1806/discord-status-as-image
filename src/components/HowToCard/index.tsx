@@ -19,7 +19,7 @@ const HowToCard = ({
       radius="md"
       maw={450}
       h={isMobile ? 'auto' : 400}
-      bg="dark"
+      bg="#1a1a1a"
       c="white"
     >
       <Card.Section>

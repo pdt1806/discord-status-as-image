@@ -1,10 +1,10 @@
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
-import { disiAPI, refinerAPI, testing } from '@/env/env';
-import { Error500 } from '@/pages/Error/500';
 import { Box, Loader } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { disiAPI, refinerAPI, testing } from '../../env/env';
+import { Error500 } from '../../pages/Error/500';
+import Footer from '../Footer';
+import Header from '../Header';
 
 const Layout = () => {
   const [page, setPage] = useState(<Loader color="white" type="bars" ml="auto" mr="auto" />);
@@ -19,15 +19,15 @@ const Layout = () => {
     const testAPIandPB = async () => {
       try {
         const controller = new AbortController();
-        const signal = controller.signal;
+        const { signal } = controller;
 
         const timeoutId = setTimeout(() => {
           controller.abort();
         }, 3000);
 
-        const responseAPI = await fetch(testing ? disiAPI['dev'] : disiAPI['prod'], { signal });
+        const responseAPI = await fetch(testing ? disiAPI.dev : disiAPI.prod, { signal });
         const responsePB = await fetch('https://disi-pb.bennynguyen.dev/api', { signal });
-        const responseRefiner = await fetch(testing ? refinerAPI['dev'] : refinerAPI['prod'], {
+        const responseRefiner = await fetch(testing ? refinerAPI.dev : refinerAPI.prod, {
           signal,
         });
 
@@ -49,7 +49,7 @@ const Layout = () => {
   return (
     <Box
       w="100vw"
-      bg="#1c1c1c"
+      bg="#111111"
       style={{
         display: 'flex',
         flexDirection: 'column',

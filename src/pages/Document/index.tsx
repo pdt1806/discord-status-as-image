@@ -1,8 +1,9 @@
-import { getDocument } from '@/pocketbase_client';
-import { monthsKey } from '@/utils/tools';
 import { Box, Container, Loader, Paper, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
+// eslint-disable-next-line import/no-cycle
+import { getDocument } from '../../pocketbase_client';
+import { monthsKey } from '../../utils/tools';
 
 export type DocumentProps = {
   id: string;
@@ -14,15 +15,24 @@ export type DocumentProps = {
 
 const Document = ({ id }: { id: string }) => {
   const [document, setDocument] = useState<DocumentProps | null>(null);
+  const [loadedDocuments, setLoadedDocuments] = useState<DocumentProps[]>([]);
 
   useEffect(() => {
     setDocument(null);
-    async function document() {
-      const document = await getDocument(id);
-      if (!document) return;
-      setDocument(document);
+    async function documentProcedure() {
+      const docID = loadedDocuments.find((doc) => doc.id === id);
+      if (docID) {
+        setDocument(docID);
+        return;
+      }
+
+      const fetchedDocument = await getDocument(id);
+      if (!fetchedDocument) return;
+
+      setLoadedDocuments([...loadedDocuments, fetchedDocument]);
+      setDocument(fetchedDocument);
     }
-    document();
+    documentProcedure();
     window.scrollTo(0, 0);
   }, [window.location.pathname]);
 
@@ -37,7 +47,7 @@ const Document = ({ id }: { id: string }) => {
           href={`https://disi.bennynguyen.dev/${document.title.toLowerCase().replaceAll(' ', '-')}`}
         />
       </Helmet>
-      <Paper shadow="xl" p="xl" bg="dark">
+      <Paper shadow="xl" p="xl" bg="#1a1a1a">
         <Box m="lg">
           <Title mb="md">{document.title}</Title>
           <Text mb="sm">

@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import express, { Request, Response } from 'express';
 import puppeteer from 'puppeteer-core';
 import { testing } from '../src/env/env';
@@ -58,7 +59,7 @@ const minimal_args = [
 
 const app = express();
 
-app.use((req, res, next) => {
+app.use((_, res, next) => {
   res.header({
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Methods': 'GET, POST',
@@ -76,7 +77,7 @@ app.use(express.json({ limit: '16mb' }));
 
 app.set('etag', false);
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (_: Request, res: Response) => {
   res.send({ message: 'API of Discord Status as Image' });
 });
 
@@ -95,8 +96,8 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
         res.status(404).send('User not found');
         return null;
       }
-      created && (link += `createdDate=${data['created_at']}&`);
-      discordlabel && (link += `discordlabel=true&`);
+      created && (link += `createdDate=${data.created_at}&`);
+      discordlabel && (link += 'discordlabel=true&');
       const browser = await puppeteer.launch({
         executablePath: '/usr/bin/chromium-browser',
         userDataDir: './loaded',
@@ -105,7 +106,7 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
       const page = await browser.newPage();
       await page.setViewport({ width: 1350, height: 450 });
       await page.goto(
-        `${link}displayName=${data['display_name']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
+        `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
         { waitUntil: ['networkidle0'] }
       );
       const screenshotBuffer = await page.screenshot({
@@ -137,7 +138,7 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
         res.status(404).send('User not found');
         return null;
       }
-      const avatar = await urlToBase64(data['avatar']);
+      const avatar = await urlToBase64(data.avatar);
       const background = bg ? `#${bg}` : '#2b2d31';
       let textColor = 'white';
       if (bg1) {
@@ -145,11 +146,11 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
         textColor = monoBackgroundTextColor(blendColor!);
       }
       if (bg) textColor = monoBackgroundTextColor(`#${bg}`);
-      if (data['status'] == 'offline' && textColor === '#202225') textColor = '#5d5f6b';
-      const statusImage = iconsListSmall[data['status']];
-      const displayName = data['display_name'];
-      const titleSize = setSmallCardTitleSize(data['display_name']);
-      const createdDate = created ? data['created_at'] : null;
+      if (data.status === 'offline' && textColor === '#202225') textColor = '#5d5f6b';
+      const statusImage = iconsListSmall[data.status as keyof typeof iconsListSmall];
+      const displayName = data.display_name;
+      const titleSize = setSmallCardTitleSize(data.display_name);
+      const createdDate = created ? data.created_at : null;
       const svgContent = `
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -207,7 +208,7 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
               `
             }
             ${
-              discordlabel == 'true' &&
+              discordlabel === 'true' &&
               `
             <path class="cls-11" d="M300.42,79.82H228.7a3.32,3.32,0,0,0-3.32,3.33V99.76h75Z" transform="translate(-0.42 0.24)"/>
             <path class="cls-12" d="M254,86.78h2.92a4.37,4.37,0,0,1,1.79.33,2.39,2.39,0,0,1,1.09.92,2.6,2.6,0,0,1,.37,1.36,2.55,2.55,0,0,1-.38,1.35,2.61,2.61,0,0,1-1.16,1,4.74,4.74,0,0,1-1.92.35H254Zm2.68,3.94a1.52,1.52,0,0,0,1.09-.36,1.42,1.42,0,0,0,0-1.9,1.42,1.42,0,0,0-1-.34h-.91v2.6Z" transform="translate(-0.42 0.24)"/>
@@ -267,20 +268,20 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
         res.status(404).send('User not found');
         return null;
       }
-      created && (link += `createdDate=${data['created_at']}&`);
-      discordlabel && (link += `discordlabel=true&`);
+      created && (link += `createdDate=${data.created_at}&`);
+      discordlabel && (link += 'discordlabel=true&');
       if (bannerID) {
         const banner = await getBannerImage(bannerID, false);
         banner && (link += `bannerImage=${banner}&`);
       }
       if (wantBannerImage) {
-        data['banner'] && (link += `bannerImage=${data['banner']}&`);
-        data['accent_color'] && (link += `accentColor=${data['accent_color'].replace('#', '')}&`);
+        data.banner && (link += `bannerImage=${data.banner}&`);
+        data.accent_color && (link += `accentColor=${data.accent_color.replace('#', '')}&`);
       }
       bannerImage && (link += `bannerImage=${bannerImage}&`);
       wantAccentColor &&
-        data['accent_color'] &&
-        (link += `accentColor=${data['accent_color'].replace('#', '')}&`);
+        data.accent_color &&
+        (link += `accentColor=${data.accent_color.replace('#', '')}&`);
       bannerColor && (link += `bannerColor=${bannerColor}&`);
       const browser = await puppeteer.launch({
         executablePath: '/usr/bin/chromium-browser',
@@ -290,7 +291,7 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       const page = await browser.newPage();
       await page.setViewport({ width: 807, height: 1200 });
       await page.goto(
-        `${link}username=${data['username']}&displayName=${data['display_name']}&avatar=${data['avatar']}&status=${data['status']}&id=${id}`,
+        `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
         { waitUntil: ['networkidle0'] }
       );
       await page.waitForSelector('#banner');
@@ -333,7 +334,7 @@ app.post('/uploadbanner', async (req, res) => {
     const id = await uploadBannerImage(blob);
     res.status(200).json({ id });
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).send((error as Error).message);
   }
 });
 

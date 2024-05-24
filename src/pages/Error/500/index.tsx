@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import {
   Anchor,
   Badge,
@@ -22,7 +23,7 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
     const fetchMaintenanceMessage = async () => {
       try {
         const response = await fetch(
-          `https://api.allorigins.win/raw?url=https://pastebin.com/raw/xPgJnKkA`,
+          'https://api.allorigins.win/raw?url=https://pastebin.com/raw/xPgJnKkA',
           { cache: 'no-store' }
         );
         if (response.ok) {
@@ -58,7 +59,7 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
           </Center>
         </Box>
         <Divider my="xl" />
-        {!!maintenanceMessage ? (
+        {maintenanceMessage ? (
           maintenanceMessage[4].includes('500') ? (
             <>
               <Badge color="orange" variant="light" size="lg">
@@ -113,6 +114,7 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
             href="https://discord.com/users/458550515614351360"
             target="_blank"
             style={{ marginTop: 'var(--mantine-spacing-md)' }}
+            rel="noreferrer"
           >
             <Image maw="450px" mah="150px" src="images/demo/small-card.png"></Image>
           </a>
@@ -120,13 +122,14 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
             href="https://discord.com/users/458550515614351360"
             target="_blank"
             style={{ marginTop: 'var(--mantine-spacing-md)' }}
+            rel="noreferrer"
           >
             <Image
               maw="450px"
               mah="627.32px"
               src="images/demo/large-card.png"
               style={{ aspectRatio: '450/627.32' }}
-            ></Image>
+            />
           </a>
         </Flex>
       </Container>

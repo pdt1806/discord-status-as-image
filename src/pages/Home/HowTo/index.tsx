@@ -1,7 +1,7 @@
-import HowToCard from '@/components/HowToCard';
 import { Flex, Group, Title } from '@mantine/core';
+import HowToCard from '../../../components/HowToCard';
 
-export default function HowTo({ isMobile }: { isMobile: boolean | undefined }) {
+export default function HowTo() {
   return (
     <Flex direction="column" align="center" justify="center" mb="xl" id="how-to">
       <Title mb="xl" order={2} ta="center">

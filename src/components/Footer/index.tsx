@@ -1,5 +1,6 @@
 import { Anchor, Group, Text, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
+import { Link } from 'react-router-dom';
 import classes from './index.module.css';
 
 const links = [
@@ -11,19 +12,15 @@ export default function Footer() {
   const isMobile = useMediaQuery('(max-width: 48em)');
 
   const items = links.map((link) => (
-    <Anchor c="dimmed" key={link.label} href={link.link} lh={1} size="sm">
+    <Text c="dimmed" key={link.label} component={Link} to={link.link} lh={1} size="sm">
       {link.label}
-    </Anchor>
+    </Text>
   ));
 
   return (
     <div className={classes.footer}>
       <div className={classes.inner}>
-        <Anchor
-          href="https://bennynguyen.dev"
-          target="_blank"
-          style={{ textDecoration: 'none', color: 'white' }}
-        >
+        <Anchor href="https://bennynguyen.dev" style={{ textDecoration: 'none', color: 'white' }}>
           <Group>
             <img
               src="https://bennynguyen.dev/icons/webIcon.svg"

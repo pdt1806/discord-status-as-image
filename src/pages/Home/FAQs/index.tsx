@@ -40,7 +40,7 @@ export default function FAQs() {
         <Grid id="faq-grid" gutter={50}>
           <Grid.Col span={{ base: 12, md: 5 }}>
             <Image
-              src={'images/faq.svg'}
+              src="images/faq.svg"
               alt="Frequently Asked Questions"
               maw={450}
               ml="auto"
@@ -63,9 +63,15 @@ export default function FAQs() {
             </Title>
             <Accordion chevronPosition="right" variant="separated">
               {faqs.map((faq) => (
-                <Accordion.Item className={classes.item} value={faq.value} key={faq.value}>
-                  <Accordion.Control>{faq.question}</Accordion.Control>
-                  <Accordion.Panel>{faq.answer}</Accordion.Panel>
+                <Accordion.Item
+                  className={classes.item}
+                  value={faq.value}
+                  key={faq.value}
+                  bg="#1a1a1a"
+                  style={{ border: '1px solid #1a1a1a' }}
+                >
+                  <Accordion.Control c="white">{faq.question}</Accordion.Control>
+                  <Accordion.Panel c="white">{faq.answer}</Accordion.Panel>
                 </Accordion.Item>
               ))}
             </Accordion>
