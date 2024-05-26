@@ -105,6 +105,7 @@ const SmallCard = () => {
                   ? textColor
                   : '#5d5f6b'
               }
+              ff="Noto Sans TC"
             >
               {displayName}
             </Title>
@@ -132,6 +133,7 @@ const SmallCard = () => {
                     : '#5d5f6b'
                 }
                 fw={400}
+                ff="Noto Sans TC"
               >
                 {formatDate(createdDate)}
               </Title>

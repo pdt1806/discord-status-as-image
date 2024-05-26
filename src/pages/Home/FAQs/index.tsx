@@ -1,4 +1,4 @@
-import { Accordion, Container, Grid, Image, Text, Title } from '@mantine/core';
+import { Accordion, Box, Grid, Image, Text, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { Link } from 'react-router-dom';
 import classes from './index.module.css';
@@ -36,7 +36,7 @@ export default function FAQs() {
 
   return (
     <div className={classes.wrapper}>
-      <Container size="xl">
+      <Box maw={1280} mx="auto">
         <Grid id="faq-grid" gutter={50}>
           <Grid.Col span={{ base: 12, md: 5 }}>
             <Image
@@ -77,7 +77,7 @@ export default function FAQs() {
             </Accordion>
           </Grid.Col>
         </Grid>
-      </Container>
+      </Box>
     </div>
   );
 }

@@ -297,12 +297,15 @@ const MainContentColumn2 = ({
             }}
           />
           <Textarea
+            styles={{ input: { fontFamily: 'Noto Sans TC' } }}
             label="About me"
             minRows={5}
             maxRows={5}
             autosize
             {...form.getInputProps('aboutMe')}
-            placeholder={'Write something about yourself.\nMax characters per line: 53'}
+            placeholder={
+              'Write something about yourself.\n\nMax characters per line: 53\nFont family: Noto Sans TC'
+            }
             onChange={(e) => {
               form.setValues({
                 ...form.values,

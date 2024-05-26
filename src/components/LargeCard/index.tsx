@@ -103,27 +103,27 @@ const LargeCard = () => {
           className={innerClasses.name}
         >
           <Box mb={15}>
-            <Title fw={600} size={titleSize} c={textColor}>
+            <Title fw={600} size={titleSize} c={textColor} ff="Noto Sans TC">
               {displayName}
             </Title>
-            <Title fw={500} mt={10} size={titleSize - 15} c={textColor}>
+            <Title fw={500} mt={10} size={titleSize - 15} c={textColor} ff="Noto Sans TC">
               {username}
             </Title>
             {pronouns && (
-              <Title fw={400} mt={15} size={25} c={textColor}>
+              <Title fw={400} mt={15} size={25} c={textColor} ff="Noto Sans TC">
                 {pronouns}
               </Title>
             )}
             {mood && (
-              <Title fw={400} mt={35} size={25} c={textColor}>
+              <Title fw={400} mt={35} size={25} c={textColor} ff="Noto Sans TC">
                 {mood}
               </Title>
             )}
           </Box>
-          {(aboutMe || createdDate) && <Divider w={687} mb={30} mt={30} />}
+          {(aboutMe || createdDate) && <Divider w={687} mb={30} mt={30} color="gray" />}
           {aboutMe && (
             <Box>
-              <Title size={20} c={textColor}>
+              <Title size={20} c={textColor} ff="Noto Sans TC">
                 ABOUT ME
               </Title>
               <Text c={textColor} lineClamp={5} className={innerClasses.aboutMe}>
@@ -133,10 +133,16 @@ const LargeCard = () => {
           )}
           {createdDate && (
             <Box>
-              <Title mt={30} size={20} c={textColor}>
+              <Title mt={30} size={20} c={textColor} ff="Noto Sans TC">
                 DISCORD MEMBER SINCE
               </Title>
-              <Text c={textColor} lineClamp={4} mt="sm" style={{ fontSize: '22px' }}>
+              <Text
+                c={textColor}
+                lineClamp={4}
+                mt="sm"
+                style={{ fontSize: '22px' }}
+                ff="Noto Sans TC"
+              >
                 {formatDate(createdDate)}
               </Text>
             </Box>

@@ -19,7 +19,7 @@ export default function HowTo() {
         />
         <HowToCard
           image="images/showcase/disi-showcase-5.png"
-          main="3. Click the 'Generate' button and you are all set!"
+          main="3. Click the Generate button and you are all set!"
           description="The cards can be embedded in various formats, such as .png, .svg, Markdown, or HTML."
         />
       </Group>

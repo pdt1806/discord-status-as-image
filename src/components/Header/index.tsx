@@ -3,7 +3,7 @@ import { useMediaQuery } from '@mantine/hooks';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
-  const smallestHeader = useMediaQuery('(max-width: 400px)');
+  const smallestHeader = useMediaQuery('(max-width: 420px)');
 
   return (
     <Box

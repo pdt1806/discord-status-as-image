@@ -23,6 +23,7 @@
   border-radius: 5px;
   box-shadow: 0 0 10px 0px #00000050;
   transform: translate(548px, 30px);
+  font-family: 'Noto Sans TC', sans-serif;
 }
 
 .name {
@@ -42,6 +43,7 @@
   max-width: 700px;
   word-wrap: break-word;
   white-space: pre-line;
+  font-family: 'Noto Sans TC', sans-serif;
 }
 
 .discordLabel {

@@ -49,7 +49,7 @@ export default function App() {
   return (
     <MantineProvider
       theme={createTheme({
-        fontFamily: 'Noto Sans TC, sans-serif',
+        fontFamily: 'Be Vietnam Pro',
         breakpoints: {
           smallHeader: '600px',
         },
