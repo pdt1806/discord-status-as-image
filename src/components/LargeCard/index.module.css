@@ -14,19 +14,26 @@
 }
 
 .friendRequest {
-  position: absolute;
-  background-color: #28944c;
   padding: 8px 18px 8px 18px;
   color: white;
   font-size: 20px;
   font-weight: 400;
   border-radius: 5px;
   box-shadow: 0 0 10px 0px #00000050;
-  transform: translate(548px, 30px);
   font-family: 'Noto Sans TC', sans-serif;
 }
 
+.addMessageGroup {
+  position: absolute;
+  transform: translate(579px, 30px);
+}
+
 .name {
+  margin-top: 20px;
+  transform: translate(30px, 120px);
+}
+
+.aboutMeBox {
   transform: translateX(30px);
   border-radius: 15px;
   z-index: 0;

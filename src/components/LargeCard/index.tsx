@@ -1,12 +1,20 @@
-import { Avatar, Box, Divider, Image, Text, Title } from '@mantine/core';
+import { ActionIcon, Avatar, Box, Flex, Group, Image, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import { IconMessageCircle2Filled, IconUserPlus } from '@tabler/icons-react';
 import { getBannerImage } from '../../pocketbase_client';
-import { formatDate, setLargeCardTitleSize } from '../../utils/tools';
+import { formatDate, hexToRgb, setLargeCardTitleSize } from '../../utils/tools';
 import classes from '../style/profile.module.css';
 import innerClasses from './index.module.css';
-import { BG1TextColor, notBG1TextColor, setStatusImg, updateStatus } from './utils';
+import {
+  BG1TextColor,
+  adjustHexColor,
+  isDark,
+  notBG1TextColor,
+  setStatusImg,
+  updateStatus,
+} from './utils';
 
 const LargeCard = () => {
   const { search } = useLocation();
@@ -22,20 +30,30 @@ const LargeCard = () => {
     params.get('accentColor') && `#${params.get('accentColor')}`
   );
   const id = params.get('id');
-  const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#2b2d31';
+  const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#111214';
   const discordLabel = params.get('discordlabel');
   const bannerColor = params.get('bannerColor') ? `#${params.get('bannerColor')}` : '#212121';
-  const mood = params.get('mood');
+  // const mood = params.get('mood');
   const aboutMe = decodeURIComponent(params.get('aboutMe') || '');
   const pronouns = decodeURIComponent(params.get('pronouns') || '');
   const bannerID = params.get('bannerID');
 
+  const bg1 = params.get('bg1');
+  const bg2 = params.get('bg2');
+
   let backgroundGradient;
   let textColor;
-  if (params.get('bg1') && params.get('bg2')) {
+  if (bg1 && bg2) {
     const colors = BG1TextColor(params);
     [backgroundGradient, textColor] = colors;
   } else textColor = notBG1TextColor(backgroundColor);
+
+  const dimmedColor = textColor === 'white' ? 'rgba(255, 255, 255, 0.75)' : 'rgba(0, 0, 0, 0.75)';
+
+  let darkColor = null;
+  if (bg1 && bg2) {
+    darkColor = adjustHexColor(bg1, 100 * (isDark(hexToRgb(bg1)!) ? -1 : 1));
+  }
 
   const updateStatusArgs = {
     params,
@@ -90,42 +108,101 @@ const LargeCard = () => {
           <Box
             id="banner"
             style={{ backgroundColor: accentColor ?? bannerColor }}
-            className={classes.colorBanner}
+            className={classes.banner}
           />
         )}
         <Box style={{ transform: 'scale(0.8) translate(20px, -180px)', position: 'absolute' }}>
           <Image alt="Avatar" src={avatar} className={classes.avatar} />
           <Avatar src={statusImage} className={innerClasses.statusImage} />
         </Box>
-        <Box className={innerClasses.friendRequest}>Send Friend Request</Box>
-        <Box
-          style={{ backgroundColor: textColor === 'white' ? '#111111' : '#ffffff' }}
-          className={innerClasses.name}
-        >
-          <Box mb={15}>
-            <Title fw={600} size={titleSize} c={textColor} ff="Noto Sans TC">
-              {displayName}
-            </Title>
-            <Title fw={500} mt={10} size={titleSize - 15} c={textColor} ff="Noto Sans TC">
+        <Group gap="xs" className={innerClasses.addMessageGroup}>
+          <ActionIcon h={40.8} w={40.8} bg={darkColor ?? '#4e5057'}>
+            <IconMessageCircle2Filled size={20} style={{ margin: 0, padding: 0 }} />
+          </ActionIcon>
+          <Box
+            className={innerClasses.friendRequest}
+            style={{ backgroundColor: darkColor ?? '#5865f2' }}
+          >
+            <Group gap="xs">
+              <IconUserPlus size={20} />
+              <Text>Add Friend</Text>
+            </Group>
+          </Box>
+        </Group>
+        <Box mb={15} className={innerClasses.name}>
+          <Title fw={600} size={titleSize} c={textColor} ff="Noto Sans TC">
+            {displayName}
+          </Title>
+          <Flex>
+            <Title fw={400} mt={10} size={titleSize - 15} c={dimmedColor} ff="Noto Sans TC">
               {username}
             </Title>
             {pronouns && (
-              <Title fw={400} mt={15} size={25} c={textColor} ff="Noto Sans TC">
-                {pronouns}
-              </Title>
+              <Flex>
+                <Title fw={700} mt={15} mx={5} size={25} c={dimmedColor} ff="Noto Sans TC">
+                  •
+                </Title>
+                <Title fw={400} mt={15} size={25} c={dimmedColor} ff="Noto Sans TC">
+                  {pronouns}
+                </Title>
+              </Flex>
             )}
-            {mood && (
-              <Title fw={400} mt={35} size={25} c={textColor} ff="Noto Sans TC">
-                {mood}
-              </Title>
-            )}
-          </Box>
-          {(aboutMe || createdDate) && <Divider w={687} mb={30} mt={30} color="gray" />}
+          </Flex>
+
+          {/* {mood && (
+            <Title fw={400} mt={35} size={25} c={textColor} ff="Noto Sans TC">
+              {mood}
+            </Title>
+          )} */}
+        </Box>
+        <Box
+          className={innerClasses.aboutMeBox}
+          style={{
+            backgroundColor:
+              textColor === 'white'
+                ? bg1 && bg2
+                  ? 'rgba(0,0,0,0.3)'
+                  : '#232528'
+                : 'rgba(255,255,255,0.7)',
+          }}
+        >
           {aboutMe && (
             <Box>
-              <Title size={20} c={textColor} ff="Noto Sans TC">
-                ABOUT ME
-              </Title>
+              <Flex align="flex-end" mb="lg">
+                <Text
+                  c={textColor}
+                  fz={22}
+                  ff="Noto Sans TC"
+                  pb="xs"
+                  style={{ borderBottom: `2px solid ${textColor}` }}
+                >
+                  About Me
+                </Text>
+                <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
+                <Text
+                  c={dimmedColor}
+                  fz={22}
+                  ff="Noto Sans TC"
+                  pb="xs"
+                  style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }}
+                >
+                  Mutual Friends
+                </Text>
+                <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
+                <Text
+                  c={dimmedColor}
+                  fz={22}
+                  ff="Noto Sans TC"
+                  pb="xs"
+                  style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }}
+                >
+                  Mutual Servers
+                </Text>
+                <Box
+                  w="max-content"
+                  style={{ borderBottom: '1px solid var(--mantine-color-dimmed)', flexGrow: 1 }}
+                />
+              </Flex>
               <Text c={textColor} lineClamp={5} className={innerClasses.aboutMe}>
                 {aboutMe}
               </Text>
@@ -133,8 +210,8 @@ const LargeCard = () => {
           )}
           {createdDate && (
             <Box>
-              <Title mt={30} size={20} c={textColor} ff="Noto Sans TC">
-                DISCORD MEMBER SINCE
+              <Title mt={30} size={20} c={dimmedColor} ff="Noto Sans TC">
+                Member Since
               </Title>
               <Text
                 c={textColor}
