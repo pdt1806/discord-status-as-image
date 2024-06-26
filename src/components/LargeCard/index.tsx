@@ -166,47 +166,46 @@ const LargeCard = () => {
                 : 'rgba(255,255,255,0.7)',
           }}
         >
+          <Flex align="flex-end" mb="lg">
+            <Text
+              c={textColor}
+              fz={22}
+              ff="Noto Sans TC"
+              pb="xs"
+              style={{ borderBottom: `2px solid ${textColor}` }}
+            >
+              About Me
+            </Text>
+            <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
+            <Text
+              c={dimmedColor}
+              fz={22}
+              ff="Noto Sans TC"
+              pb="xs"
+              style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }}
+            >
+              Mutual Friends
+            </Text>
+            <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
+            <Text
+              c={dimmedColor}
+              fz={22}
+              ff="Noto Sans TC"
+              pb="xs"
+              style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }}
+            >
+              Mutual Servers
+            </Text>
+            <Box
+              w="max-content"
+              style={{ borderBottom: '1px solid var(--mantine-color-dimmed)', flexGrow: 1 }}
+            />
+          </Flex>
+
           {aboutMe && (
-            <Box>
-              <Flex align="flex-end" mb="lg">
-                <Text
-                  c={textColor}
-                  fz={22}
-                  ff="Noto Sans TC"
-                  pb="xs"
-                  style={{ borderBottom: `2px solid ${textColor}` }}
-                >
-                  About Me
-                </Text>
-                <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
-                <Text
-                  c={dimmedColor}
-                  fz={22}
-                  ff="Noto Sans TC"
-                  pb="xs"
-                  style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }}
-                >
-                  Mutual Friends
-                </Text>
-                <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
-                <Text
-                  c={dimmedColor}
-                  fz={22}
-                  ff="Noto Sans TC"
-                  pb="xs"
-                  style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }}
-                >
-                  Mutual Servers
-                </Text>
-                <Box
-                  w="max-content"
-                  style={{ borderBottom: '1px solid var(--mantine-color-dimmed)', flexGrow: 1 }}
-                />
-              </Flex>
-              <Text c={textColor} lineClamp={5} className={innerClasses.aboutMe}>
-                {aboutMe}
-              </Text>
-            </Box>
+            <Text c={textColor} lineClamp={5} className={innerClasses.aboutMe}>
+              {aboutMe}
+            </Text>
           )}
           {createdDate && (
             <Box>
