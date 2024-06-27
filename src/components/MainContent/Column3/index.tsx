@@ -139,7 +139,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy Anchor (.png)',
       execute: () => {
         navigator.clipboard.writeText(
-          `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="256.5px" src="${largeCardLink}"></img></a>`
+          `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="272.7px" src="${largeCardLink}"></img></a>`
         );
         copiedNotification();
       },
@@ -148,7 +148,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy iframe (live card)',
       execute: () => {
         navigator.clipboard.writeText(
-          `<iframe src="${testing ? web.dev : web.prod}/largecard?id=${userID}?${largeTail}" name="disi-large-card" height="256.5px" width="300px"></iframe>`
+          `<iframe src="${testing ? web.dev : web.prod}/largecard?id=${userID}?${largeTail}" name="disi-large-card" height="272.7px" width="300px"></iframe>`
         );
         copiedNotification();
       },
@@ -270,7 +270,7 @@ const MainContentColumn3 = ({
                 </Combobox.Dropdown>
               </Combobox>
               <Text mt="sm" style={{ fontSize: '15px' }}>
-                The size of the iframe and anchor image is pre-determined to be 300.0 x 256.5 (px).
+                The size of the iframe and anchor image is pre-determined to be 300.0 x 272.7 (px).
                 You probably will need to change it to fit your needs.
               </Text>
             </Box>
