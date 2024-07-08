@@ -70,14 +70,12 @@ const SmallCard = () => {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      try {
-        updateStatus();
-      } catch {
-        // pass
-      }
+    const intervalID = setInterval(() => {
+      updateStatus();
     }, 15000);
-  });
+
+    return () => clearInterval(intervalID);
+  }, []);
 
   const titleSize = setSmallCardTitleSize(displayName || '');
 

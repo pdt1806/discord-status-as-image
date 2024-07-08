@@ -80,13 +80,13 @@ const LargeCard = () => {
     getBanner();
   }, []);
 
-  setTimeout(() => {
-    try {
+  useEffect(() => {
+    const intervalID = setInterval(() => {
       updateStatus(updateStatusArgs);
-    } catch {
-      // pass
-    }
-  }, 15000);
+    }, 15000);
+
+    return () => clearInterval(intervalID);
+  }, []);
 
   const titleSize = setLargeCardTitleSize(displayName || '');
 
@@ -133,19 +133,19 @@ const LargeCard = () => {
           <Title fw={600} size={titleSize} c={textColor} ff="Noto Sans TC">
             {displayName}
           </Title>
-          <Flex>
-            <Title fw={400} mt={10} size={titleSize - 15} c={dimmedColor} ff="Noto Sans TC">
+          <Flex mt={15}>
+            <Title fw={400} size={25} c={dimmedColor} ff="Noto Sans TC">
               {username}
             </Title>
             {pronouns && (
-              <Flex>
-                <Title fw={700} mt={15} mx={5} size={25} c={dimmedColor} ff="Noto Sans TC">
+              <>
+                <Title fw={700} mx={5} size={25} c={dimmedColor} ff="Noto Sans TC">
                   •
                 </Title>
-                <Title fw={400} mt={15} size={25} c={dimmedColor} ff="Noto Sans TC">
+                <Title fw={400} size={25} c={dimmedColor} ff="Noto Sans TC">
                   {pronouns}
                 </Title>
-              </Flex>
+              </>
             )}
           </Flex>
 
