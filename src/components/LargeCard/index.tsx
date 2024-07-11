@@ -50,9 +50,14 @@ const LargeCard = () => {
 
   const dimmedColor = textColor === 'white' ? 'rgba(255, 255, 255, 0.75)' : 'rgba(0, 0, 0, 0.75)';
 
-  let darkColor = null;
+  let buttonColor = null;
   if (bg1 && bg2) {
-    darkColor = adjustHexColor(bg1, 100 * (isDark(hexToRgb(bg1)!) ? -1 : 1));
+    buttonColor = adjustHexColor(bg1, 100 * (isDark(hexToRgb(bg1)!) ? -1 : 1));
+  } else if (backgroundColor) {
+    buttonColor = adjustHexColor(
+      backgroundColor,
+      100 * (isDark(hexToRgb(backgroundColor)!) ? -1 : 1)
+    );
   }
 
   const updateStatusArgs = {
@@ -116,12 +121,12 @@ const LargeCard = () => {
           <Avatar src={statusImage} className={innerClasses.statusImage} />
         </Box>
         <Group gap="xs" className={innerClasses.addMessageGroup}>
-          <ActionIcon h={40.8} w={40.8} bg={darkColor ?? '#4e5057'}>
+          <ActionIcon h={40.8} w={40.8} bg={buttonColor ?? '#4e5057'}>
             <IconMessageCircle2Filled size={20} style={{ margin: 0, padding: 0 }} />
           </ActionIcon>
           <Box
             className={innerClasses.friendRequest}
-            style={{ backgroundColor: darkColor ?? '#5865f2' }}
+            style={{ backgroundColor: buttonColor ?? '#5865f2' }}
           >
             <Group gap="xs">
               <IconUserPlus size={20} />

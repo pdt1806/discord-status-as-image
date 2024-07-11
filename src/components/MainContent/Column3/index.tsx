@@ -49,26 +49,6 @@ const MainContentColumn3 = ({
     setLargeCardValue(null);
   }, [smallTail, largeTail]);
 
-  useEffect(() => {
-    if (smallCardValue) {
-      smallCardOptions.forEach((option) => {
-        if (option.value === smallCardValue) {
-          option.execute();
-        }
-      });
-    }
-  }, [smallCardValue]);
-
-  useEffect(() => {
-    if (largeCardValue) {
-      largeCardOptions.forEach((option) => {
-        if (option.value === largeCardValue) {
-          option.execute();
-        }
-      });
-    }
-  }, [largeCardValue]);
-
   const smallCardOptions = [
     {
       value: '🔗 Copy Image URL (.png)',
@@ -122,7 +102,7 @@ const MainContentColumn3 = ({
   ];
 
   const smallCardComboboxOptions = smallCardOptions.map((option) => (
-    <Combobox.Option value={option.value} key={option.value}>
+    <Combobox.Option value={option.value} key={option.value} onClick={option.execute}>
       {option.value}
     </Combobox.Option>
   ));
@@ -174,6 +154,7 @@ const MainContentColumn3 = ({
       value={option.value}
       key={option.value}
       disabled={option.value.includes('.svg')}
+      onClick={option.execute}
     >
       {option.value}
     </Combobox.Option>
