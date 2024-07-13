@@ -143,7 +143,7 @@ const MainContentColumn2 = ({
         <NativeSelect
           {...form.getInputProps('colorMode')}
           label="Color mode"
-          data={['Single', 'Gradient']}
+          data={['Single', 'Gradient', 'Discord Accent Color']}
           onChange={(e) => {
             setColorMode(e.currentTarget.value);
             form.setValues({
@@ -187,7 +187,7 @@ const MainContentColumn2 = ({
               />
             </HoverCard.Dropdown>
           </HoverCard>
-        ) : (
+        ) : colorMode === 'Gradient' ? (
           <Box display="flex" style={{ justifyContent: 'space-between' }} w="100%">
             <HoverCard shadow="md" openDelay={250}>
               <HoverCard.Target>
@@ -268,6 +268,13 @@ const MainContentColumn2 = ({
               }}
             />
           </Box>
+        ) : (
+          form.values.colorMode === 'Discord Accent Color' && (
+            <Text mt="md" style={{ fontSize: '15px' }}>
+              This is the color that Discord uses for the accent color of your profile. If it is not
+              available, you will get the default grey background instead.
+            </Text>
+          )
         )}
       </Box>
       <Checkbox

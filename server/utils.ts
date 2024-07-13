@@ -20,7 +20,7 @@ export function base64toFile(base64: string): File | null {
 }
 
 export const fetchData = async (id: string) => {
-  const response = await fetch(`http://127.0.0.1:7000/user/${id}`);
+  const response = await fetch(`https://refiner-api.bennynguyen.dev/user/${id}`);
   try {
     if (response.status === 404) {
       return null;

@@ -27,7 +27,7 @@ const LargeCard = () => {
   const [bannerImage, setBannerImage] = useState(params.get('bannerImage'));
   const [statusImage, setStatusImage] = useState(setStatusImg(status || 'offline'));
   const [accentColor, setAccentColor] = useState(
-    params.get('accentColor') && `#${params.get('accentColor')}`
+    params.get('accentColor') && `#${params.get('accentColor')}` // for api -> png
   );
   const id = params.get('id');
   const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#111214';

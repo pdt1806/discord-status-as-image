@@ -2,17 +2,11 @@ import { Avatar, Box, Flex, Image, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { refinerAPI, testing } from '../../env/env';
-import {
-  bgIsLight,
-  blendColors,
-  formatDate,
-  hexToRgb,
-  setSmallCardTitleSize,
-} from '../../utils/tools';
+import { formatDate, setSmallCardTitleSize } from '../../utils/tools';
 import { setStatusImg } from '../LargeCard/utils';
 import classes from '../style/profile.module.css';
 import innerClasses from './index.module.css';
+import { textColorFn, updateStatus } from './utils';
 
 const SmallCard = () => {
   const { search } = useLocation();
@@ -25,53 +19,51 @@ const SmallCard = () => {
   const [statusImage, setStatusImage] = useState(setStatusImg(status || 'offline'));
 
   const id = params.get('id');
-  const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#2b2d31';
   const discordLabel = params.get('discordlabel');
-  let backgroundGradient;
-  let textColor;
-  if (!params.get('bg1')) {
-    const textColorRaw = hexToRgb(backgroundColor || '');
-    textColor = bgIsLight(textColorRaw!) ? '#202225' : 'white';
-  } else {
-    const gradient1Raw = hexToRgb(params.get('bg1') || '');
-    const gradient2Raw = hexToRgb(params.get('bg2') || '');
-    const gradient1 = gradient1Raw ? `${gradient1Raw.r}, ${gradient1Raw.g}, ${gradient1Raw.b}` : '';
-    const gradient2 = gradient2Raw ? `${gradient2Raw.r}, ${gradient2Raw.g}, ${gradient2Raw.b}` : '';
-    backgroundGradient =
-      gradient1 && gradient2 && params.get('angle')
-        ? `linear-gradient(${params.get('angle')}deg, rgb(${gradient1}) 0%, rgb(${gradient2}) 100%)`
-        : '';
-    const textColorRaw = hexToRgb(
-      blendColors(params.get('bg1') || '', params.get('bg2') || '') || ''
-    );
-    textColor = bgIsLight(textColorRaw!) ? '#202225' : 'white';
-  }
 
-  function updateStatus() {
-    fetch(`${testing ? refinerAPI.dev : refinerAPI.prod}/user/${id}`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setDisplayName(data.display_name);
-        setAvatar(data.avatar);
-        setStatus(data.status);
-        setStatusImage(setStatusImg(data.status));
-        if (params.get('created') === 'true') {
-          setCreatedDate(data.created_at);
-        }
-      });
-  }
+  const [backgroundColor, setBackgroundColor] = useState(
+    params.get('bg')
+      ? `#${params.get('bg')}`
+      : params.get('accentColor')
+        ? `#${params.get('accentColor')}`
+        : '#2b2d31'
+  );
+
+  const [backgroundGradient, setBackgroundGradient] = useState('');
+  const [textColor, setTextColor] = useState('');
 
   useEffect(() => {
-    if (!params.get('displayName')) updateStatus();
+    textColorFn(params, backgroundColor, setTextColor, setBackgroundGradient);
+  }, [backgroundColor]);
+
+  useEffect(() => {
+    if (!params.get('displayName')) {
+      updateStatus(
+        id || '',
+        params,
+        setDisplayName,
+        setAvatar,
+        setStatus,
+        setStatusImage,
+        setCreatedDate,
+        setBackgroundColor
+      );
+    }
+    textColorFn(params, backgroundColor, setTextColor, setBackgroundGradient);
   }, []);
 
   useEffect(() => {
     const intervalID = setInterval(() => {
-      updateStatus();
+      updateStatus(
+        id || '',
+        params,
+        setDisplayName,
+        setAvatar,
+        setStatus,
+        setStatusImage,
+        setCreatedDate,
+        setBackgroundColor
+      );
     }, 15000);
 
     return () => clearInterval(intervalID);

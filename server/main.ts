@@ -84,7 +84,7 @@ app.get('/', (_: Request, res: Response) => {
 app.get('/smallcard/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { bg, bg1, bg2, angle, created, discordlabel } = req.query;
+    const { bg, bg1, bg2, angle, created, discordlabel, wantAccentColor } = req.query;
     let link = bg1
       ? `${root}/smallcard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&angle=${angle}&`
       : bg
@@ -98,6 +98,7 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
       }
       created && (link += `createdDate=${data.created_at}&`);
       discordlabel && (link += 'discordlabel=true&');
+      wantAccentColor && data.accent_color && (link += `bg=${data.accent_color.replace('#', '')}&`);
       const browser = await puppeteer.launch({
         executablePath: '/usr/bin/chromium-browser',
         userDataDir: './loaded',
@@ -131,7 +132,7 @@ function monoBackgroundTextColor(bg: string) {
 app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { bg, bg1, bg2, angle, created, discordlabel } = req.query;
+    const { bg, bg1, bg2, angle, created, discordlabel, wantAccentColor } = req.query;
     try {
       const data = await fetchData(id);
       if (data === null) {
@@ -139,13 +140,22 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
         return null;
       }
       const avatar = await urlToBase64(data.avatar);
-      const background = bg ? `#${bg}` : '#2b2d31';
+      const background = bg
+        ? `#${bg}`
+        : wantAccentColor && data.accent_color
+          ? data.accent_color
+          : '#2b2d31';
+
       let textColor = 'white';
       if (bg1) {
         const blendColor = blendColors(`#${bg1}`, `#${bg2}`);
         textColor = monoBackgroundTextColor(blendColor!);
       }
       if (bg) textColor = monoBackgroundTextColor(`#${bg}`);
+      if (wantAccentColor && data.accent_color) {
+        textColor = monoBackgroundTextColor(data.accent_color);
+      }
+
       if (data.status === 'offline' && textColor === '#202225') textColor = '#5d5f6b';
       const statusImage = iconsListSmall[data.status as keyof typeof iconsListSmall];
       const displayName = data.display_name;
