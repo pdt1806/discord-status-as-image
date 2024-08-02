@@ -6,6 +6,7 @@ import { IconMessageCircle2Filled, IconUserPlus } from '@tabler/icons-react';
 import { getBannerImage } from '../../pocketbase_client';
 import { formatDate, hexToRgb, setLargeCardTitleSize } from '../../utils/tools';
 import classes from '../style/profile.module.css';
+import ActivityBox from './ActivityBox';
 import innerClasses from './index.module.css';
 import {
   BG1TextColor,
@@ -160,75 +161,87 @@ const LargeCard = () => {
             </Title>
           )} */}
         </Box>
-        <Box
-          className={innerClasses.aboutMeBox}
-          style={{
-            backgroundColor:
-              textColor === 'white'
-                ? bg1 && bg2
-                  ? 'rgba(0,0,0,0.3)'
-                  : '#232528'
-                : 'rgba(255,255,255,0.7)',
-          }}
-        >
-          <Flex align="flex-end" mb="lg">
-            <Text
-              c={textColor}
-              fz={22}
-              ff="Noto Sans TC"
-              pb="xs"
-              style={{ borderBottom: `2px solid ${textColor}` }}
-            >
-              About Me
-            </Text>
-            <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
-            <Text
-              c={dimmedColor}
-              fz={22}
-              ff="Noto Sans TC"
-              pb="xs"
-              style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }}
-            >
-              Mutual Friends
-            </Text>
-            <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
-            <Text
-              c={dimmedColor}
-              fz={22}
-              ff="Noto Sans TC"
-              pb="xs"
-              style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }}
-            >
-              Mutual Servers
-            </Text>
-            <Box
-              w="max-content"
-              style={{ borderBottom: '1px solid var(--mantine-color-dimmed)', flexGrow: 1 }}
-            />
-          </Flex>
-
-          {aboutMe && (
-            <Text c={textColor} lineClamp={5} className={innerClasses.aboutMe}>
-              {aboutMe}
-            </Text>
-          )}
-          {createdDate && (
-            <Box>
-              <Title mt={30} size={20} c={dimmedColor} ff="Noto Sans TC">
-                Member Since
-              </Title>
+        <ActivityBox
+          background={
+            textColor === 'white'
+              ? bg1 && bg2
+                ? 'rgba(0,0,0,0.3)'
+                : '#232528'
+              : 'rgba(255,255,255,0.7)'
+          }
+          textColor={textColor}
+        />
+        {(aboutMe || createdDate) && (
+          <Box
+            className={innerClasses.aboutMeBox}
+            style={{
+              backgroundColor:
+                textColor === 'white'
+                  ? bg1 && bg2
+                    ? 'rgba(0,0,0,0.3)'
+                    : '#232528'
+                  : 'rgba(255,255,255,0.7)',
+            }}
+          >
+            <Flex align="flex-end" mb="lg">
               <Text
                 c={textColor}
-                lineClamp={4}
-                mt="sm"
-                style={{ fontSize: '22px' }}
+                fz={22}
                 ff="Noto Sans TC"
+                pb="xs"
+                style={{ borderBottom: `2px solid ${textColor}` }}
               >
-                {formatDate(createdDate)}
+                About Me
               </Text>
-            </Box>
-          )}
-        </Box>
+              <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
+              <Text
+                c={dimmedColor}
+                fz={22}
+                ff="Noto Sans TC"
+                pb="xs"
+                style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }}
+              >
+                Mutual Friends
+              </Text>
+              <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
+              <Text
+                c={dimmedColor}
+                fz={22}
+                ff="Noto Sans TC"
+                pb="xs"
+                style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }}
+              >
+                Mutual Servers
+              </Text>
+              <Box
+                w="max-content"
+                style={{ borderBottom: '1px solid var(--mantine-color-dimmed)', flexGrow: 1 }}
+              />
+            </Flex>
+
+            {aboutMe && (
+              <Text c={textColor} lineClamp={5} className={innerClasses.aboutMe}>
+                {aboutMe}
+              </Text>
+            )}
+            {createdDate && (
+              <Box>
+                <Title mt={30} size={20} c={dimmedColor} ff="Noto Sans TC">
+                  Member Since
+                </Title>
+                <Text
+                  c={textColor}
+                  lineClamp={4}
+                  mt="sm"
+                  style={{ fontSize: '22px' }}
+                  ff="Noto Sans TC"
+                >
+                  {formatDate(createdDate)}
+                </Text>
+              </Box>
+            )}
+          </Box>
+        )}
         {discordLabel && (
           <Image
             alt="discord-logo"
