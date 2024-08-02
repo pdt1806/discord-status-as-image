@@ -69,6 +69,7 @@ export function updateStatus({
   setCreatedDate,
   setBannerImage,
   setAccentColor,
+  setActivity,
 }: {
   params: URLSearchParams;
   id: string | null;
@@ -80,6 +81,7 @@ export function updateStatus({
   setCreatedDate: (createdDate: string) => void;
   setBannerImage: (bannerImage: string) => void;
   setAccentColor: (accentColor: string) => void;
+  setActivity: (activity: object) => void;
 }) {
   fetch(`${testing ? refinerAPI.dev : refinerAPI.prod}/user/${id}`, {
     headers: {
@@ -94,10 +96,11 @@ export function updateStatus({
       setStatus(data.status);
       setStatusImage(setStatusImg(data.status));
       if (params.get('created') === 'true') setCreatedDate(data.created_at);
-      if (params.get('wantBannerImage') === 'true') {
+      if (params.get('wantBannerImage')) {
         setBannerImage(data.banner);
         setAccentColor(data.accent_color);
       }
       if (params.get('wantAccentColor')) setAccentColor(data.accent_color);
+      if (params.get('wantActivity')) setActivity(data.activity);
     });
 }

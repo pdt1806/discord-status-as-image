@@ -152,3 +152,32 @@ export const fetchMaintenanceMessage = async () => {
   }
   return message;
 };
+
+const formatMilliseconds = (milliseconds: number) => {
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  if (hours > 0) {
+    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  }
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+};
+
+export const getElapsedProgessListening = (timestamps: { start: string; end: string }) => {
+  const startTime = new Date(timestamps.start).getTime();
+  const endTime = new Date(timestamps.end).getTime();
+  const currentTime = new Date().getTime();
+
+  const elapsedTime = currentTime - startTime;
+
+  const totalTime = endTime - startTime;
+
+  const progress = (elapsedTime / totalTime) * 100;
+
+  return {
+    elapsedTime: formatMilliseconds(elapsedTime),
+    totalTime: formatMilliseconds(totalTime),
+    progress,
+  };
+};

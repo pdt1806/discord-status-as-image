@@ -30,6 +30,8 @@ const LargeCard = () => {
   const [accentColor, setAccentColor] = useState(
     params.get('accentColor') && `#${params.get('accentColor')}` // for api -> png
   );
+  // eslint-disable-next-line no-eval
+  const [activity, setActivity] = useState(eval(params.get('activity') || ''));
   const id = params.get('id');
   const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#111214';
   const discordLabel = params.get('discordlabel');
@@ -72,6 +74,7 @@ const LargeCard = () => {
     setCreatedDate,
     setBannerImage,
     setAccentColor,
+    setActivity,
   };
 
   useEffect(() => {
@@ -161,16 +164,19 @@ const LargeCard = () => {
             </Title>
           )} */}
         </Box>
-        <ActivityBox
-          background={
-            textColor === 'white'
-              ? bg1 && bg2
-                ? 'rgba(0,0,0,0.3)'
-                : '#232528'
-              : 'rgba(255,255,255,0.7)'
-          }
-          textColor={textColor}
-        />
+        {activity && (
+          <ActivityBox
+            background={
+              textColor === 'white'
+                ? bg1 && bg2
+                  ? 'rgba(0,0,0,0.3)'
+                  : '#232528'
+                : 'rgba(255,255,255,0.7)'
+            }
+            textColor={textColor}
+            activity={activity}
+          />
+        )}
         {(aboutMe || createdDate) && (
           <Box
             className={innerClasses.aboutMeBox}
