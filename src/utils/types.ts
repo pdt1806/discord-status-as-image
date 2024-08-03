@@ -39,8 +39,8 @@ type PlayingActivityType = {
   details: string;
   state: string;
   assets: {
-    largeImage: string;
-    smallImage: string;
+    large_image: string;
+    small_image: string;
   };
 };
 

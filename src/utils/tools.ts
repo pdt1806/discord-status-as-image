@@ -158,10 +158,10 @@ const formatMilliseconds = (milliseconds: number) => {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
-  if (hours > 0) {
-    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  }
-  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+  return hours > 0
+    ? `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+    : `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
 
 export const getElapsedProgessListening = (timestamps: { start: string; end: string }) => {
@@ -173,11 +173,23 @@ export const getElapsedProgessListening = (timestamps: { start: string; end: str
 
   const totalTime = endTime - startTime;
 
-  const progress = (elapsedTime / totalTime) * 100;
-
   return {
     elapsedTime: formatMilliseconds(elapsedTime),
     totalTime: formatMilliseconds(totalTime),
-    progress,
+    progress: (elapsedTime / totalTime) * 100,
   };
+};
+
+export const formatActivityImageUrl = (encodedUrl: string) => {
+  const startIndex = encodedUrl.indexOf('https/');
+  const url = decodeURIComponent(encodedUrl.slice(startIndex).replace('https/', ''));
+  return url ? `https://${url}` : '';
+};
+
+export const getPlayingTimestamp = (timestamps: { start: number; end?: string }) => {
+  const currentTime = new Date().getTime();
+
+  const elapsedTime = currentTime - timestamps.start;
+
+  return formatMilliseconds(elapsedTime);
 };
