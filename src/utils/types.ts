@@ -32,7 +32,15 @@ type ListeningActivityType = {
   };
 };
 
-type PlayingActivityType = {
+type StreamingActivityType = {
+  platform: string;
+  twitch_name: string;
+  url: string;
+  game: string;
+};
+
+type OtherActivityType = {
+  application_id: string;
   timestamps: {
     start: number;
   };
@@ -44,4 +52,7 @@ type PlayingActivityType = {
   };
 };
 
-export type ActivityType = GeneralActivityType & ListeningActivityType & PlayingActivityType;
+export type ActivityType = GeneralActivityType &
+  ListeningActivityType &
+  StreamingActivityType &
+  OtherActivityType;

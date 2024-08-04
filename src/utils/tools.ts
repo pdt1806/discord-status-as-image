@@ -193,3 +193,6 @@ export const getPlayingTimestamp = (timestamps: { start: number; end?: string })
 
   return formatMilliseconds(elapsedTime);
 };
+
+export const getImageURLfromCDN = (appID: string, imageID: string) =>
+  `https://cdn.discordapp.com/app-assets/${appID}/${imageID}.png`;

@@ -186,7 +186,7 @@ const LargeCard = () => {
                   ? bg1 && bg2
                     ? 'rgba(0,0,0,0.3)'
                     : '#232528'
-                  : 'rgba(255,255,255,0.7)',
+                  : 'rgba(0,0,0,0.05)',
             }}
           >
             <Flex align="flex-end" mb="lg">
@@ -199,7 +199,7 @@ const LargeCard = () => {
               >
                 About Me
               </Text>
-              <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
+              {/* <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
               <Text
                 c={dimmedColor}
                 fz={22}
@@ -218,7 +218,7 @@ const LargeCard = () => {
                 style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }}
               >
                 Mutual Servers
-              </Text>
+              </Text> */}
               <Box
                 w="max-content"
                 style={{ borderBottom: '1px solid var(--mantine-color-dimmed)', flexGrow: 1 }}
