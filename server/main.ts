@@ -84,7 +84,17 @@ app.get('/', (_: Request, res: Response) => {
 app.get('/smallcard/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { bg, bg1, bg2, angle, created, discordlabel, wantAccentColor } = req.query;
+    const {
+      bg,
+      bg1,
+      bg2,
+      angle,
+      wantCreated,
+      // wantActivity,
+      // wantMood,
+      discordlabel,
+      wantAccentColor,
+    } = req.query;
     let link = bg1
       ? `${root}/smallcard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&angle=${angle}&`
       : bg
@@ -96,8 +106,10 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
         res.status(404).send('User not found');
         return null;
       }
-      created && (link += `createdDate=${data.created_at}&`);
+      wantCreated && (link += `createdDate=${data.created_at}&`);
       discordlabel && (link += 'discordlabel=true&');
+      // wantActivity && (link += 'wantActivity=true&');
+      // wantMood && (link += 'wantMood=true&');
       wantAccentColor && data.accent_color && (link += `bg=${data.accent_color.replace('#', '')}&`);
       const browser = await puppeteer.launch({
         executablePath: '/usr/bin/chromium-browser',

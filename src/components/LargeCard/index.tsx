@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { IconMessageCircle2Filled, IconUserPlus } from '@tabler/icons-react';
 import { getBannerImage } from '../../pocketbase_client';
 import { formatDate, hexToRgb, setLargeCardTitleSize } from '../../utils/tools';
+import { ActivityType } from '../../utils/types';
 import classes from '../style/profile.module.css';
 import ActivityBox from './ActivityBox';
 import innerClasses from './index.module.css';
@@ -30,8 +31,7 @@ const LargeCard = () => {
   const [accentColor, setAccentColor] = useState(
     params.get('accentColor') && `#${params.get('accentColor')}` // for api -> png
   );
-  // eslint-disable-next-line no-eval
-  const [activity, setActivity] = useState(eval(params.get('activity') || ''));
+  const [activity, setActivity] = useState<ActivityType | null>(null);
   const id = params.get('id');
   const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#111214';
   const discordLabel = params.get('discordlabel');

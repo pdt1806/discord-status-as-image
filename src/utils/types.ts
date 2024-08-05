@@ -1,13 +1,15 @@
 export type DISIForm = {
   username: string | null;
   colorMode: string;
+  smallCardDetailMode: string;
   backgroundSingle: string;
   backgroundGradient1: string;
   backgroundGradient2: string;
   backgroundGradientAngle: number;
-  created: boolean;
+  largeCardActivity: boolean;
+  largeCardMood: boolean;
+  largeCardCreated: boolean;
   aboutMe: string;
-  mood: string;
   bannerColor: string;
   pronouns: string;
   discordLabel: boolean;

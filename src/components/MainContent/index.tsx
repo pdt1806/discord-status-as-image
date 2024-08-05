@@ -14,6 +14,7 @@ const MainContent = () => {
   const [smallTail, setSmallTail] = useState('');
   const [largeTail, setLargeTail] = useState('');
   const [userID, setUserID] = useState('');
+  const [colorMode, setColorMode] = useState('Single');
   const [wantLargeCard, setWantLargeCard] = useState(false);
   const [bannerMode, setBannerMode] = useState('Custom Color');
   const [customBannerMode, setCustomBannerMode] = useState('');
@@ -24,13 +25,15 @@ const MainContent = () => {
     initialValues: {
       username: null as string | null,
       colorMode: 'Single',
+      smallCardDetailMode: 'None',
       backgroundSingle: '',
       backgroundGradient1: '',
       backgroundGradient2: '',
       backgroundGradientAngle: 0,
-      created: false,
+      largeCardActivity: false,
+      largeCardMood: false,
+      largeCardCreated: false,
       aboutMe: '',
-      mood: '',
       bannerColor: '',
       pronouns: '',
       discordLabel: false,
@@ -48,8 +51,6 @@ const MainContent = () => {
     bannerMode === 'Custom Image Banner' && setCustomBannerMode('upload');
     bannerMode !== 'Custom Image Banner' && setCustomBannerMode('');
   }, [bannerMode]);
-
-  const [colorMode, setColorMode] = useState('Single');
 
   const isMobile = useMediaQuery('(max-width: 1080px)');
 

@@ -130,7 +130,7 @@ export default function ActivityBox({
             Live on {activity.platform}
           </Title>
           <Group gap="lg" mt="lg">
-            <OtherAssets activity={activity} />
+            {activity.assets.large_image && <OtherAssets activity={activity} />}
             <Box maw={500}>
               <Title ff="Noto Sans TC" order={3} lineClamp={1}>
                 {activity.details}
@@ -160,7 +160,7 @@ export default function ActivityBox({
             </Title>
           )}
           <Group gap="lg" mt="lg">
-            <OtherAssets activity={activity} />
+            {activity.assets.large_image && <OtherAssets activity={activity} />}
             <Box maw={500}>
               <Title ff="Noto Sans TC" order={3} lineClamp={2}>
                 {activity.details}

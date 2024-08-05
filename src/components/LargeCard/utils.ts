@@ -1,5 +1,6 @@
 import { refinerAPI, testing } from '../../env/env';
 import { blendColors, hexToRgb } from '../../utils/tools';
+import { ActivityType } from '../../utils/types';
 
 const getRgbString = (hexColor: string) => {
   const rgb = hexToRgb(hexColor);
@@ -81,7 +82,7 @@ export function updateStatus({
   setCreatedDate: (createdDate: string) => void;
   setBannerImage: (bannerImage: string) => void;
   setAccentColor: (accentColor: string) => void;
-  setActivity: (activity: object) => void;
+  setActivity: (activity: ActivityType) => void;
 }) {
   fetch(`${testing ? refinerAPI.dev : refinerAPI.prod}/user/${id}`, {
     headers: {
@@ -95,7 +96,7 @@ export function updateStatus({
       setAvatar(data.avatar);
       setStatus(data.status);
       setStatusImage(setStatusImg(data.status));
-      if (params.get('created') === 'true') setCreatedDate(data.created_at);
+      if (params.get('wantCreated')) setCreatedDate(data.created_at);
       if (params.get('wantBannerImage')) {
         setBannerImage(data.banner);
         setAccentColor(data.accent_color);

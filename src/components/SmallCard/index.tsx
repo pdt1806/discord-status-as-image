@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { formatDate, setSmallCardTitleSize } from '../../utils/tools';
+import { ActivityType } from '../../utils/types';
 import { setStatusImg } from '../LargeCard/utils';
 import classes from '../style/profile.module.css';
 import innerClasses from './index.module.css';
@@ -17,6 +18,7 @@ const SmallCard = () => {
   const [status, setStatus] = useState(params.get('status'));
   const [createdDate, setCreatedDate] = useState(params.get('createdDate'));
   const [statusImage, setStatusImage] = useState(setStatusImg(status || 'offline'));
+  const [activity, setActivity] = useState<ActivityType | null>(null);
 
   const id = params.get('id');
   const discordLabel = params.get('discordlabel');
@@ -46,7 +48,8 @@ const SmallCard = () => {
         setStatus,
         setStatusImage,
         setCreatedDate,
-        setBackgroundColor
+        setBackgroundColor,
+        setActivity
       );
     }
     textColorFn(params, backgroundColor, setTextColor, setBackgroundGradient);
@@ -62,7 +65,8 @@ const SmallCard = () => {
         setStatus,
         setStatusImage,
         setCreatedDate,
-        setBackgroundColor
+        setBackgroundColor,
+        setActivity
       );
     }, 15000);
 
@@ -129,13 +133,62 @@ const SmallCard = () => {
               </Title>
             </Box>
           )}
+          {activity && (
+            <Box mt="lg" display="flex" style={{ alignItems: 'center' }} h={60} maw={720}>
+              <Title
+                lineClamp={1}
+                size={40}
+                c={
+                  status !== 'offline' || (status === 'offline' && textColor === 'white')
+                    ? textColor
+                    : '#5d5f6b'
+                }
+                fw={400}
+                ff="Noto Sans TC"
+              >
+                {
+                  {
+                    listening: 'Listening to ',
+                    watching: 'Watching ',
+                    playing: 'Playing ',
+                    streaming: 'Streaming ',
+                    competing: 'Competing in ',
+                  }[activity.type]
+                }
+                <span style={{ fontWeight: 600 }}>
+                  {
+                    {
+                      listening: activity.platform,
+                      watching: activity.name,
+                      playing: activity.name,
+                      streaming: activity.details,
+                      competing: activity.name,
+                    }[activity.type]
+                  }
+                </span>
+              </Title>
+              <Image
+                alt="detail-icon"
+                src="/images/detail-icon.svg"
+                className={innerClasses.detailIcon}
+                style={{
+                  filter:
+                    textColor === 'white'
+                      ? 'invert(1)'
+                      : status !== 'offline'
+                        ? 'brightness(0) saturate(100%) invert(7%) sepia(6%) saturate(1299%) hue-rotate(177deg) brightness(96%) contrast(85%)'
+                        : 'brightness(0) saturate(100%) invert(34%) sepia(6%) saturate(770%) hue-rotate(194deg) brightness(102%) contrast(87%)',
+                }}
+              />
+            </Box>
+          )}
           {discordLabel && (
             <Image
               alt="discord-logo"
               src="/images/discord-label.svg"
               className={innerClasses.discordLabel}
               style={{
-                transform: `translate(603.3px, ${createdDate ? '30px' : '70px'})`,
+                transform: `translate(603.3px, ${createdDate || activity ? '30px' : '70px'})`,
               }}
             />
           )}

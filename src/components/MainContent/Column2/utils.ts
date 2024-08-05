@@ -29,9 +29,11 @@ export const generatingCards = async (
     `${testing ? refinerAPI.dev : refinerAPI.prod}/username/${form.values.username}`
   );
   if (res.status === 404) throw new Error('User not found');
+
   const data = await res.json();
   setUserID(data.id);
-  let newTail =
+
+  const newTail =
     colorMode === 'Gradient'
       ? `&bg1=${form.values.backgroundGradient1.replace(
           '#',
@@ -40,7 +42,7 @@ export const generatingCards = async (
       : form.values.backgroundSingle
         ? `&bg=${form.values.backgroundSingle.replace('#', '')}`
         : '';
-  if (form.values.created) newTail += '&created=true';
+
   let newBannerID = '';
   if (bannerFile && customBannerMode === 'upload') {
     const body = {
@@ -58,15 +60,33 @@ export const generatingCards = async (
     newBannerID = json.id;
     setBannerFile(null);
   }
-  const smallTail =
+
+  let smallTail =
     newTail +
     (colorMode === 'Gradient' ? `&angle=${form.values.backgroundGradientAngle}` : '') +
     (form.values.discordLabel ? '&discordlabel=true' : '') +
     (colorMode === 'Discord Accent Color' ? '&wantAccentColor=true' : '');
+
+  switch (form.values.smallCardDetailMode) {
+    case 'Show Activity':
+      smallTail += '&wantActivity=true';
+      break;
+    case 'Show Mood (a.k.a. custom status)':
+      smallTail += '&wantMood=true';
+      break;
+    case 'Show account created date':
+      smallTail += '&wantCreated=true';
+      break;
+    default:
+      break;
+  }
+
   const largeTail =
     newTail +
+    (form.values.largeCardActivity ? '&wantActivity=true' : '') +
+    (form.values.largeCardMood ? '&wantMood=true' : '') +
+    (form.values.largeCardCreated ? '&wantCreated=true' : '') +
     (form.values.aboutMe ? `&aboutMe=${encodeURIComponent(form.values.aboutMe)}` : '') +
-    (form.values.mood ? `&mood=${form.values.mood}` : '') +
     (form.values.pronouns ? `&pronouns=${encodeURIComponent(form.values.pronouns)}` : '') +
     (bannerMode === 'Custom Color' && form.values.bannerColor
       ? `&bannerColor=${form.values.bannerColor.replace('#', '')}`
