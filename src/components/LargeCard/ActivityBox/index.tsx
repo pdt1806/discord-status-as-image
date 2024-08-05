@@ -49,7 +49,6 @@ export default function ActivityBox({
       className={classes.aboutMeBox}
       style={{
         backgroundColor: background,
-        backdropFilter: 'brightness(0.8)',
       }}
     >
       {activity.type === 'listening' && (
@@ -103,7 +102,7 @@ export default function ActivityBox({
             Playing a game
           </Title>
           <Group gap="lg" mt="lg">
-            <OtherAssets activity={activity} />
+            {activity.assets && <OtherAssets activity={activity} />}
             <Box maw={500}>
               <Title ff="Noto Sans TC" order={3} lineClamp={1}>
                 {activity.name}
@@ -115,7 +114,7 @@ export default function ActivityBox({
               <Text ff="Noto Sans TC" fz="lg" lineClamp={1}>
                 {activity.state}
               </Text>
-              {activity.timestamps.start && activity.timestamps.end && (
+              {activity.timestamps.start && (
                 <Text ff="Noto Sans TC" fz="lg" lineClamp={1}>
                   {playingTimestamp} elapsed
                 </Text>
@@ -130,7 +129,7 @@ export default function ActivityBox({
             Live on {activity.platform}
           </Title>
           <Group gap="lg" mt="lg">
-            {activity.assets.large_image && <OtherAssets activity={activity} />}
+            {activity.assets && <OtherAssets activity={activity} />}
             <Box maw={500}>
               <Title ff="Noto Sans TC" order={3} lineClamp={1}>
                 {activity.details}
@@ -139,7 +138,7 @@ export default function ActivityBox({
               <Text ff="Noto Sans TC" fz="lg" lineClamp={1}>
                 playing {activity.game}
               </Text>
-              {activity.timestamps.start && activity.timestamps.end && (
+              {activity.timestamps.start && (
                 <Text ff="Noto Sans TC" fz="lg" lineClamp={1}>
                   {playingTimestamp} elapsed
                 </Text>
@@ -160,7 +159,7 @@ export default function ActivityBox({
             </Title>
           )}
           <Group gap="lg" mt="lg">
-            {activity.assets.large_image && <OtherAssets activity={activity} />}
+            {activity.assets && <OtherAssets activity={activity} />}
             <Box maw={500}>
               <Title ff="Noto Sans TC" order={3} lineClamp={2}>
                 {activity.details}
@@ -169,7 +168,7 @@ export default function ActivityBox({
               <Text ff="Noto Sans TC" fz="lg" lineClamp={1}>
                 {activity.state}
               </Text>
-              {activity.timestamps.start && activity.timestamps.end && (
+              {activity.timestamps.start && (
                 <Text ff="Noto Sans TC" fz="lg" lineClamp={1}>
                   {playingTimestamp} elapsed
                 </Text>
@@ -183,13 +182,21 @@ export default function ActivityBox({
 }
 
 function OtherAssets({ activity }: { activity: ActivityType }) {
+  const { large_image, small_image } = activity.assets;
+
   return (
     <Box>
       <Image
         src={
-          activity.assets.large_image.includes('https')
-            ? formatActivityImageUrl(activity.assets.large_image)
-            : getImageURLfromCDN(activity.application_id, activity.assets.large_image)
+          large_image
+            ? large_image.includes('https')
+              ? formatActivityImageUrl(large_image)
+              : getImageURLfromCDN(activity.application_id, large_image)
+            : small_image
+              ? small_image.includes('https')
+                ? formatActivityImageUrl(small_image)
+                : getImageURLfromCDN(activity.application_id, small_image)
+              : ''
         }
         alt="Large Image"
         style={{
@@ -198,7 +205,7 @@ function OtherAssets({ activity }: { activity: ActivityType }) {
           borderRadius: 10,
         }}
       />
-      {activity.assets.small_image && (
+      {small_image && large_image && (
         <Flex
           w="100%"
           mt={-35}
@@ -209,9 +216,9 @@ function OtherAssets({ activity }: { activity: ActivityType }) {
           <Avatar
             ml="auto"
             src={
-              activity.assets.small_image.includes('https')
-                ? formatActivityImageUrl(activity.assets.small_image)
-                : getImageURLfromCDN(activity.application_id, activity.assets.small_image)
+              small_image.includes('https')
+                ? formatActivityImageUrl(small_image)
+                : getImageURLfromCDN(activity.application_id, small_image)
             }
             alt="Small Image"
             size={40}

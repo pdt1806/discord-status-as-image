@@ -58,3 +58,26 @@ export type ActivityType = GeneralActivityType &
   ListeningActivityType &
   StreamingActivityType &
   OtherActivityType;
+
+export type MoodType = {
+  type: number;
+  state: string; // message
+  name: string;
+  emoji: {
+    id: number;
+    name: string;
+  };
+};
+
+export type RefinerResponse = {
+  id: string;
+  username: string;
+  display_name: string;
+  avatar: string;
+  status: string;
+  banner: string | null;
+  accent_color: string | null;
+  created_at: string;
+  activity: ActivityType;
+  mood: MoodType;
+};

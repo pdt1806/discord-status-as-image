@@ -1,3 +1,6 @@
+import { refinerAPI, testing } from '../src/env/env';
+import { RefinerResponse } from '../src/utils/types';
+
 export function base64toFile(base64: string): File | null {
   const match = base64.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,(.+)$/);
 
@@ -19,8 +22,8 @@ export function base64toFile(base64: string): File | null {
   return new File([blob], fileName, { type: contentType });
 }
 
-export const fetchData = async (id: string) => {
-  const response = await fetch(`https://refiner-api.bennynguyen.dev/user/${id}`);
+export const fetchData = async (id: string): Promise<RefinerResponse | null> => {
+  const response = await fetch(`${testing ? refinerAPI.dev : refinerAPI.prod}/user/${id}`);
   try {
     if (response.status === 404) {
       return null;
@@ -28,9 +31,7 @@ export const fetchData = async (id: string) => {
   } catch {
     throw new Error('Internal Server Error');
   }
-  return (await response.json()) as {
-    [key: string]: string;
-  };
+  return response.json();
 };
 
 export async function urlToBase64(imgUrl: string): Promise<string> {

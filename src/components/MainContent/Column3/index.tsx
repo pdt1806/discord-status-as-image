@@ -88,7 +88,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy iframe (live card)',
       execute: () => {
         navigator.clipboard.writeText(
-          `<iframe src="${testing ? web.dev : web.prod}/smallcard?id=${userID}?${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
+          `<iframe src="${testing ? web.dev : web.prod}/smallcard?id=${userID}${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
         );
         copiedNotification();
       },
@@ -96,7 +96,7 @@ const MainContentColumn3 = ({
     {
       value: '🌐 View live card',
       execute: () => {
-        window.open(`/smallcard?id=${userID}?${smallTail}`, '_blank');
+        window.open(`/smallcard?id=${userID}${smallTail}`, '_blank');
       },
     },
   ];
@@ -128,7 +128,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy iframe (live card)',
       execute: () => {
         navigator.clipboard.writeText(
-          `<iframe src="${testing ? web.dev : web.prod}/largecard?id=${userID}?${largeTail}" name="disi-large-card" height="272.7px" width="300px"></iframe>`
+          `<iframe src="${testing ? web.dev : web.prod}/largecard?id=${userID}${largeTail}" name="disi-large-card" height="272.7px" width="300px"></iframe>`
         );
         copiedNotification();
       },
@@ -136,7 +136,7 @@ const MainContentColumn3 = ({
     {
       value: '🌐 View live card',
       execute: () => {
-        window.open(`/largecard?id=${userID}?${largeTail}`, '_blank');
+        window.open(`/largecard?id=${userID}${largeTail}`, '_blank');
       },
     },
     {

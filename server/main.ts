@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
 import express, { Request, Response } from 'express';
 import puppeteer from 'puppeteer-core';
@@ -10,6 +11,7 @@ import {
   hexToRgb,
   setSmallCardTitleSize,
 } from '../src/utils/tools';
+import { RefinerResponse } from '../src/utils/types';
 import { iconsListSmall } from './icons';
 import { uploadBannerImage } from './pocketbase_server';
 import { base64toFile, fetchData, urlToBase64 } from './utils';
@@ -90,8 +92,8 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
       bg2,
       angle,
       wantCreated,
-      // wantActivity,
-      // wantMood,
+      wantActivity,
+      wantMood,
       discordlabel,
       wantAccentColor,
     } = req.query;
@@ -108,8 +110,6 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
       }
       wantCreated && (link += `createdDate=${data.created_at}&`);
       discordlabel && (link += 'discordlabel=true&');
-      // wantActivity && (link += 'wantActivity=true&');
-      // wantMood && (link += 'wantMood=true&');
       wantAccentColor && data.accent_color && (link += `bg=${data.accent_color.replace('#', '')}&`);
       const browser = await puppeteer.launch({
         executablePath: '/usr/bin/chromium-browser',
@@ -118,6 +118,23 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
       });
       const page = await browser.newPage();
       await page.setViewport({ width: 1350, height: 450 });
+      await page.goto(
+        `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
+      );
+      wantActivity
+        ? await page.evaluate((data: RefinerResponse) => {
+            localStorage.setItem('activity', JSON.stringify(data.activity));
+          }, data)
+        : await page.evaluate(() => {
+            localStorage.removeItem('activity');
+          });
+      wantMood
+        ? await page.evaluate((data: RefinerResponse) => {
+            localStorage.setItem('mood', JSON.stringify(data.mood));
+          }, data)
+        : await page.evaluate(() => {
+            localStorage.removeItem('mood');
+          });
       await page.goto(
         `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
         { waitUntil: ['networkidle0'] }
@@ -272,6 +289,8 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       pronouns,
       wantBannerImage,
       wantAccentColor,
+      wantActivity,
+      wantMood,
       bannerColor,
       bannerID,
       bannerImage,
@@ -312,6 +331,23 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       });
       const page = await browser.newPage();
       await page.setViewport({ width: 807, height: 1200 });
+      await page.goto(
+        `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
+      );
+      wantActivity
+        ? await page.evaluate((data: RefinerResponse) => {
+            localStorage.setItem('activity', JSON.stringify(data.activity));
+          }, data)
+        : await page.evaluate(() => {
+            localStorage.removeItem('activity');
+          });
+      wantMood
+        ? await page.evaluate((data: RefinerResponse) => {
+            localStorage.setItem('mood', JSON.stringify(data.mood));
+          }, data)
+        : await page.evaluate(() => {
+            localStorage.removeItem('mood');
+          });
       await page.goto(
         `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
         { waitUntil: ['networkidle0'] }

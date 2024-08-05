@@ -31,15 +31,19 @@ const LargeCard = () => {
   const [accentColor, setAccentColor] = useState(
     params.get('accentColor') && `#${params.get('accentColor')}` // for api -> png
   );
-  const [activity, setActivity] = useState<ActivityType | null>(null);
   const id = params.get('id');
   const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#111214';
   const discordLabel = params.get('discordlabel');
   const bannerColor = params.get('bannerColor') ? `#${params.get('bannerColor')}` : '#212121';
-  // const mood = params.get('mood');
   const aboutMe = decodeURIComponent(params.get('aboutMe') || '');
   const pronouns = decodeURIComponent(params.get('pronouns') || '');
   const bannerID = params.get('bannerID');
+  const [activity, setActivity] = useState<ActivityType | null>(
+    localStorage.getItem('activity') ? JSON.parse(localStorage.getItem('activity')!) : null
+  );
+  // const [mood, setMood] = useState<MoodType | null>(
+  //   localStorage.getItem('mood') ? JSON.parse(localStorage.getItem('mood')!) : null
+  // );
 
   const bg1 = params.get('bg1');
   const bg2 = params.get('bg2');
@@ -171,7 +175,9 @@ const LargeCard = () => {
                 ? bg1 && bg2
                   ? 'rgba(0,0,0,0.3)'
                   : '#232528'
-                : 'rgba(255,255,255,0.7)'
+                : bg1 && bg2
+                  ? 'rgba(255,255,255,0.7)'
+                  : '#f5f5f5'
             }
             textColor={textColor}
             activity={activity}
@@ -186,7 +192,9 @@ const LargeCard = () => {
                   ? bg1 && bg2
                     ? 'rgba(0,0,0,0.3)'
                     : '#232528'
-                  : 'rgba(0,0,0,0.05)',
+                  : bg1 && bg2
+                    ? 'rgba(255,255,255,0.7)'
+                    : '#f5f5f5',
             }}
           >
             <Flex align="flex-end" mb="lg">

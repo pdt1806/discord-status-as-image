@@ -160,8 +160,8 @@ const formatMilliseconds = (milliseconds: number) => {
   const seconds = totalSeconds % 60;
 
   return hours > 0
-    ? `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
-    : `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    ? `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+    : `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
 
 export const getElapsedProgessListening = (timestamps: { start: string; end: string }) => {
