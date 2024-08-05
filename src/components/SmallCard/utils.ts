@@ -26,12 +26,12 @@ export function updateStatus(
       setAvatar(data.avatar);
       setStatus(data.status);
       setStatusImage(setStatusImg(data.status));
-      if (params.get('wantCreated')) {
+      if (params.get('created')) {
         setCreatedDate(data.created_at);
       }
       if (params.get('wantAccentColor')) setBackgroundColor(data.accent_color);
-      if (params.get('wantActivity')) setActivity(data.activity);
-      if (params.get('wantMood')) setMood(data.mood);
+      if (params.get('activity')) setActivity(data.activity);
+      if (params.get('mood')) setMood(data.mood);
     });
 }
 

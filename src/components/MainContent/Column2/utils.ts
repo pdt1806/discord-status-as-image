@@ -33,16 +33,6 @@ export const generatingCards = async (
   const data = await res.json();
   setUserID(data.id);
 
-  const newTail =
-    colorMode === 'Gradient'
-      ? `&bg1=${form.values.backgroundGradient1.replace(
-          '#',
-          ''
-        )}&bg2=${form.values.backgroundGradient2.replace('#', '')}`
-      : form.values.backgroundSingle
-        ? `&bg=${form.values.backgroundSingle.replace('#', '')}`
-        : '';
-
   let newBannerID = '';
   if (bannerFile && customBannerMode === 'upload') {
     const body = {
@@ -61,31 +51,27 @@ export const generatingCards = async (
     setBannerFile(null);
   }
 
-  let smallTail =
+  let newTail =
+    colorMode === 'Gradient'
+      ? `&bg1=${form.values.backgroundGradient1.replace(
+          '#',
+          ''
+        )}&bg2=${form.values.backgroundGradient2.replace('#', '')}`
+      : form.values.backgroundSingle
+        ? `&bg=${form.values.backgroundSingle.replace('#', '')}`
+        : '';
+  form.values.activity && (newTail += '&activity=true');
+  form.values.mood && (newTail += '&mood=true');
+  form.values.created && (newTail += '&created=true');
+
+  const smallTail =
     newTail +
     (colorMode === 'Gradient' ? `&angle=${form.values.backgroundGradientAngle}` : '') +
-    (form.values.discordLabel ? '&discordlabel=true' : '') +
+    (form.values.discordLabel ? '&discordLabel=true' : '') +
     (colorMode === 'Discord Accent Color' ? '&wantAccentColor=true' : '');
-
-  switch (form.values.smallCardDetailMode) {
-    case 'Show Activity':
-      smallTail += '&wantActivity=true';
-      break;
-    case 'Show Mood (a.k.a. custom status)':
-      smallTail += '&wantMood=true';
-      break;
-    case 'Show account created date':
-      smallTail += '&wantCreated=true';
-      break;
-    default:
-      break;
-  }
 
   const largeTail =
     newTail +
-    (form.values.largeCardActivity ? '&wantActivity=true' : '') +
-    (form.values.largeCardMood ? '&wantMood=true' : '') +
-    (form.values.largeCardCreated ? '&wantCreated=true' : '') +
     (form.values.aboutMe ? `&aboutMe=${encodeURIComponent(form.values.aboutMe)}` : '') +
     (form.values.pronouns ? `&pronouns=${encodeURIComponent(form.values.pronouns)}` : '') +
     (bannerMode === 'Custom Color' && form.values.bannerColor
@@ -96,7 +82,8 @@ export const generatingCards = async (
     (customBannerMode === 'upload' ? `&bannerID=${newBannerID}` : '') +
     (customBannerMode === 'pbid' ? `&bannerID=${bannerPBID}` : '') +
     (customBannerMode === 'exturl' ? `&bannerImage=${externalImageURL}` : '') +
-    (form.values.discordLabel ? '&discordlabel=true' : '');
+    (form.values.discordLabel ? '&discordLabel=true' : '');
+
   setSmallTail(smallTail);
   setLargeTail(largeTail);
   setSmallCardLink(`${testing ? disiAPI.dev : disiAPI.prod}/smallcard/${data.id}?${smallTail}`);

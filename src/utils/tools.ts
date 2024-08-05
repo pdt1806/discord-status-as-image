@@ -174,7 +174,7 @@ export const getElapsedProgessListening = (timestamps: { start: string; end: str
   const totalTime = endTime - startTime;
 
   return {
-    elapsedTime: formatMilliseconds(elapsedTime),
+    elapsedTime: formatMilliseconds(elapsedTime <= totalTime ? elapsedTime : totalTime),
     totalTime: formatMilliseconds(totalTime),
     progress: (elapsedTime / totalTime) * 100,
   };
@@ -186,7 +186,7 @@ export const formatActivityImageUrl = (encodedUrl: string) => {
   return url ? `https://${url}` : '';
 };
 
-export const getPlayingTimestamp = (timestamps: { start: number; end?: string }) => {
+export const getPlayingTimestamp = (timestamps: { start: number }) => {
   const currentTime = new Date().getTime();
 
   const elapsedTime = currentTime - timestamps.start;

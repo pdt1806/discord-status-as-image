@@ -33,7 +33,7 @@ const LargeCard = () => {
   );
   const id = params.get('id');
   const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#111214';
-  const discordLabel = params.get('discordlabel');
+  const discordLabel = params.get('discordLabel');
   const bannerColor = params.get('bannerColor') ? `#${params.get('bannerColor')}` : '#212121';
   const aboutMe = decodeURIComponent(params.get('aboutMe') || '');
   const pronouns = decodeURIComponent(params.get('pronouns') || '');

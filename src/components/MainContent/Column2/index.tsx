@@ -127,18 +127,28 @@ const MainContentColumn2 = ({
           });
         }}
       />
-      <NativeSelect
-        {...form.getInputProps('smallCardDetailMode')}
-        label="Detail"
-        description="Choose what you want to show beneath your name on the small card."
-        data={[
-          'None',
-          'Show Activity',
-          'Show Mood (a.k.a. custom status)',
-          'Show account created date',
-        ]}
+      <Checkbox
+        label="Show Activity"
+        mt="md"
+        {...form.getInputProps('activity')}
         onChange={(e) => {
-          form.setFieldValue('smallCardDetailMode', e.currentTarget.value);
+          form.setFieldValue('activity', e.currentTarget.checked);
+        }}
+      />
+      <Checkbox
+        label="Show Mood (a.k.a. custom status)"
+        mt="md"
+        {...form.getInputProps('mood')}
+        onChange={(e) => {
+          form.setFieldValue('mood', e.currentTarget.checked);
+        }}
+      />
+      <Checkbox
+        label="Show account created date"
+        mt="md"
+        {...form.getInputProps('created')}
+        onChange={(e) => {
+          form.setFieldValue('created', e.currentTarget.checked);
         }}
       />
       <Box mt="xl">
@@ -295,30 +305,6 @@ const MainContentColumn2 = ({
       {wantLargeCard && (
         <Box mt="xl">
           <Title order={4}>Large card settings</Title>
-          <Checkbox
-            label="Show Activity"
-            mt="md"
-            {...form.getInputProps('largeCardActivity')}
-            onChange={(e) => {
-              form.setFieldValue('largeCardActivity', e.currentTarget.checked);
-            }}
-          />
-          <Checkbox
-            label="Show Mood (a.k.a. custom status)"
-            mt="md"
-            {...form.getInputProps('largeCardMood')}
-            onChange={(e) => {
-              form.setFieldValue('largeCardMood', e.currentTarget.checked);
-            }}
-          />
-          <Checkbox
-            label="Show account created date"
-            mt="md"
-            {...form.getInputProps('largeCardCreated')}
-            onChange={(e) => {
-              form.setFieldValue('largeCardCreated', e.currentTarget.checked);
-            }}
-          />
           <TextInput
             {...form.getInputProps('pronouns')}
             label="Pronouns"

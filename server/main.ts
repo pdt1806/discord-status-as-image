@@ -86,17 +86,8 @@ app.get('/', (_: Request, res: Response) => {
 app.get('/smallcard/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const {
-      bg,
-      bg1,
-      bg2,
-      angle,
-      wantCreated,
-      wantActivity,
-      wantMood,
-      discordlabel,
-      wantAccentColor,
-    } = req.query;
+    const { bg, bg1, bg2, angle, created, activity, mood, discordLabel, wantAccentColor } =
+      req.query;
     let link = bg1
       ? `${root}/smallcard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&angle=${angle}&`
       : bg
@@ -108,8 +99,8 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
         res.status(404).send('User not found');
         return null;
       }
-      wantCreated && (link += `createdDate=${data.created_at}&`);
-      discordlabel && (link += 'discordlabel=true&');
+      created && (link += `createdDate=${data.created_at}&`);
+      discordLabel && (link += 'discordLabel=true&');
       wantAccentColor && data.accent_color && (link += `bg=${data.accent_color.replace('#', '')}&`);
       const browser = await puppeteer.launch({
         executablePath: '/usr/bin/chromium-browser',
@@ -121,14 +112,14 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
       await page.goto(
         `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
       );
-      wantActivity
+      activity
         ? await page.evaluate((data: RefinerResponse) => {
             localStorage.setItem('activity', JSON.stringify(data.activity));
           }, data)
         : await page.evaluate(() => {
             localStorage.removeItem('activity');
           });
-      wantMood
+      mood
         ? await page.evaluate((data: RefinerResponse) => {
             localStorage.setItem('mood', JSON.stringify(data.mood));
           }, data)
@@ -161,7 +152,17 @@ function monoBackgroundTextColor(bg: string) {
 app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { bg, bg1, bg2, angle, created, discordlabel, wantAccentColor } = req.query;
+    const {
+      bg,
+      bg1,
+      bg2,
+      angle,
+      created,
+      activity: wantActivity,
+      mood: wantMood,
+      discordLabel,
+      wantAccentColor,
+    } = req.query;
     try {
       const data = await fetchData(id);
       if (data === null) {
@@ -190,6 +191,8 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
       const displayName = data.display_name;
       const titleSize = setSmallCardTitleSize(data.display_name);
       const createdDate = created ? data.created_at : null;
+      const activity = wantActivity ? data.activity : null;
+      const mood = wantMood ? data.mood : null;
       const svgContent = `
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -236,6 +239,7 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
             </text>
             ${
               createdDate &&
+              !(activity || mood) &&
               `
                 <path
                   class="cls-9"
@@ -247,7 +251,59 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
               `
             }
             ${
-              discordlabel === 'true' &&
+              (activity || mood) &&
+              `
+              ${
+                mood &&
+                mood.emoji.name &&
+                !mood.emoji.id &&
+                `<text class="cls-10" transform="translate(92 70.42077)">
+                    ${mood.emoji.name}
+                    </text>`
+              }
+              ${
+                mood &&
+                mood.state !== 'Custom Status' &&
+                `<text class="cls-10" transform="translate(108.38086 70.42077)">
+                    ${mood.state}
+                    </text>`
+              }
+              ${
+                mood &&
+                `<text class="cls-10" transform="translate(108.38086 70.42077)">
+                    ${mood.state !== 'Custom Status' ? mood.state : ''}
+                    </text>`
+              }
+                  ${
+                    activity &&
+                    (mood?.state === 'Custom Status' || !mood) &&
+                    `<text class="cls-10" transform="translate(${!mood ? '92' : '108.38086'} 70.42077)">
+                    ${
+                      {
+                        listening: 'Listening to ',
+                        watching: 'Watching ',
+                        playing: 'Playing ',
+                        streaming: 'Streaming ',
+                        competing: 'Competing in ',
+                      }[activity.type]
+                    }
+                      <tspan style="font-weight: 600;">
+                      ${
+                        {
+                          listening: activity.platform,
+                          watching: activity.name,
+                          playing: activity.name,
+                          streaming: activity.details,
+                          competing: activity.name,
+                        }[activity.type]
+                      }
+                      </tspan>
+                    </text>`
+                  }
+              `
+            }
+            ${
+              discordLabel === 'true' &&
               `
             <path class="cls-11" d="M300.42,79.82H228.7a3.32,3.32,0,0,0-3.32,3.33V99.76h75Z" transform="translate(-0.42 0.24)"/>
             <path class="cls-12" d="M254,86.78h2.92a4.37,4.37,0,0,1,1.79.33,2.39,2.39,0,0,1,1.09.92,2.6,2.6,0,0,1,.37,1.36,2.55,2.55,0,0,1-.38,1.35,2.61,2.61,0,0,1-1.16,1,4.74,4.74,0,0,1-1.92.35H254Zm2.68,3.94a1.52,1.52,0,0,0,1.09-.36,1.42,1.42,0,0,0,0-1.9,1.42,1.42,0,0,0-1-.34h-.91v2.6Z" transform="translate(-0.42 0.24)"/>
@@ -289,12 +345,12 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       pronouns,
       wantBannerImage,
       wantAccentColor,
-      wantActivity,
-      wantMood,
+      activity,
+      mood,
       bannerColor,
       bannerID,
       bannerImage,
-      discordlabel,
+      discordLabel,
     } = req.query as { [key: string]: string };
     let link = bg1
       ? `${root}/largecard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&`
@@ -310,7 +366,7 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
         return null;
       }
       created && (link += `createdDate=${data.created_at}&`);
-      discordlabel && (link += 'discordlabel=true&');
+      discordLabel && (link += 'discordLabel=true&');
       if (bannerID) {
         const banner = await getBannerImage(bannerID, false);
         banner && (link += `bannerImage=${banner}&`);
@@ -334,14 +390,14 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       await page.goto(
         `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
       );
-      wantActivity
+      activity
         ? await page.evaluate((data: RefinerResponse) => {
             localStorage.setItem('activity', JSON.stringify(data.activity));
           }, data)
         : await page.evaluate(() => {
             localStorage.removeItem('activity');
           });
-      wantMood
+      mood
         ? await page.evaluate((data: RefinerResponse) => {
             localStorage.setItem('mood', JSON.stringify(data.mood));
           }, data)

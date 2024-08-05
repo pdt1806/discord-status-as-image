@@ -33,6 +33,9 @@ export default function ActivityBox({
           setListeningProgress(getElapsedProgessListening(activity.timestamps));
           break;
         case 'playing':
+        case 'streaming':
+        case 'watching':
+        case 'competing':
           setPlayingTimestamp(getPlayingTimestamp(activity.timestamps));
           break;
         default:
@@ -74,8 +77,8 @@ export default function ActivityBox({
                 {activity.name}
               </Title>
               <Space h={3} />
-              <Text ff="Noto Sans TC" fz="lg">{`by ${activity.artists.join(', ')}`}</Text>
-              <Text ff="Noto Sans TC" fz="lg">{`on ${activity.album.name}`}</Text>
+              <Text ff="Noto Sans TC" fz={22}>{`by ${activity.artists.join(', ')}`}</Text>
+              <Text ff="Noto Sans TC" fz={22}>{`on ${activity.album.name}`}</Text>
             </Box>
             <Progress
               mt="md"
@@ -86,10 +89,10 @@ export default function ActivityBox({
               w="100%"
             />
             <Flex justify="space-between" align="center" w="100%">
-              <Text ff="Noto Sans TC" fz="lg">
+              <Text ff="Noto Sans TC" fz={22}>
                 {listeningProgress.elapsedTime}
               </Text>
-              <Text ff="Noto Sans TC" fz="lg">
+              <Text ff="Noto Sans TC" fz={22}>
                 {listeningProgress.totalTime}
               </Text>
             </Flex>
@@ -108,14 +111,14 @@ export default function ActivityBox({
                 {activity.name}
               </Title>
               <Space h={3} />
-              <Text ff="Noto Sans TC" fz="lg" lineClamp={1}>
+              <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
                 {activity.details}
               </Text>
-              <Text ff="Noto Sans TC" fz="lg" lineClamp={1}>
+              <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
                 {activity.state}
               </Text>
               {activity.timestamps.start && (
-                <Text ff="Noto Sans TC" fz="lg" lineClamp={1}>
+                <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
                   {playingTimestamp} elapsed
                 </Text>
               )}
@@ -135,11 +138,11 @@ export default function ActivityBox({
                 {activity.details}
               </Title>
               <Space h={3} />
-              <Text ff="Noto Sans TC" fz="lg" lineClamp={1}>
+              <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
                 playing {activity.game}
               </Text>
               {activity.timestamps.start && (
-                <Text ff="Noto Sans TC" fz="lg" lineClamp={1}>
+                <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
                   {playingTimestamp} elapsed
                 </Text>
               )}
@@ -165,11 +168,11 @@ export default function ActivityBox({
                 {activity.details}
               </Title>
               <Space h={3} />
-              <Text ff="Noto Sans TC" fz="lg" lineClamp={1}>
+              <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
                 {activity.state}
               </Text>
               {activity.timestamps.start && (
-                <Text ff="Noto Sans TC" fz="lg" lineClamp={1}>
+                <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
                   {playingTimestamp} elapsed
                 </Text>
               )}

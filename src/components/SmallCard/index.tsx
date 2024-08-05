@@ -26,7 +26,7 @@ const SmallCard = () => {
   );
 
   const id = params.get('id');
-  const discordLabel = params.get('discordlabel');
+  const discordLabel = params.get('discordLabel');
 
   const [backgroundColor, setBackgroundColor] = useState(
     params.get('bg')
@@ -111,7 +111,7 @@ const SmallCard = () => {
               {displayName}
             </Title>
           </Flex>
-          {createdDate && (
+          {createdDate && !(activity || mood) && (
             <Box mt="lg" display="flex" style={{ alignItems: 'center' }}>
               <Image
                 alt="discord-logo"
@@ -142,7 +142,25 @@ const SmallCard = () => {
           )}
           {(activity || mood) && (
             <Box mt="lg" display="flex" style={{ alignItems: 'center' }} h={60} maw={720}>
-              {activity && !mood && (
+              {mood && (
+                <Group gap="xs" align="center" mr="xs">
+                  <Title
+                    lineClamp={1}
+                    size={40}
+                    c={
+                      status !== 'offline' || (status === 'offline' && textColor === 'white')
+                        ? textColor
+                        : '#5d5f6b'
+                    }
+                    fw={400}
+                    ff="Noto Sans TC"
+                  >
+                    {mood.emoji.name && !mood.emoji.id ? `${mood.emoji.name} ` : ''}
+                    {mood.state === 'Custom Status' ? '' : mood.state}
+                  </Title>
+                </Group>
+              )}
+              {activity && (mood?.state === 'Custom Status' || !mood) && (
                 <Title
                   lineClamp={1}
                   size={40}
@@ -175,24 +193,6 @@ const SmallCard = () => {
                     }
                   </span>
                 </Title>
-              )}
-              {mood && (
-                <Group gap="xs" align="center">
-                  <Title
-                    lineClamp={1}
-                    size={40}
-                    c={
-                      status !== 'offline' || (status === 'offline' && textColor === 'white')
-                        ? textColor
-                        : '#5d5f6b'
-                    }
-                    fw={400}
-                    ff="Noto Sans TC"
-                  >
-                    {mood.emoji.name && !mood.emoji.id ? `${mood.emoji.name} ` : ''}
-                    {mood.state}
-                  </Title>
-                </Group>
               )}
               {activity && (
                 <Image
