@@ -9,6 +9,7 @@ import { ActivityType } from '../../utils/types';
 import classes from '../style/profile.module.css';
 import ActivityBox from './ActivityBox';
 import innerClasses from './index.module.css';
+import MoodBox from './Mood';
 import {
   BG1TextColor,
   adjustHexColor,
@@ -168,6 +169,7 @@ const LargeCard = () => {
             </Title>
           )} */}
         </Box>
+        <MoodBox />
         {activity && (
           <ActivityBox
             background={

@@ -255,51 +255,52 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
               `
               ${
                 mood &&
+                mood.emoji &&
                 mood.emoji.name &&
                 !mood.emoji.id &&
                 `<text class="cls-10" transform="translate(92 70.42077)">
                     ${mood.emoji.name}
                     </text>`
               }
-              ${
-                mood &&
-                mood.state !== 'Custom Status' &&
-                `<text class="cls-10" transform="translate(108.38086 70.42077)">
-                    ${mood.state}
-                    </text>`
-              }
-              ${
-                mood &&
-                `<text class="cls-10" transform="translate(108.38086 70.42077)">
-                    ${mood.state !== 'Custom Status' ? mood.state : ''}
-                    </text>`
-              }
-                  ${
-                    activity &&
-                    (mood?.state === 'Custom Status' || !mood) &&
-                    `<text class="cls-10" transform="translate(${!mood ? '92' : '108.38086'} 70.42077)">
-                    ${
-                      {
-                        listening: 'Listening to ',
-                        watching: 'Watching ',
-                        playing: 'Playing ',
-                        streaming: 'Streaming ',
-                        competing: 'Competing in ',
-                      }[activity.type]
-                    }
-                      <tspan style="font-weight: 600;">
-                      ${
-                        {
-                          listening: activity.platform,
-                          watching: activity.name,
-                          playing: activity.name,
-                          streaming: activity.details,
-                          competing: activity.name,
-                        }[activity.type]
-                      }
-                      </tspan>
-                    </text>`
-                  }
+                  <foreignObject x="0" y="0" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: center; transform: translate(${mood && mood.emoji ? '108.38086px' : '92px'}, 57.8px);">
+                ${
+                  activity && (mood?.state === 'Custom Status' || !mood)
+                    ? `
+                    <div class="cls-10" style="color: ${textColor}">
+                        ${
+                          {
+                            listening: 'Listening to ',
+                            watching: 'Watching ',
+                            playing: 'Playing ',
+                            streaming: 'Streaming ',
+                            competing: 'Competing in ',
+                          }[activity.type]
+                        }
+                        <span style="font-weight: 600;">
+                            ${
+                              {
+                                listening: activity.platform,
+                                watching: activity.name,
+                                playing: activity.name,
+                                streaming: activity.details,
+                                competing: activity.name,
+                              }[activity.type]
+                            }
+                        </span>
+                    </div>
+                `
+                    : mood
+                      ? `<div class="cls-10" style="color: ${textColor}">${mood.state !== 'Custom Status' ? mood.state : ''}</div>`
+                      : ''
+                }
+                    <div style="margin-left: 5px; transform: translateY(-1px); visibility: ${activity ? 'visible' : 'hidden'}">
+                        <svg xmlns="http://www.w3.org/2000/svg" style="width: 8px; height: 8px" viewBox="0 0 36.9945 36.9945" fill="${textColor}">
+                            <path d="M22.1967 25.8961H7.39891V22.1967H22.1967V25.8961ZM29.5956 18.4972H7.39891V14.7978H29.5956V18.4972ZM29.5956 11.0983H7.39891V7.39891H29.5956V11.0983ZM32.8843 0H4.11024C1.82738 0 0 1.82746 0 4.11002V32.8845C0 35.1558 1.83848 36.9945 4.11024 36.9945H32.8843C35.1561 36.9945 36.9945 35.1558 36.9945 32.8845V4.11002C36.9945 1.82746 35.145 0 32.8843 0Z" />
+                        </svg>
+                    </div>
+            </div>
+        </foreignObject>    
               `
             }
             ${
