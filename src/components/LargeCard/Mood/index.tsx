@@ -1,23 +1,36 @@
-import { Avatar, Box, Text } from '@mantine/core';
+import { Box, Text } from '@mantine/core';
+import { MoodType } from '../../../utils/types';
 
-export default function MoodBox() {
+export default function MoodBox({ mood, textColor }: { mood: MoodType; textColor: string }) {
+  const bg = textColor === 'white' ? '#313338' : '#f8fcfc';
+
+  if (mood.state === 'Custom Status' && mood.emoji?.id) {
+    return null;
+  }
+
   return (
     <Box style={{ position: 'absolute', zIndex: 999, transform: 'translate(290px, -330px)' }}>
-      <Avatar size="md" bg="grey">
-        {' '}
-      </Avatar>
-      <Avatar size="lg" bg="grey" mt="xs" ml="lg">
-        {' '}
-      </Avatar>
+      <Box w={30} h={30} bg={bg} style={{ borderRadius: '50%' }} />
+      <Box w={56} h={56} bg={bg} style={{ borderRadius: '50%' }} mt="xs" ml="lg" />
       <Box
-        mt={-45}
-        bg="grey"
-        mih={100}
+        mt={-35}
+        bg={bg}
+        mih={50}
         maw={400}
-        style={{ borderRadius: 'var(--mantine-radius-xl)', zIndex: 999, position: 'relative' }}
+        miw={100}
+        py="lg"
+        px="xl"
+        style={{
+          borderRadius: 'var(--mantine-radius-xl)',
+          zIndex: 999,
+          position: 'relative',
+        }}
       >
-        <Text mt="xs" fz={22} ff="Noto Sans TC" c="white" p="lg">
-          Moooooooooooooooooooood
+        <Text ff="Noto Sans TC" fz={22} c={textColor} lineClamp={2}>
+          <span style={{ fontSize: 30 }}>
+            {mood.emoji && !mood.emoji.id ? `${mood.emoji.name} ` : ''}
+          </span>
+          {mood.state === 'Custom Status' ? '' : mood.state}
         </Text>
       </Box>
     </Box>
