@@ -1,4 +1,5 @@
-import { Box, Text } from '@mantine/core';
+import { Box, Image, Text } from '@mantine/core';
+import { getEmojiURLfromCDN } from '../../../utils/tools';
 import { MoodType } from '../../../utils/types';
 
 export default function MoodBox({ mood, textColor }: { mood: MoodType; textColor: string }) {
@@ -27,9 +28,19 @@ export default function MoodBox({ mood, textColor }: { mood: MoodType; textColor
         }}
       >
         <Text ff="Noto Sans TC" fz={22} c={textColor} lineClamp={2}>
-          <span style={{ fontSize: 30 }}>
-            {mood.emoji && !mood.emoji.id ? `${mood.emoji.name} ` : ''}
-          </span>
+          {mood.emoji && mood.emoji.id && (
+            <span style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+              <Image
+                src={getEmojiURLfromCDN(mood.emoji)}
+                alt={mood.emoji.name}
+                style={{ width: 35, height: 35 }}
+                mr="md"
+              />
+            </span>
+          )}
+          {mood.emoji && !mood.emoji.id && (
+            <span style={{ fontSize: 30 }}>{`${mood.emoji.name} `}</span>
+          )}
           {mood.state === 'Custom Status' ? '' : mood.state}
         </Text>
       </Box>

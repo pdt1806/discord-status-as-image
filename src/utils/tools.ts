@@ -1,5 +1,5 @@
 import { UseFormReturnType } from '@mantine/form';
-import { DISIForm } from './types';
+import { DISIForm, EmojiType } from './types';
 
 export function hexToRgb(hex: string) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -196,3 +196,11 @@ export const getPlayingTimestamp = (timestamps: { start: number }) => {
 
 export const getImageURLfromCDN = (appID: string, imageID: string) =>
   `https://cdn.discordapp.com/app-assets/${appID}/${imageID}.png`;
+
+export const getEmojiURLfromCDN = (emoji: EmojiType) => {
+  const { id, animated } = emoji;
+
+  return animated
+    ? `https://cdn.discordapp.com/emojis/${id}.gif`
+    : `https://cdn.discordapp.com/emojis/${id}.png`;
+};

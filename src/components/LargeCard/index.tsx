@@ -1,4 +1,4 @@
-import { ActionIcon, Avatar, Box, Flex, Group, Image, Text, Title } from '@mantine/core';
+import { ActionIcon, Avatar, Box, Flex, Group, Image, Stack, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -169,21 +169,24 @@ const LargeCard = () => {
           </Flex>
         </Box>
         {mood && <MoodBox mood={mood} textColor={textColor} />}
-        {activity && (
-          <ActivityBox
-            background={
-              textColor === 'white'
-                ? bg1 && bg2
-                  ? 'rgba(0,0,0,0.3)'
-                  : '#232528'
-                : bg1 && bg2
-                  ? 'rgba(255,255,255,0.7)'
-                  : '#f5f5f5'
-            }
-            textColor={textColor}
-            activity={activity}
-          />
-        )}
+        {activity &&
+          ['playing', 'listening', 'streaming', 'watching', 'competing'].includes(
+            activity.type
+          ) && (
+            <ActivityBox
+              background={
+                textColor === 'white'
+                  ? bg1 && bg2
+                    ? 'rgba(0,0,0,0.3)'
+                    : '#232528'
+                  : bg1 && bg2
+                    ? 'rgba(255,255,255,0.7)'
+                    : '#f5f5f5'
+              }
+              textColor={textColor}
+              activity={activity}
+            />
+          )}
         {(aboutMe || createdDate) && (
           <Box
             className={innerClasses.aboutMeBox}
@@ -198,32 +201,34 @@ const LargeCard = () => {
                     : '#f5f5f5',
             }}
           >
-            {aboutMe && (
-              <Box>
-                <Title size={20} c={dimmedColor} ff="Noto Sans TC">
-                  About Me
-                </Title>
-                <Text c={textColor} lineClamp={5} className={innerClasses.aboutMe}>
-                  {aboutMe}
-                </Text>
-              </Box>
-            )}
-            {createdDate && (
-              <Box>
-                <Title mt={30} size={20} c={dimmedColor} ff="Noto Sans TC">
-                  Member Since
-                </Title>
-                <Text
-                  c={textColor}
-                  lineClamp={4}
-                  mt="sm"
-                  style={{ fontSize: '22px' }}
-                  ff="Noto Sans TC"
-                >
-                  {formatDate(createdDate)}
-                </Text>
-              </Box>
-            )}
+            <Stack gap="xl">
+              {aboutMe && (
+                <Box>
+                  <Title size={20} c={textColor} ff="Noto Sans TC">
+                    About Me
+                  </Title>
+                  <Text c={textColor} lineClamp={5} className={innerClasses.aboutMe}>
+                    {aboutMe}
+                  </Text>
+                </Box>
+              )}
+              {createdDate && (
+                <Box>
+                  <Title size={20} c={textColor} ff="Noto Sans TC">
+                    Member Since
+                  </Title>
+                  <Text
+                    c={textColor}
+                    lineClamp={4}
+                    mt="sm"
+                    style={{ fontSize: '22px' }}
+                    ff="Noto Sans TC"
+                  >
+                    {formatDate(createdDate)}
+                  </Text>
+                </Box>
+              )}
+            </Stack>
           </Box>
         )}
         {discordLabel && (

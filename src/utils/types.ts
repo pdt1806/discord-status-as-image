@@ -62,10 +62,13 @@ export type MoodType = {
   type: number;
   state: string; // message
   name: string;
-  emoji: {
-    id: number;
-    name: string;
-  };
+  emoji: EmojiType;
+};
+
+export type EmojiType = {
+  id: number;
+  name: string;
+  animated?: boolean;
 };
 
 export type RefinerResponse = {

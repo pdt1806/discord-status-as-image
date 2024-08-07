@@ -1,8 +1,8 @@
-import { Avatar, Box, Flex, Group, Image, Title } from '@mantine/core';
+import { Avatar, Box, Flex, Image, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { formatDate, setSmallCardTitleSize } from '../../utils/tools';
+import { formatDate, getEmojiURLfromCDN, setSmallCardTitleSize } from '../../utils/tools';
 import { ActivityType, MoodType } from '../../utils/types';
 import { setStatusImg } from '../LargeCard/utils';
 import classes from '../style/profile.module.css';
@@ -143,7 +143,16 @@ const SmallCard = () => {
           {(activity || mood) && (
             <Box mt="lg" display="flex" style={{ alignItems: 'center' }} h={60} maw={720}>
               {mood && (
-                <Group gap="xs" align="center" mr="xs">
+                <>
+                  {mood.emoji && mood.emoji.id && (
+                    <Image
+                      src={getEmojiURLfromCDN(mood.emoji)}
+                      alt={mood.emoji.name}
+                      style={{ width: 58, height: 58 }}
+                      mr="lg"
+                    />
+                  )}
+
                   <Title
                     lineClamp={1}
                     size={40}
@@ -158,7 +167,7 @@ const SmallCard = () => {
                     {mood.emoji.name && !mood.emoji.id ? `${mood.emoji.name} ` : ''}
                     {mood.state === 'Custom Status' ? '' : mood.state}
                   </Title>
-                </Group>
+                </>
               )}
               {activity && (mood?.state === 'Custom Status' || !mood) && (
                 <Title
