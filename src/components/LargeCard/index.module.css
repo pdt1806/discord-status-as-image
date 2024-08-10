@@ -29,8 +29,9 @@
 }
 
 .name {
-  margin-top: 20px;
-  transform: translate(30px, 120px);
+  margin-top: 140px;
+  padding-bottom: 30px;
+  transform: translateX(30px);
 }
 
 .aboutMeBox {
@@ -39,7 +40,6 @@
   z-index: 0;
   width: 747px;
   padding: 30px;
-  margin-top: 150px;
   margin-bottom: 30px;
   height: max-content;
 }

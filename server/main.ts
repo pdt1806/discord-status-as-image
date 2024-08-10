@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
 import express, { Request, Response } from 'express';
 import puppeteer from 'puppeteer-core';
@@ -7,9 +8,11 @@ import {
   bgIsLight,
   blendColors,
   formatDate,
+  getEmojiURLfromCDN,
   hexToRgb,
   setSmallCardTitleSize,
 } from '../src/utils/tools';
+import { RefinerResponse } from '../src/utils/types';
 import { iconsListSmall } from './icons';
 import { uploadBannerImage } from './pocketbase_server';
 import { base64toFile, fetchData, urlToBase64 } from './utils';
@@ -84,7 +87,8 @@ app.get('/', (_: Request, res: Response) => {
 app.get('/smallcard/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { bg, bg1, bg2, angle, created, discordlabel, wantAccentColor } = req.query;
+    const { bg, bg1, bg2, angle, created, activity, mood, discordLabel, wantAccentColor } =
+      req.query;
     let link = bg1
       ? `${root}/smallcard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&angle=${angle}&`
       : bg
@@ -97,7 +101,7 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
         return null;
       }
       created && (link += `createdDate=${data.created_at}&`);
-      discordlabel && (link += 'discordlabel=true&');
+      discordLabel && (link += 'discordLabel=true&');
       wantAccentColor && data.accent_color && (link += `bg=${data.accent_color.replace('#', '')}&`);
       const browser = await puppeteer.launch({
         executablePath: '/usr/bin/chromium-browser',
@@ -106,6 +110,23 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
       });
       const page = await browser.newPage();
       await page.setViewport({ width: 1350, height: 450 });
+      await page.goto(
+        `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
+      );
+      activity
+        ? await page.evaluate((data: RefinerResponse) => {
+            localStorage.setItem('activity', JSON.stringify(data.activity));
+          }, data)
+        : await page.evaluate(() => {
+            localStorage.removeItem('activity');
+          });
+      mood
+        ? await page.evaluate((data: RefinerResponse) => {
+            localStorage.setItem('mood', JSON.stringify(data.mood));
+          }, data)
+        : await page.evaluate(() => {
+            localStorage.removeItem('mood');
+          });
       await page.goto(
         `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
         { waitUntil: ['networkidle0'] }
@@ -129,10 +150,25 @@ function monoBackgroundTextColor(bg: string) {
   return bgIsLight(color!) ? '#202225' : 'white';
 }
 
+function limitMoodLength(value: string) {
+  if (value.length < 33) return value;
+  return `${value.slice(0, 30)}...`;
+}
+
 app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { bg, bg1, bg2, angle, created, discordlabel, wantAccentColor } = req.query;
+    const {
+      bg,
+      bg1,
+      bg2,
+      angle,
+      created,
+      activity: wantActivity,
+      mood: wantMood,
+      discordLabel,
+      wantAccentColor,
+    } = req.query;
     try {
       const data = await fetchData(id);
       if (data === null) {
@@ -161,6 +197,8 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
       const displayName = data.display_name;
       const titleSize = setSmallCardTitleSize(data.display_name);
       const createdDate = created ? data.created_at : null;
+      const activity = wantActivity ? data.activity : null;
+      const mood = wantMood ? data.mood : null;
       const svgContent = `
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -207,6 +245,7 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
             </text>
             ${
               createdDate &&
+              !(activity || mood) &&
               `
                 <path
                   class="cls-9"
@@ -218,7 +257,66 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
               `
             }
             ${
-              discordlabel === 'true' &&
+              (activity || mood) &&
+              `
+              ${
+                mood &&
+                mood.emoji &&
+                mood.emoji.name &&
+                !mood.emoji.id &&
+                `<text class="cls-10" transform="translate(92 70.42077)">
+                    ${mood.emoji.name}
+                    </text>`
+              }
+                    ${
+                      mood &&
+                      mood.emoji &&
+                      mood.emoji.id &&
+                      `<image transform="translate(92 62.5)" width="10" height="10" xlink:href="${getEmojiURLfromCDN(mood.emoji)}" preserveAspectRatio="none"></image>`
+                    }
+                  <foreignObject x="0" y="0" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: center; transform: translate(${mood && mood.emoji ? '107.38086px' : '92px'}, 57.8px);">
+                ${
+                  activity && (mood?.state === 'Custom Status' || !mood)
+                    ? `
+                    <div class="cls-10" style="color: ${textColor}">
+                        ${
+                          {
+                            listening: 'Listening to ',
+                            watching: 'Watching ',
+                            playing: 'Playing ',
+                            streaming: 'Streaming ',
+                            competing: 'Competing in ',
+                          }[activity.type]
+                        }
+                        <span style="font-weight: 600;">
+                            ${
+                              {
+                                listening: activity.platform,
+                                watching: activity.name,
+                                playing: activity.name,
+                                streaming: activity.details,
+                                competing: activity.name,
+                              }[activity.type]
+                            }
+                        </span>
+                    </div>
+                `
+                    : mood
+                      ? `<div class="cls-10" style="color: ${textColor}">${mood.state !== 'Custom Status' ? limitMoodLength(mood.state) : ''}</div>`
+                      : ''
+                }
+                    <div style="margin-left: 5px; transform: translateY(-1px); visibility: ${activity ? 'visible' : 'hidden'}">
+                        <svg xmlns="http://www.w3.org/2000/svg" style="width: 8px; height: 8px" viewBox="0 0 36.9945 36.9945" fill="${textColor}">
+                            <path d="M22.1967 25.8961H7.39891V22.1967H22.1967V25.8961ZM29.5956 18.4972H7.39891V14.7978H29.5956V18.4972ZM29.5956 11.0983H7.39891V7.39891H29.5956V11.0983ZM32.8843 0H4.11024C1.82738 0 0 1.82746 0 4.11002V32.8845C0 35.1558 1.83848 36.9945 4.11024 36.9945H32.8843C35.1561 36.9945 36.9945 35.1558 36.9945 32.8845V4.11002C36.9945 1.82746 35.145 0 32.8843 0Z" />
+                        </svg>
+                    </div>
+            </div>
+        </foreignObject>    
+              `
+            }
+            ${
+              discordLabel === 'true' &&
               `
             <path class="cls-11" d="M300.42,79.82H228.7a3.32,3.32,0,0,0-3.32,3.33V99.76h75Z" transform="translate(-0.42 0.24)"/>
             <path class="cls-12" d="M254,86.78h2.92a4.37,4.37,0,0,1,1.79.33,2.39,2.39,0,0,1,1.09.92,2.6,2.6,0,0,1,.37,1.36,2.55,2.55,0,0,1-.38,1.35,2.61,2.61,0,0,1-1.16,1,4.74,4.74,0,0,1-1.92.35H254Zm2.68,3.94a1.52,1.52,0,0,0,1.09-.36,1.42,1.42,0,0,0,0-1.9,1.42,1.42,0,0,0-1-.34h-.91v2.6Z" transform="translate(-0.42 0.24)"/>
@@ -260,10 +358,12 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       pronouns,
       wantBannerImage,
       wantAccentColor,
+      activity,
+      mood,
       bannerColor,
       bannerID,
       bannerImage,
-      discordlabel,
+      discordLabel,
     } = req.query as { [key: string]: string };
     let link = bg1
       ? `${root}/largecard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&`
@@ -279,7 +379,7 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
         return null;
       }
       created && (link += `createdDate=${data.created_at}&`);
-      discordlabel && (link += 'discordlabel=true&');
+      discordLabel && (link += 'discordLabel=true&');
       if (bannerID) {
         const banner = await getBannerImage(bannerID, false);
         banner && (link += `bannerImage=${banner}&`);
@@ -300,6 +400,23 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       });
       const page = await browser.newPage();
       await page.setViewport({ width: 807, height: 1200 });
+      await page.goto(
+        `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
+      );
+      activity
+        ? await page.evaluate((data: RefinerResponse) => {
+            localStorage.setItem('activity', JSON.stringify(data.activity));
+          }, data)
+        : await page.evaluate(() => {
+            localStorage.removeItem('activity');
+          });
+      mood
+        ? await page.evaluate((data: RefinerResponse) => {
+            localStorage.setItem('mood', JSON.stringify(data.mood));
+          }, data)
+        : await page.evaluate(() => {
+            localStorage.removeItem('mood');
+          });
       await page.goto(
         `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
         { waitUntil: ['networkidle0'] }

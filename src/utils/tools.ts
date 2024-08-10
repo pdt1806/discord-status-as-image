@@ -1,5 +1,5 @@
 import { UseFormReturnType } from '@mantine/form';
-import { DISIForm } from './types';
+import { DISIForm, EmojiType } from './types';
 
 export function hexToRgb(hex: string) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -151,4 +151,56 @@ export const fetchMaintenanceMessage = async () => {
     // pass
   }
   return message;
+};
+
+const formatMilliseconds = (milliseconds: number) => {
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  return hours > 0
+    ? `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+    : `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+};
+
+export const getElapsedProgessListening = (timestamps: { start: string; end: string }) => {
+  const startTime = new Date(timestamps.start).getTime();
+  const endTime = new Date(timestamps.end).getTime();
+  const currentTime = new Date().getTime();
+
+  const elapsedTime = currentTime - startTime;
+
+  const totalTime = endTime - startTime;
+
+  return {
+    elapsedTime: formatMilliseconds(elapsedTime <= totalTime ? elapsedTime : totalTime),
+    totalTime: formatMilliseconds(totalTime),
+    progress: (elapsedTime / totalTime) * 100,
+  };
+};
+
+export const formatActivityImageUrl = (encodedUrl: string) => {
+  const startIndex = encodedUrl.indexOf('https/');
+  const url = decodeURIComponent(encodedUrl.slice(startIndex).replace('https/', ''));
+  return url ? `https://${url}` : '';
+};
+
+export const getPlayingTimestamp = (timestamps: { start: number }) => {
+  const currentTime = new Date().getTime();
+
+  const elapsedTime = currentTime - timestamps.start;
+
+  return formatMilliseconds(elapsedTime);
+};
+
+export const getImageURLfromCDN = (appID: string, imageID: string) =>
+  `https://cdn.discordapp.com/app-assets/${appID}/${imageID}.png`;
+
+export const getEmojiURLfromCDN = (emoji: EmojiType) => {
+  const { id, animated } = emoji;
+
+  return animated
+    ? `https://cdn.discordapp.com/emojis/${id}.gif`
+    : `https://cdn.discordapp.com/emojis/${id}.png`;
 };

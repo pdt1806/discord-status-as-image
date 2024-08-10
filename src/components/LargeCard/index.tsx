@@ -1,12 +1,15 @@
-import { ActionIcon, Avatar, Box, Flex, Group, Image, Text, Title } from '@mantine/core';
+import { ActionIcon, Avatar, Box, Flex, Group, Image, Stack, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { IconMessageCircle2Filled, IconUserPlus } from '@tabler/icons-react';
 import { getBannerImage } from '../../pocketbase_client';
 import { formatDate, hexToRgb, setLargeCardTitleSize } from '../../utils/tools';
+import { ActivityType, MoodType } from '../../utils/types';
 import classes from '../style/profile.module.css';
+import ActivityBox from './ActivityBox';
 import innerClasses from './index.module.css';
+import MoodBox from './Mood';
 import {
   BG1TextColor,
   adjustHexColor,
@@ -31,12 +34,17 @@ const LargeCard = () => {
   );
   const id = params.get('id');
   const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#111214';
-  const discordLabel = params.get('discordlabel');
+  const discordLabel = params.get('discordLabel');
   const bannerColor = params.get('bannerColor') ? `#${params.get('bannerColor')}` : '#212121';
-  // const mood = params.get('mood');
   const aboutMe = decodeURIComponent(params.get('aboutMe') || '');
   const pronouns = decodeURIComponent(params.get('pronouns') || '');
   const bannerID = params.get('bannerID');
+  const [activity, setActivity] = useState<ActivityType | null>(
+    localStorage.getItem('activity') ? JSON.parse(localStorage.getItem('activity')!) : null
+  );
+  const [mood, setMood] = useState<MoodType | null>(
+    localStorage.getItem('mood') ? JSON.parse(localStorage.getItem('mood')!) : null
+  );
 
   const bg1 = params.get('bg1');
   const bg2 = params.get('bg2');
@@ -71,6 +79,8 @@ const LargeCard = () => {
     setCreatedDate,
     setBannerImage,
     setAccentColor,
+    setActivity,
+    setMood,
   };
 
   useEffect(() => {
@@ -120,20 +130,24 @@ const LargeCard = () => {
           <Image alt="Avatar" src={avatar} className={classes.avatar} />
           <Avatar src={statusImage} className={innerClasses.statusImage} />
         </Box>
-        <Group gap="xs" className={innerClasses.addMessageGroup}>
-          <ActionIcon h={40.8} w={40.8} bg={buttonColor ?? '#4e5057'}>
-            <IconMessageCircle2Filled size={20} style={{ margin: 0, padding: 0 }} />
-          </ActionIcon>
-          <Box
-            className={innerClasses.friendRequest}
-            style={{ backgroundColor: buttonColor ?? '#5865f2' }}
-          >
-            <Group gap="xs">
-              <IconUserPlus size={20} />
-              <Text>Add Friend</Text>
-            </Group>
-          </Box>
-        </Group>
+        {(!mood ||
+          mood.state === 'Custom Status' ||
+          mood.state.length <= (mood.emoji ? 15 : 19)) && (
+          <Group gap="xs" className={innerClasses.addMessageGroup}>
+            <ActionIcon h={40.8} w={40.8} bg={buttonColor ?? '#4e5057'}>
+              <IconMessageCircle2Filled size={20} style={{ margin: 0, padding: 0 }} />
+            </ActionIcon>
+            <Box
+              className={innerClasses.friendRequest}
+              style={{ backgroundColor: buttonColor ?? '#5865f2' }}
+            >
+              <Group gap="xs">
+                <IconUserPlus size={20} />
+                <Text>Add Friend</Text>
+              </Group>
+            </Box>
+          </Group>
+        )}
         <Box mb={15} className={innerClasses.name}>
           <Title fw={600} size={titleSize} c={textColor} ff="Noto Sans TC">
             {displayName}
@@ -153,82 +167,70 @@ const LargeCard = () => {
               </>
             )}
           </Flex>
-
-          {/* {mood && (
-            <Title fw={400} mt={35} size={25} c={textColor} ff="Noto Sans TC">
-              {mood}
-            </Title>
-          )} */}
         </Box>
-        <Box
-          className={innerClasses.aboutMeBox}
-          style={{
-            backgroundColor:
-              textColor === 'white'
-                ? bg1 && bg2
-                  ? 'rgba(0,0,0,0.3)'
-                  : '#232528'
-                : 'rgba(255,255,255,0.7)',
-          }}
-        >
-          <Flex align="flex-end" mb="lg">
-            <Text
-              c={textColor}
-              fz={22}
-              ff="Noto Sans TC"
-              pb="xs"
-              style={{ borderBottom: `2px solid ${textColor}` }}
-            >
-              About Me
-            </Text>
-            <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
-            <Text
-              c={dimmedColor}
-              fz={22}
-              ff="Noto Sans TC"
-              pb="xs"
-              style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }}
-            >
-              Mutual Friends
-            </Text>
-            <Box w="45" style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }} />
-            <Text
-              c={dimmedColor}
-              fz={22}
-              ff="Noto Sans TC"
-              pb="xs"
-              style={{ borderBottom: '1px solid var(--mantine-color-dimmed)' }}
-            >
-              Mutual Servers
-            </Text>
-            <Box
-              w="max-content"
-              style={{ borderBottom: '1px solid var(--mantine-color-dimmed)', flexGrow: 1 }}
+        {mood && <MoodBox mood={mood} textColor={textColor} />}
+        {activity &&
+          ['playing', 'listening', 'streaming', 'watching', 'competing'].includes(
+            activity.type
+          ) && (
+            <ActivityBox
+              background={
+                textColor === 'white'
+                  ? bg1 && bg2
+                    ? 'rgba(0,0,0,0.3)'
+                    : '#232528'
+                  : bg1 && bg2
+                    ? 'rgba(255,255,255,0.7)'
+                    : '#f5f5f5'
+              }
+              textColor={textColor}
+              activity={activity}
             />
-          </Flex>
-
-          {aboutMe && (
-            <Text c={textColor} lineClamp={5} className={innerClasses.aboutMe}>
-              {aboutMe}
-            </Text>
           )}
-          {createdDate && (
-            <Box>
-              <Title mt={30} size={20} c={dimmedColor} ff="Noto Sans TC">
-                Member Since
-              </Title>
-              <Text
-                c={textColor}
-                lineClamp={4}
-                mt="sm"
-                style={{ fontSize: '22px' }}
-                ff="Noto Sans TC"
-              >
-                {formatDate(createdDate)}
-              </Text>
-            </Box>
-          )}
-        </Box>
+        {(aboutMe || createdDate) && (
+          <Box
+            className={innerClasses.aboutMeBox}
+            style={{
+              backgroundColor:
+                textColor === 'white'
+                  ? bg1 && bg2
+                    ? 'rgba(0,0,0,0.3)'
+                    : '#232528'
+                  : bg1 && bg2
+                    ? 'rgba(255,255,255,0.7)'
+                    : '#f5f5f5',
+            }}
+          >
+            <Stack gap="xl">
+              {aboutMe && (
+                <Box>
+                  <Title size={20} c={textColor} ff="Noto Sans TC">
+                    About Me
+                  </Title>
+                  <Text c={textColor} lineClamp={5} className={innerClasses.aboutMe}>
+                    {aboutMe}
+                  </Text>
+                </Box>
+              )}
+              {createdDate && (
+                <Box>
+                  <Title size={20} c={textColor} ff="Noto Sans TC">
+                    Member Since
+                  </Title>
+                  <Text
+                    c={textColor}
+                    lineClamp={4}
+                    mt="sm"
+                    style={{ fontSize: '22px' }}
+                    ff="Noto Sans TC"
+                  >
+                    {formatDate(createdDate)}
+                  </Text>
+                </Box>
+              )}
+            </Stack>
+          </Box>
+        )}
         {discordLabel && (
           <Image
             alt="discord-logo"

@@ -1,5 +1,6 @@
 import { refinerAPI, testing } from '../../env/env';
 import { blendColors, hexToRgb } from '../../utils/tools';
+import { ActivityType, MoodType } from '../../utils/types';
 
 const getRgbString = (hexColor: string) => {
   const rgb = hexToRgb(hexColor);
@@ -69,6 +70,8 @@ export function updateStatus({
   setCreatedDate,
   setBannerImage,
   setAccentColor,
+  setActivity,
+  setMood,
 }: {
   params: URLSearchParams;
   id: string | null;
@@ -80,6 +83,8 @@ export function updateStatus({
   setCreatedDate: (createdDate: string) => void;
   setBannerImage: (bannerImage: string) => void;
   setAccentColor: (accentColor: string) => void;
+  setActivity: (activity: ActivityType) => void;
+  setMood: (mood: MoodType) => void;
 }) {
   fetch(`${testing ? refinerAPI.dev : refinerAPI.prod}/user/${id}`, {
     headers: {
@@ -93,11 +98,13 @@ export function updateStatus({
       setAvatar(data.avatar);
       setStatus(data.status);
       setStatusImage(setStatusImg(data.status));
-      if (params.get('created') === 'true') setCreatedDate(data.created_at);
-      if (params.get('wantBannerImage') === 'true') {
+      if (params.get('created')) setCreatedDate(data.created_at);
+      if (params.get('wantBannerImage')) {
         setBannerImage(data.banner);
         setAccentColor(data.accent_color);
       }
       if (params.get('wantAccentColor')) setAccentColor(data.accent_color);
+      if (params.get('activity')) setActivity(data.activity);
+      if (params.get('mood')) setMood(data.mood);
     });
 }

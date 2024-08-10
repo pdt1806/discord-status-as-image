@@ -5,6 +5,7 @@ import {
   Image,
   Input,
   InputBase,
+  Loader,
   Mark,
   Table,
   Text,
@@ -88,7 +89,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy iframe (live card)',
       execute: () => {
         navigator.clipboard.writeText(
-          `<iframe src="${testing ? web.dev : web.prod}/smallcard?id=${userID}?${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
+          `<iframe src="${testing ? web.dev : web.prod}/smallcard?id=${userID}${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
         );
         copiedNotification();
       },
@@ -96,7 +97,7 @@ const MainContentColumn3 = ({
     {
       value: '🌐 View live card',
       execute: () => {
-        window.open(`/smallcard?id=${userID}?${smallTail}`, '_blank');
+        window.open(`/smallcard?id=${userID}${smallTail}`, '_blank');
       },
     },
   ];
@@ -119,7 +120,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy Anchor (.png)',
       execute: () => {
         navigator.clipboard.writeText(
-          `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="272.7px" src="${largeCardLink}"></img></a>`
+          `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="219.7px" src="${largeCardLink}"></img></a>`
         );
         copiedNotification();
       },
@@ -128,7 +129,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy iframe (live card)',
       execute: () => {
         navigator.clipboard.writeText(
-          `<iframe src="${testing ? web.dev : web.prod}/largecard?id=${userID}?${largeTail}" name="disi-large-card" height="272.7px" width="300px"></iframe>`
+          `<iframe src="${testing ? web.dev : web.prod}/largecard?id=${userID}${largeTail}" name="disi-large-card" height="219.7px" width="300px"></iframe>`
         );
         copiedNotification();
       },
@@ -136,7 +137,7 @@ const MainContentColumn3 = ({
     {
       value: '🌐 View live card',
       execute: () => {
-        window.open(`/largecard?id=${userID}?${largeTail}`, '_blank');
+        window.open(`/largecard?id=${userID}${largeTail}`, '_blank');
       },
     },
     {
@@ -160,6 +161,19 @@ const MainContentColumn3 = ({
     </Combobox.Option>
   ));
 
+  const [smallCardLoading, setSmallCardLoading] = useState(true);
+  const [largeCardLoading, setLargeCardLoading] = useState(true);
+
+  useEffect(() => {
+    setSmallCardLoading(true);
+    document.getElementById('small-card-image')?.setAttribute('style', 'display: none');
+  }, [smallCardLink]);
+
+  useEffect(() => {
+    setLargeCardLoading(true);
+    document.getElementById('large-card-image')?.setAttribute('style', 'display: none');
+  }, [largeCardLink]);
+
   return (
     <Table.Td>
       {smallCardLink !== '' ? (
@@ -173,8 +187,20 @@ const MainContentColumn3 = ({
             <Title order={4} mb="md">
               Small card
             </Title>
+            {smallCardLoading && <Loader color="white" size="lg" my="md" />}
             <a href={`https://discord.com/users/${userID}`} target="_blank" rel="noreferrer">
-              <Image src={smallCardLink} mb="md" />
+              <Image
+                id="small-card-image"
+                src={smallCardLink}
+                mb="md"
+                onLoad={() => {
+                  setSmallCardLoading(false);
+                  document
+                    .getElementById('small-card-image')
+                    ?.setAttribute('style', 'display: block');
+                }}
+                style={{ display: 'none' }}
+              />
             </a>
             <Combobox
               store={comboboxForSmallCard}
@@ -223,8 +249,20 @@ const MainContentColumn3 = ({
                   </Text>
                 </>
               )}
+              {largeCardLoading && <Loader color="white" size="lg" my="md" />}
               <a href={`https://discord.com/users/${userID}`} target="_blank" rel="noreferrer">
-                <Image src={largeCardLink} mb="md" />
+                <Image
+                  id="large-card-image"
+                  src={largeCardLink}
+                  mb="md"
+                  onLoad={() => {
+                    setLargeCardLoading(false);
+                    document
+                      .getElementById('large-card-image')
+                      ?.setAttribute('style', 'display: block');
+                  }}
+                  style={{ display: 'none' }}
+                />
               </a>
               <Combobox
                 store={comboboxForLargeCard}
@@ -251,7 +289,7 @@ const MainContentColumn3 = ({
                 </Combobox.Dropdown>
               </Combobox>
               <Text mt="sm" style={{ fontSize: '15px' }}>
-                The size of the iframe and anchor image is pre-determined to be 300.0 x 272.7 (px).
+                The size of the iframe and anchor image is pre-determined to be 300.0 x 219.7 (px).
                 You probably will need to change it to fit your needs.
               </Text>
             </Box>

@@ -117,17 +117,6 @@ const MainContentColumn2 = ({
         }}
       />
       <Checkbox
-        label="Show account created date"
-        mt="md"
-        {...form.getInputProps('created')}
-        onChange={(e) => {
-          form.setValues({
-            ...form.values,
-            created: e.currentTarget.checked,
-          });
-        }}
-      />
-      <Checkbox
         label="Show Discord label"
         mt="md"
         {...form.getInputProps('discordLabel')}
@@ -136,6 +125,30 @@ const MainContentColumn2 = ({
             ...form.values,
             discordLabel: e.currentTarget.checked,
           });
+        }}
+      />
+      <Checkbox
+        label="Show Activity"
+        mt="md"
+        {...form.getInputProps('activity')}
+        onChange={(e) => {
+          form.setFieldValue('activity', e.currentTarget.checked);
+        }}
+      />
+      <Checkbox
+        label="Show Mood (a.k.a. custom status)"
+        mt="md"
+        {...form.getInputProps('mood')}
+        onChange={(e) => {
+          form.setFieldValue('mood', e.currentTarget.checked);
+        }}
+      />
+      <Checkbox
+        label="Show account created date"
+        mt="md"
+        {...form.getInputProps('created')}
+        onChange={(e) => {
+          form.setFieldValue('created', e.currentTarget.checked);
         }}
       />
       <Box mt="xl">
@@ -291,7 +304,7 @@ const MainContentColumn2 = ({
       />
       {wantLargeCard && (
         <Box mt="xl">
-          <Title order={4}>Details</Title>
+          <Title order={4}>Large card settings</Title>
           <TextInput
             {...form.getInputProps('pronouns')}
             label="Pronouns"

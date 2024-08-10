@@ -1,5 +1,6 @@
 import { refinerAPI, testing } from '../../env/env';
 import { bgIsLight, blendColors, hexToRgb } from '../../utils/tools';
+import { ActivityType, MoodType } from '../../utils/types';
 import { setStatusImg } from '../LargeCard/utils';
 
 export function updateStatus(
@@ -10,7 +11,9 @@ export function updateStatus(
   setStatus: (status: string) => void,
   setStatusImage: (statusImage: string) => void,
   setCreatedDate: (date: string) => void,
-  setBackgroundColor: (color: string) => void
+  setBackgroundColor: (color: string) => void,
+  setActivity: (activity: ActivityType) => void,
+  setMood: (mood: MoodType) => void
 ) {
   fetch(`${testing ? refinerAPI.dev : refinerAPI.prod}/user/${id}`, {
     headers: {
@@ -23,10 +26,12 @@ export function updateStatus(
       setAvatar(data.avatar);
       setStatus(data.status);
       setStatusImage(setStatusImg(data.status));
-      if (params.get('created') === 'true') {
+      if (params.get('created')) {
         setCreatedDate(data.created_at);
       }
       if (params.get('wantAccentColor')) setBackgroundColor(data.accent_color);
+      if (params.get('activity')) setActivity(data.activity);
+      if (params.get('mood')) setMood(data.mood);
     });
 }
 
