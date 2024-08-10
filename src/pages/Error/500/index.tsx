@@ -82,8 +82,8 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
               <Text>
                 Please send a message to{' '}
                 <span>
-                  <Anchor c="orange" href="mailto:support@bennynguyen.dev">
-                    support@bennynguyen.dev
+                  <Anchor c="orange" href="mailto:me@bennynguyen.dev">
+                    me@bennynguyen.dev
                   </Anchor>
                 </span>{' '}
                 to notify me of this issue and I will work on it ASAP. Thank you in advance.

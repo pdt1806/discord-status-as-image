@@ -8,6 +8,7 @@ import {
   bgIsLight,
   blendColors,
   formatDate,
+  getEmojiURLfromCDN,
   hexToRgb,
   setSmallCardTitleSize,
 } from '../src/utils/tools';
@@ -149,6 +150,11 @@ function monoBackgroundTextColor(bg: string) {
   return bgIsLight(color!) ? '#202225' : 'white';
 }
 
+function limitMoodLength(value: string) {
+  if (value.length < 33) return value;
+  return `${value.slice(0, 30)}...`;
+}
+
 app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -262,8 +268,14 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
                     ${mood.emoji.name}
                     </text>`
               }
+                    ${
+                      mood &&
+                      mood.emoji &&
+                      mood.emoji.id &&
+                      `<image transform="translate(92 62.5)" width="10" height="10" xlink:href="${getEmojiURLfromCDN(mood.emoji)}" preserveAspectRatio="none"></image>`
+                    }
                   <foreignObject x="0" y="0" width="100%" height="100%">
-            <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: center; transform: translate(${mood && mood.emoji ? '108.38086px' : '92px'}, 57.8px);">
+            <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: center; transform: translate(${mood && mood.emoji ? '107.38086px' : '92px'}, 57.8px);">
                 ${
                   activity && (mood?.state === 'Custom Status' || !mood)
                     ? `
@@ -291,7 +303,7 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
                     </div>
                 `
                     : mood
-                      ? `<div class="cls-10" style="color: ${textColor}">${mood.state !== 'Custom Status' ? mood.state : ''}</div>`
+                      ? `<div class="cls-10" style="color: ${textColor}">${mood.state !== 'Custom Status' ? limitMoodLength(mood.state) : ''}</div>`
                       : ''
                 }
                     <div style="margin-left: 5px; transform: translateY(-1px); visibility: ${activity ? 'visible' : 'hidden'}">

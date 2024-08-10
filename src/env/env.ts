@@ -10,4 +10,4 @@ export const web = {
   prod: 'https://disi.bennynguyen.dev',
   dev: 'http://localhost:5173',
 };
-export const testing = true;
+export const testing = false;
