@@ -1,5 +1,5 @@
 import { UseFormReturnType } from '@mantine/form';
-import { disiAPI, refinerAPI, testing } from '../../../env/env';
+import { debugging, disiAPI, refinerAPI } from '../../../env/env';
 import { getBannerImage } from '../../../pocketbase_client';
 import { fileToBase64 } from '../../../utils/tools';
 import { DISIForm } from '../../../utils/types';
@@ -26,7 +26,7 @@ export const generatingCards = async (
   }
 
   const res = await fetch(
-    `${testing ? refinerAPI.dev : refinerAPI.prod}/username/${form.values.username}`
+    `${debugging ? refinerAPI.dev : refinerAPI.prod}/username/${form.values.username}`
   );
   if (res.status === 404) throw new Error('User not found');
 
@@ -38,7 +38,7 @@ export const generatingCards = async (
     const body = {
       image: await fileToBase64(bannerFile),
     };
-    const response = await fetch(`${testing ? disiAPI.dev : disiAPI.prod}/uploadbanner`, {
+    const response = await fetch(`${debugging ? disiAPI.dev : disiAPI.prod}/uploadbanner`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ export const generatingCards = async (
 
   setSmallTail(smallTail);
   setLargeTail(largeTail);
-  setSmallCardLink(`${testing ? disiAPI.dev : disiAPI.prod}/smallcard/${data.id}?${smallTail}`);
+  setSmallCardLink(`${debugging ? disiAPI.dev : disiAPI.prod}/smallcard/${data.id}?${smallTail}`);
   wantLargeCard &&
-    setLargeCardLink(`${testing ? disiAPI.dev : disiAPI.prod}/largecard/${data.id}?${largeTail}`);
+    setLargeCardLink(`${debugging ? disiAPI.dev : disiAPI.prod}/largecard/${data.id}?${largeTail}`);
 };

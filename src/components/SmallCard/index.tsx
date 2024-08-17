@@ -226,7 +226,7 @@ const SmallCard = () => {
               src="/images/discord-label.svg"
               className={innerClasses.discordLabel}
               style={{
-                transform: `translate(603.3px, ${createdDate || activity ? '30px' : '70px'})`,
+                transform: `translate(603.3px, ${createdDate || activity || mood ? '30px' : '70px'})`,
               }}
             />
           )}

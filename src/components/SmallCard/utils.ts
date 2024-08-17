@@ -1,4 +1,4 @@
-import { refinerAPI, testing } from '../../env/env';
+import { debugging, refinerAPI } from '../../env/env';
 import { bgIsLight, blendColors, hexToRgb } from '../../utils/tools';
 import { ActivityType, MoodType } from '../../utils/types';
 import { setStatusImg } from '../LargeCard/utils';
@@ -15,7 +15,7 @@ export function updateStatus(
   setActivity: (activity: ActivityType) => void,
   setMood: (mood: MoodType) => void
 ) {
-  fetch(`${testing ? refinerAPI.dev : refinerAPI.prod}/user/${id}`, {
+  fetch(`${debugging ? refinerAPI.dev : refinerAPI.prod}/user/${id}`, {
     headers: {
       'Content-Type': 'application/json',
     },

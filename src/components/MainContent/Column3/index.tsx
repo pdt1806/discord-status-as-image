@@ -13,7 +13,7 @@ import {
   useCombobox,
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { disiAPI, testing, web } from '../../../env/env';
+import { debugging, disiAPI, web } from '../../../env/env';
 
 const MainContentColumn3 = ({
   smallCardLink,
@@ -71,7 +71,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy Image URL (.svg)',
       execute: () => {
         navigator.clipboard.writeText(
-          `${testing ? disiAPI.dev : disiAPI.prod}/smallcard_svg/${userID}?${smallTail}`
+          `${debugging ? disiAPI.dev : disiAPI.prod}/smallcard_svg/${userID}?${smallTail}`
         );
         copiedNotification();
       },
@@ -80,7 +80,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy Markdown (.svg)',
       execute: () => {
         navigator.clipboard.writeText(
-          `[![My Discord](${testing ? disiAPI.dev : disiAPI.prod}/smallcard_svg/${userID}?${smallTail})](https://discord.com/users/${userID})`
+          `[![My Discord](${debugging ? disiAPI.dev : disiAPI.prod}/smallcard_svg/${userID}?${smallTail})](https://discord.com/users/${userID})`
         );
         copiedNotification();
       },
@@ -89,7 +89,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy iframe (live card)',
       execute: () => {
         navigator.clipboard.writeText(
-          `<iframe src="${testing ? web.dev : web.prod}/smallcard?id=${userID}${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
+          `<iframe src="${debugging ? web.dev : web.prod}/smallcard?id=${userID}${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
         );
         copiedNotification();
       },
@@ -129,7 +129,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy iframe (live card)',
       execute: () => {
         navigator.clipboard.writeText(
-          `<iframe src="${testing ? web.dev : web.prod}/largecard?id=${userID}${largeTail}" name="disi-large-card" height="219.7px" width="300px"></iframe>`
+          `<iframe src="${debugging ? web.dev : web.prod}/largecard?id=${userID}${largeTail}" name="disi-large-card" height="219.7px" width="300px"></iframe>`
         );
         copiedNotification();
       },

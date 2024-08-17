@@ -1,4 +1,4 @@
-import { refinerAPI, testing } from '../src/env/env';
+import { debugging, refinerAPI } from '../src/env/env';
 import { RefinerResponse } from '../src/utils/types';
 
 export function base64toFile(base64: string): File | null {
@@ -23,7 +23,7 @@ export function base64toFile(base64: string): File | null {
 }
 
 export const fetchData = async (id: string): Promise<RefinerResponse | null> => {
-  const response = await fetch(`${testing ? refinerAPI.dev : refinerAPI.prod}/user/${id}`);
+  const response = await fetch(`${debugging ? refinerAPI.dev : refinerAPI.prod}/user/${id}`);
   try {
     if (response.status === 404) {
       return null;

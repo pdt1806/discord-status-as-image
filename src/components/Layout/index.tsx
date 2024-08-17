@@ -1,7 +1,7 @@
 import { Box, Loader } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { disiAPI, refinerAPI, testing } from '../../env/env';
+import { debugging, disiAPI, refinerAPI } from '../../env/env';
 import { Error500 } from '../../pages/Error/500';
 import Footer from '../Footer';
 import Header from '../Header';
@@ -25,9 +25,9 @@ const Layout = () => {
           controller.abort();
         }, 3000);
 
-        const responseAPI = await fetch(testing ? disiAPI.dev : disiAPI.prod, { signal });
+        const responseAPI = await fetch(debugging ? disiAPI.dev : disiAPI.prod, { signal });
         const responsePB = await fetch('https://disi-pb.bennynguyen.dev/api', { signal });
-        const responseRefiner = await fetch(testing ? refinerAPI.dev : refinerAPI.prod, {
+        const responseRefiner = await fetch(debugging ? refinerAPI.dev : refinerAPI.prod, {
           signal,
         });
 

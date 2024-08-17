@@ -2,7 +2,7 @@
 /* eslint-disable consistent-return */
 import express, { Request, Response } from 'express';
 import puppeteer from 'puppeteer-core';
-import { testing } from '../src/env/env';
+import { debugging } from '../src/env/env';
 import { getBannerImage } from '../src/pocketbase_client/index';
 import {
   bgIsLight,
@@ -17,9 +17,9 @@ import { iconsListSmall } from './icons';
 import { uploadBannerImage } from './pocketbase_server';
 import { base64toFile, fetchData, urlToBase64 } from './utils';
 
-const root = testing ? 'http://localhost:5173' : 'https://disi.bennynguyen.dev';
+const root = debugging ? 'http://localhost:5173' : 'https://disi.bennynguyen.dev';
 
-const origin = testing ? '*' : 'https://disi.bennynguyen.dev';
+const origin = debugging ? '*' : 'https://disi.bennynguyen.dev';
 
 const minimal_args = [
   '--autoplay-policy=user-gesture-required',
