@@ -68,6 +68,12 @@ const LargeCard = () => {
     );
   }
 
+  const buttonTextColor = buttonColor
+    ? isDark(hexToRgb(buttonColor)!)
+      ? 'black'
+      : 'white'
+    : 'black';
+
   const updateStatusArgs = {
     params,
     id,
@@ -135,15 +141,19 @@ const LargeCard = () => {
           mood.state.length <= (mood.emoji ? 15 : 19)) && (
           <Group gap="xs" className={innerClasses.addMessageGroup}>
             <ActionIcon h={40.8} w={40.8} bg={buttonColor ?? '#4e5057'}>
-              <IconMessageCircle2Filled size={20} style={{ margin: 0, padding: 0 }} />
+              <IconMessageCircle2Filled
+                size={20}
+                style={{ margin: 0, padding: 0 }}
+                color={buttonTextColor}
+              />
             </ActionIcon>
             <Box
               className={innerClasses.friendRequest}
               style={{ backgroundColor: buttonColor ?? '#5865f2' }}
             >
               <Group gap="xs">
-                <IconUserPlus size={20} />
-                <Text>Add Friend</Text>
+                <IconUserPlus size={20} color={buttonTextColor} />
+                <Text c={buttonTextColor}>Add Friend</Text>
               </Group>
             </Box>
           </Group>
