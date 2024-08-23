@@ -42,7 +42,11 @@
 
 ## 📄 License
 
-Discord Status as Image is licensed under the MIT License. See the [`LICENSE`](LICENSE).
+Discord Status as Image is licensed under the MIT License. See the [`LICENSE`](https://github.com/pdt1806/discord-status-as-image/blob/main/LICENSE).
+
+## 🔗 An example use case
+
+Go to [my GitHub profile](https://github.com/pdt1806) and look at the README to see how I use this tool to display my Discord status.
 
 ## 🤝 Contributions
 
