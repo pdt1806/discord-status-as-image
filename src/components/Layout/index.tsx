@@ -5,6 +5,7 @@ import { debugging, disiAPI, refinerAPI } from '../../env/env';
 import { Error500 } from '../../pages/Error/500';
 import Footer from '../Footer';
 import Header from '../Header';
+import HeaderNoti from '../HeaderNoti';
 
 const Layout = () => {
   const [page, setPage] = useState(<Loader color="white" type="bars" ml="auto" mr="auto" />);
@@ -58,6 +59,7 @@ const Layout = () => {
       }}
     >
       <Header />
+      <HeaderNoti />
       <Box style={{ flexGrow: '1' }} />
       {page}
       <Box style={{ flexGrow: '1' }} />

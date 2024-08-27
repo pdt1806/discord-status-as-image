@@ -126,9 +126,8 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
           >
             <Image
               maw="450px"
-              mah="627.32px"
               src="images/demo/large-card.png"
-              style={{ aspectRatio: '450/627.32' }}
+              style={{ aspectRatio: '807/985' }}
             />
           </a>
         </Flex>
