@@ -310,6 +310,7 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       await browser.close();
     } catch (error) {
       res.status(500).send('Internal Server Error');
+      console.error(error);
     }
   } catch (error) {
     res.status(500).send('Internal Server Error');

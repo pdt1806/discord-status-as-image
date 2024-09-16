@@ -58,13 +58,19 @@ export default function ActivityBox({
         <>
           <Flex justify="space-between" align="center">
             <Title order={3} ff="Noto Sans TC">
-              Listening to {activity.platform}
+              Listening to {activity.platform ?? activity.name}
             </Title>
-            <Image src="/images/logos/spotify.svg" alt="Spotify" width={30} height={30} />
+            {activity.platform && (
+              <Image src="/images/logos/spotify.svg" alt="Spotify" width={30} height={30} />
+            )}
           </Flex>
           <Group gap="md" mt="lg">
             <Image
-              src={activity.album.cover}
+              src={
+                activity.platform
+                  ? activity.album.cover
+                  : formatActivityImageUrl(activity.assets.large_image)
+              }
               alt="Large Image"
               style={{
                 height: '150px',
@@ -74,11 +80,15 @@ export default function ActivityBox({
             />
             <Box maw={500}>
               <Title ff="Noto Sans TC" order={3}>
-                {activity.name}
+                {activity.platform ? activity.name : activity.details}
               </Title>
               <Space h={3} />
-              <Text ff="Noto Sans TC" fz={22}>{`by ${activity.artists.join(', ')}`}</Text>
-              <Text ff="Noto Sans TC" fz={22}>{`on ${activity.album.name}`}</Text>
+              <Text ff="Noto Sans TC" fz={22}>
+                {`by ${activity.platform ? activity.artists.join(', ') : activity.state}`}
+              </Text>
+              {activity.platform && (
+                <Text ff="Noto Sans TC" fz={22}>{`on ${activity.album.name}`}</Text>
+              )}
             </Box>
             <Progress
               mt="md"

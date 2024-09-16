@@ -19,7 +19,7 @@ type GeneralActivityType = {
   name: string;
 };
 
-type ListeningActivityType = {
+type SpotifyActivityType = {
   platform: string;
   timestamps: {
     start: string;
@@ -30,6 +30,21 @@ type ListeningActivityType = {
   album: {
     name: string;
     cover: string;
+  };
+};
+
+type ListeningActivityType = {
+  type: string;
+  name: string; // platform
+  details: string; // song name
+  state: string; // artist
+  timestamps: {
+    start: number;
+    end: number;
+  };
+  assets: {
+    large_image: string;
+    small_image: string;
   };
 };
 
@@ -54,6 +69,7 @@ type OtherActivityType = {
 };
 
 export type ActivityType = GeneralActivityType &
+  SpotifyActivityType &
   ListeningActivityType &
   StreamingActivityType &
   OtherActivityType;
