@@ -15,7 +15,6 @@
     "@mantine/notifications": "^7.12.2",
     "@tabler/icons-react": "^3.1.0",
     "@types/react-helmet": "^6.1.11",
-    "@types/svg2png": "^4.1.5",
     "express": "^4.19.2",
     "http-server": "^14.1.1",
     "node-fetch": "^3.3.2",

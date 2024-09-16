@@ -99,7 +99,6 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
       wantAccentColor && data.accent_color && (link += `bg=${data.accent_color.replace('#', '')}&`);
       const browser = await puppeteer.launch({
         executablePath: '/usr/bin/chromium-browser',
-        userDataDir: './loaded',
         args: minimal_args,
       });
       const page = await browser.newPage();
@@ -133,92 +132,12 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
       await browser.close();
     } catch (error) {
       res.status(500).send('Internal Server Error');
+      console.error(error);
     }
   } catch (error) {
     res.status(500).send('Internal Server Error');
   }
 });
-
-// app.get('/smallcard/:id', async (req: Request, res: Response) => {
-//   try {
-//     const { id } = req.params;
-//     const {
-//       bg,
-//       bg1,
-//       bg2,
-//       angle,
-//       created,
-//       activity: wantActivity,
-//       mood: wantMood,
-//       discordLabel,
-//       wantAccentColor,
-//     } = req.query as { [key: string]: string };
-//     try {
-//       const data = await fetchData(id);
-//       if (data === null) {
-//         res.status(404).send('User not found');
-//         return null;
-//       }
-//       const avatar = await urlToBase64(data.avatar);
-//       const background = bg
-//         ? `#${bg}`
-//         : wantAccentColor && data.accent_color
-//           ? data.accent_color
-//           : '#2b2d31';
-
-//       let textColor = 'white';
-//       if (bg1) {
-//         const blendColor = blendColors(`#${bg1}`, `#${bg2}`);
-//         textColor = monoBackgroundTextColor(blendColor!);
-//       }
-//       if (bg) textColor = monoBackgroundTextColor(`#${bg}`);
-//       if (wantAccentColor && data.accent_color) {
-//         textColor = monoBackgroundTextColor(data.accent_color);
-//       }
-
-//       if (data.status === 'offline' && textColor === '#202225') textColor = '#5d5f6b';
-//       const statusImage = iconsListSmall[data.status as keyof typeof iconsListSmall];
-//       const displayName = data.display_name;
-//       const titleSize = setSmallCardTitleSize(data.display_name);
-//       const createdDate = created ? data.created_at : null;
-//       const activity = wantActivity ? data.activity : null;
-//       const mood = wantMood ? data.mood : null;
-//       const svgContent = smallcardSvgContent({
-//         width: 1350,
-//         height: 450,
-//         bg1,
-//         bg2,
-//         background,
-//         angle,
-//         avatar,
-//         displayName,
-//         statusImage,
-//         createdDate,
-//         activity,
-//         mood,
-//         discordLabel,
-//         textColor,
-//         titleSize,
-//       });
-
-//       const canvas = createCanvas(1350, 450);
-//       const ctx = canvas.getContext('2d');
-//       const image = await loadImage(
-//         `data:image/svg+xml;base64,${Buffer.from(svgContent).toString('base64')}`
-//       );
-//       ctx.drawImage(image, 0, 0, 1350, 450);
-
-//       const pngBuffer = canvas.toBuffer('image/png');
-
-//       res.setHeader('Content-Type', 'image/png');
-//       res.send(pngBuffer);
-//     } catch (error) {
-//       res.status(500).send('Internal Server Error');
-//     }
-//   } catch (error) {
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
 
 const monoBackgroundTextColor = (bg: string) => {
   const color = hexToRgb(bg);
@@ -347,7 +266,6 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       bannerColor && (link += `bannerColor=${bannerColor}&`);
       const browser = await puppeteer.launch({
         executablePath: '/usr/bin/chromium-browser',
-        userDataDir: './loaded',
         args: minimal_args,
       });
       const page = await browser.newPage();
