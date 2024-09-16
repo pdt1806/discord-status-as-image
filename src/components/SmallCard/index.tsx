@@ -164,7 +164,7 @@ const SmallCard = () => {
                     fw={400}
                     ff="Noto Sans TC"
                   >
-                    {mood.emoji.name && !mood.emoji.id ? `${mood.emoji.name} ` : ''}
+                    {mood.emoji && !mood.emoji.id ? `${mood.emoji.name} ` : ''}
                     {mood.state === 'Custom Status' ? '' : mood.state}
                   </Title>
                 </>
