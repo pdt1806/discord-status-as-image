@@ -1,4 +1,3 @@
-import fs from 'fs';
 import { formatDate, getEmojiURLfromCDN } from '../src/utils/tools';
 import { ActivityType, MoodType } from '../src/utils/types';
 
@@ -34,12 +33,8 @@ export const smallcardSvgContent = ({
   discordLabel: string;
   textColor: string;
   titleSize: number;
-}) => {
-  const regularFont = fs.readFileSync('./fonts/NotoSansTC-Regular.ttf').toString('base64');
-  const mediumFont = fs.readFileSync('./fonts/NotoSansTC-Medium.ttf').toString('base64');
-  const semiBoldFont = fs.readFileSync('./fonts/NotoSansTC-SemiBold.ttf').toString('base64');
-  const boldFont = fs.readFileSync('./fonts/NotoSansTC-Bold.ttf').toString('base64');
-  return `<svg
+}) =>
+  `<svg
           xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
           viewBox="0 0 300 100"
@@ -55,7 +50,7 @@ export const smallcardSvgContent = ({
               </linearGradient>`
               : ''
           }
-            <style type="text/css">@font-face { font-family: 'Noto Sans TC'; font-weight: 400; src: url('data:font/ttf;base64,${regularFont}') format('truetype'); } @font-face { font-family: 'Noto Sans TC'; font-weight: 500; src: url('data:font/ttf;base64,${mediumFont}') format('truetype'); } @font-face { font-family: 'Noto Sans TC'; font-weight: 600; src: url('data:font/ttf;base64,${semiBoldFont}') format('truetype'); } @font-face { font-family: 'Noto Sans TC'; font-weight: 700; src: url('data:font/ttf;base64,${boldFont}') format('truetype'); }.cls-1{fill:none;}.cls-2{fill:${bg1 ? 'url(#bgGradient)' : background};}.cls-30{fill:#24934f;fill-rule:evenodd;}.cls-31{fill:#5d5f6b;fill-rule:evenodd;}.cls-32{fill:#f0b232;fill-rule:evenodd;}.cls-33{fill:#ec3e4a;fill-rule:evenodd;}.cls-4{clip-path:url(#clip-path);}.cls-10,.cls-5,.cls-6{isolation:isolate;}.cls-6{font-size:${22 * (titleSize / 100)}px;font-family:Noto Sans TC,system-ui;font-weight:500;}.cls-10,.cls-6,.cls-9{fill:${textColor};}.cls-7{letter-spacing:-0.021em;}.cls-8{letter-spacing:-0.01501em;}.cls-10{font-size:8.85069px;font-family:Noto Sans TC,system-ui; font-weight:400;}.cls-11{fill:#5865f2;}.cls-12{fill:#fff;}}</style>
+            <style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700');.cls-1{fill:none;}.cls-2{fill:${bg1 ? 'url(#bgGradient)' : background};}.cls-30{fill:#24934f;fill-rule:evenodd;}.cls-31{fill:#5d5f6b;fill-rule:evenodd;}.cls-32{fill:#f0b232;fill-rule:evenodd;}.cls-33{fill:#ec3e4a;fill-rule:evenodd;}.cls-4{clip-path:url(#clip-path);}.cls-10,.cls-5,.cls-6{isolation:isolate;}.cls-6{font-size:${22 * (titleSize / 100)}px;font-family:Noto Sans TC,system-ui;font-weight:500;}.cls-10,.cls-6,.cls-9{fill:${textColor};}.cls-7{letter-spacing:-0.021em;}.cls-8{letter-spacing:-0.01501em;}.cls-10{font-size:8.85069px;font-family:Noto Sans TC,system-ui; font-weight:400;}.cls-11{fill:#5865f2;}.cls-12{fill:#fff;}}</style>
             <clipPath id="clip-path">
               <path
                 class="cls-1"
@@ -174,7 +169,6 @@ export const smallcardSvgContent = ({
         </svg>`
     .replace(/\s+/g, ' ')
     .trim();
-};
 
 const limitMoodLength = (value: string) => {
   if (value.length < 33) return value;
