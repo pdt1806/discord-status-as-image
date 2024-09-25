@@ -50,14 +50,14 @@ export default function ModalNoti(): {
         radius="md"
         padding="lg"
         size="auto"
-        title="Choir Concert at Antelope, CA!"
+        title="Choir Concert in Antelope, CA!"
       >
         <Flex direction={{ base: 'column', md: 'row' }} align="center">
           <Image
             mx="auto"
             src="images/f24-choir-poster.webp"
             w={{ base: 250, xs: 300, lg: 350 }}
-            alt="Choir Concert at Antelope!"
+            alt="Choir Concert in Antelope!"
             radius="md"
           />
           <Box
