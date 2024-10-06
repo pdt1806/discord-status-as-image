@@ -61,7 +61,7 @@ const Layout = () => {
         color: 'white',
       }}
     >
-      {modalNoti.element}
+      {/* {modalNoti.element} */}
       <Header />
       {/* <HeaderNoti /> */}
       <Box style={{ flexGrow: '1' }} />
