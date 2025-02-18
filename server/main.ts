@@ -75,7 +75,7 @@ async function selectPage(id: string, type: string): Promise<[Page, boolean]> {
   const page = await context.newPage();
   type === 'small'
     ? await page.setViewportSize({ width: 1350, height: 450 })
-    : await page.setViewportSize({ width: 807, height: 1200 });
+    : await page.setViewportSize({ width: 807, height: 1500 });
   reference.set(id, page);
   return [page, true]; // true means the page is newly created
 }
