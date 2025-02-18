@@ -294,8 +294,8 @@ const MainContentColumn3 = ({
             </Box>
           )}
           <Text mt="sm" style={{ fontSize: '15px' }}>
-            The first time you load the card(s), it may take a while for the image to be loaded.
-            After that, the images are cached and will load faster.
+            The first time you generate the card(s), it may take a while for the image to be loaded
+            due to initialization. After that, it should be loaded almost-instantly!
           </Text>
         </Box>
       ) : (

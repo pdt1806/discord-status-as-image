@@ -28,7 +28,7 @@
 - [Cloudflare Pages](https://pages.cloudflare.com/)
 - [Node.js](https://nodejs.org/en/)
 - [Express](https://expressjs.com/)
-- [Puppeteer](https://pptr.dev/)
+- [Playwright](https://playwright.dev/)
 - [Refiner Discord Bot](https://github.com/pdt1806/refiner-discord-bot)
   - [discord.py](https://discordpy.readthedocs.io/en/latest/)
   - [FastAPI](https://fastapi.tiangolo.com/)

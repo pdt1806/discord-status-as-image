@@ -1,15 +1,42 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const slug = window.location.pathname.split('/').pop();
+      if (slug === 'largecard') {
+        createLink(`${window.location.origin}/images/banner_overlay.svg`);
+        if (urlParams.has('bannerImage')) createLink(urlParams.get('bannerImage'));
+      }
+
+      function createLink(href) {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.fetchPriority = 'high';
+        link.href = href;
+        link.crossOrigin = 'anonymous';
+        document.head.appendChild(link);
+
+        // console.log(`Preloaded ${href}`);
+      }
+      createLink(`${window.location.origin}/images/avatar_overlay.svg`);
+      if (urlParams.has('urls')) {
+        const urls = JSON.parse(decodeURIComponent(urlParams.get('urls')));
+        urls.forEach((url) => createLink(url));
+      }
+      if (urlParams.has('status')) {
+        const status = urlParams.get('status');
+        createLink(`${window.location.origin}/images/icons/${status}.svg`);
+      }
+      if (urlParams.has('discordLabel'))
+        createLink(`${window.location.origin}/images/discord-label.svg`);
+      if (urlParams.has('createdDate') && slug === 'smallcard')
+        createLink(`${window.location.origin}/images/discord.svg`);
+    </script>
     <base href="/" />
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/images/disi-logo-circle.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+TC:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
     <link rel="canonical" href="https://disi.bennynguyen.dev" />
     <meta
       name="viewport"

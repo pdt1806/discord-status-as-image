@@ -61,7 +61,13 @@ export default function ActivityBox({
               Listening to {activity.platform ?? activity.name}
             </Title>
             {activity.platform && (
-              <Image src="/images/logos/spotify.svg" alt="Spotify" width={30} height={30} />
+              <Image
+                src="/images/logos/spotify.svg"
+                alt="Spotify"
+                width={30}
+                height={30}
+                crossOrigin="anonymous"
+              />
             )}
           </Flex>
           <Group gap="md" mt="lg">
@@ -77,6 +83,7 @@ export default function ActivityBox({
                 aspectRatio: '1/1',
                 borderRadius: 10,
               }}
+              crossOrigin="anonymous"
             />
             <Box maw={500}>
               <Title ff="Noto Sans TC" order={3}>
@@ -217,6 +224,7 @@ function OtherAssets({ activity }: { activity: ActivityType }) {
           aspectRatio: '1/1',
           borderRadius: 10,
         }}
+        crossOrigin="anonymous"
       />
       {small_image && large_image && (
         <Flex

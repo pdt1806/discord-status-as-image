@@ -15,7 +15,7 @@ export function updateStatus(
   setActivity: (activity: ActivityType) => void,
   setMood: (mood: MoodType) => void
 ) {
-  fetch(`${refinerAPI[debugging]}/user/${id}`, {
+  fetch(`${refinerAPI[debugging]}/user/${id}?full=true`, {
     headers: {
       'Content-Type': 'application/json',
     },
