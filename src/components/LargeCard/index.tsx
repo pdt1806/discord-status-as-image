@@ -1,4 +1,4 @@
-import { ActionIcon, Avatar, Box, Flex, Group, Image, Stack, Text, Title } from '@mantine/core';
+import { ActionIcon, Box, Flex, Group, Image, Stack, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -124,7 +124,7 @@ const LargeCard = () => {
         }}
       >
         {bannerImage ? (
-          <Image src={bannerImage} className={classes.banner} id="banner" />
+          <Image src={bannerImage} className={classes.banner} id="banner" crossOrigin="anonymous" />
         ) : (
           <Box
             id="banner"
@@ -133,8 +133,8 @@ const LargeCard = () => {
           />
         )}
         <Box style={{ transform: 'scale(0.8) translate(20px, -180px)', position: 'absolute' }}>
-          <Image alt="Avatar" src={avatar} className={classes.avatar} />
-          <Avatar src={statusImage} className={innerClasses.statusImage} />
+          <Image alt="Avatar" src={avatar} className={classes.avatar} crossOrigin="anonymous" />
+          <Image src={statusImage} className={innerClasses.statusImage} crossOrigin="anonymous" />
         </Box>
         {(!mood ||
           mood.state === 'Custom Status' ||
@@ -246,6 +246,7 @@ const LargeCard = () => {
             alt="discord-logo"
             src="/images/discord-label.svg"
             className={innerClasses.discordLabel}
+            crossOrigin="anonymous"
           />
         )}
       </Box>

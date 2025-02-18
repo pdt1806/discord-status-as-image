@@ -45,18 +45,8 @@ export function adjustHexColor(hex: string, amount: number) {
 }
 
 export function setStatusImg(status?: string) {
-  switch (status) {
-    case 'online':
-      return '/images/icons/online.svg';
-    case 'idle':
-      return '/images/icons/idle.svg';
-    case 'dnd':
-      return '/images/icons/dnd.svg';
-    case 'offline':
-      return '/images/icons/offline.svg';
-    default:
-      return '/images/icons/offline.svg';
-  }
+  if (status) return `/images/icons/${status}.svg`;
+  return '/images/icons/offline.svg';
 }
 
 export function updateStatus({
@@ -86,7 +76,7 @@ export function updateStatus({
   setActivity: (activity: ActivityType) => void;
   setMood: (mood: MoodType) => void;
 }) {
-  fetch(`${refinerAPI[debugging]}/user/${id}`, {
+  fetch(`${refinerAPI[debugging]}/user/${id}?full=true`, {
     headers: {
       'Content-Type': 'application/json',
     },

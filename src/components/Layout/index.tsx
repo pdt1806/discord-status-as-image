@@ -1,6 +1,7 @@
 import { Box } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import classes from '../../App.module.css';
 import { debugging, disiAPI, refinerAPI } from '../../env/env';
 import { Error500 } from '../../pages/Error/500';
 import Fallback from '../Fallback';
@@ -53,6 +54,7 @@ const Layout = () => {
 
   return (
     <Box
+      className={classes.layout}
       w="100vw"
       bg="#111111"
       style={{

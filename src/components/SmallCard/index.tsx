@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Image, Title } from '@mantine/core';
+import { Box, Flex, Image, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -78,6 +78,7 @@ const SmallCard = () => {
       );
     }, 15000);
 
+    // eslint-disable-next-line consistent-return
     return () => clearInterval(intervalID);
   }, []);
 
@@ -94,8 +95,14 @@ const SmallCard = () => {
         }}
         className={innerClasses.smallCard}
       >
-        <Image alt="Avatar" src={avatar} className={classes.avatar} id="avatar" />
-        <Avatar className={innerClasses.statusImage} src={statusImage} />
+        <Image
+          alt="Avatar"
+          src={avatar}
+          className={classes.avatar}
+          id="avatar"
+          crossOrigin="anonymous"
+        />
+        <Image className={innerClasses.statusImage} src={statusImage} crossOrigin="anonymous" />
         <Box style={{ transform: 'translateX(-10px)' }}>
           <Flex mih={130} direction="column" justify="end">
             <Title
@@ -126,6 +133,7 @@ const SmallCard = () => {
                         ? 'brightness(0) saturate(100%) invert(7%) sepia(6%) saturate(1299%) hue-rotate(177deg) brightness(96%) contrast(85%)'
                         : 'brightness(0) saturate(100%) invert(34%) sepia(6%) saturate(770%) hue-rotate(194deg) brightness(102%) contrast(87%)',
                 }}
+                crossOrigin="anonymous"
               />
               <Title
                 size={40}
@@ -151,6 +159,7 @@ const SmallCard = () => {
                       alt={mood.emoji.name}
                       style={{ width: 58, height: 58 }}
                       mr="lg"
+                      crossOrigin="anonymous"
                     />
                   )}
 
@@ -217,6 +226,7 @@ const SmallCard = () => {
                           ? 'brightness(0) saturate(100%) invert(7%) sepia(6%) saturate(1299%) hue-rotate(177deg) brightness(96%) contrast(85%)'
                           : 'brightness(0) saturate(100%) invert(34%) sepia(6%) saturate(770%) hue-rotate(194deg) brightness(102%) contrast(87%)',
                   }}
+                  crossOrigin="anonymous"
                 />
               )}
             </Box>
@@ -229,6 +239,7 @@ const SmallCard = () => {
               style={{
                 transform: `translate(603.3px, ${createdDate || activity || mood ? '30px' : '70px'})`,
               }}
+              crossOrigin="anonymous"
             />
           )}
         </Box>

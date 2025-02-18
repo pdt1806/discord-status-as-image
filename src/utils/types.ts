@@ -98,4 +98,5 @@ export type RefinerResponse = {
   created_at: string;
   activity: ActivityType;
   mood: MoodType;
+  urls: string[];
 };

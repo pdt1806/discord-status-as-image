@@ -5,9 +5,9 @@ import { MoodType } from '../../../utils/types';
 export default function MoodBox({ mood, textColor }: { mood: MoodType; textColor: string }) {
   const bg = textColor === 'white' ? '#313338' : '#f8fcfc';
 
-  if (mood.state === 'Custom Status' && mood.emoji?.id) {
-    return null;
-  }
+  // if (mood.state === 'Custom Status' && mood.emoji?.id) {
+  //   return null;
+  // }
 
   return (
     <Box style={{ position: 'absolute', zIndex: 999, transform: 'translate(290px, -330px)' }}>
@@ -35,6 +35,7 @@ export default function MoodBox({ mood, textColor }: { mood: MoodType; textColor
                 alt={mood.emoji.name}
                 style={{ width: 35, height: 35 }}
                 mr="md"
+                crossOrigin="anonymous"
               />
             </span>
           )}

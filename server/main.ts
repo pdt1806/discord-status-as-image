@@ -2,57 +2,25 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
 import express, { Request, Response } from 'express';
-import puppeteer, { Browser, Page } from 'puppeteer-core';
+import playwright, { Browser, Page } from 'playwright';
+import { expect } from 'playwright/test';
 import { debugging, web } from '../src/env/env';
-import { getBannerImage } from '../src/pocketbase_client/index';
 import { bgIsLight, blendColors, hexToRgb, setSmallCardTitleSize } from '../src/utils/tools';
 import { iconsListSmall } from './icons';
 import { uploadBannerImage } from './pocketbase_server';
 import { smallcardSvgContent } from './svgContent';
-import { base64toFile, fetchData, urlToBase64 } from './utils';
+import {
+  base64toFile,
+  fetchRefinerData,
+  getLargeCardLink,
+  getSmallCardLink,
+  minimal_args,
+  urlToBase64,
+} from './utils';
 
 const root = web[debugging];
 
 const origin = debugging ? '*' : 'https://disi.bennynguyen.dev';
-
-const minimal_args = [
-  '--autoplay-policy=user-gesture-required',
-  '--disable-background-networking',
-  '--disable-background-timer-throttling',
-  '--disable-backgrounding-occluded-windows',
-  '--disable-breakpad',
-  '--disable-client-side-phishing-detection',
-  '--disable-component-update',
-  '--disable-default-apps',
-  '--disable-dev-shm-usage',
-  '--disable-domain-reliability',
-  '--disable-extensions',
-  '--disable-features=AudioServiceOutOfProcess',
-  '--disable-hang-monitor',
-  '--disable-ipc-flooding-protection',
-  '--disable-notifications',
-  '--disable-offer-store-unmasked-wallet-cards',
-  '--disable-popup-blocking',
-  '--disable-print-preview',
-  '--disable-prompt-on-repost',
-  '--disable-renderer-backgrounding',
-  '--disable-setuid-sandbox',
-  '--disable-speech-api',
-  '--disable-sync',
-  '--hide-scrollbars',
-  '--ignore-gpu-blacklist',
-  '--metrics-recording-only',
-  '--mute-audio',
-  '--no-default-browser-check',
-  '--no-first-run',
-  '--no-pings',
-  '--no-sandbox',
-  '--no-zygote',
-  '--password-store=basic',
-  '--use-gl=swiftshader',
-  '--use-mock-keychain',
-  '--headless',
-];
 
 const app = express();
 
@@ -81,9 +49,8 @@ app.get('/', (_: Request, res: Response) => {
 let browser: Browser;
 
 async function initBrowser() {
-  browser = await puppeteer.launch({
+  browser = await playwright.chromium.launch({
     headless: true,
-    executablePath: '/usr/bin/chromium-browser',
     args: minimal_args,
   });
   console.log('Browser started.');
@@ -97,51 +64,61 @@ initBrowser().catch((error) => {
   process.exit(1);
 });
 
+const smallPages = new Map<string, Page>();
+const largePages = new Map<string, Page>();
+
+async function selectPage(id: string, type: string): Promise<[Page, boolean]> {
+  const reference = type === 'small' ? smallPages : largePages;
+  if (reference.has(id)) return [reference.get(id)!, false];
+
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  type === 'small'
+    ? await page.setViewportSize({ width: 1350, height: 450 })
+    : await page.setViewportSize({ width: 807, height: 1200 });
+  reference.set(id, page);
+  return [page, true]; // true means the page is newly created
+}
+
 app.get('/smallcard/:id', async (req: Request, res: Response) => {
   try {
+    const startRefiner = Date.now();
     const { id } = req.params;
-    const { bg, bg1, bg2, angle, created, activity, mood, discordLabel, wantAccentColor } =
-      req.query;
-    let link = bg1
-      ? `${root}/smallcard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&angle=${angle}&`
-      : bg
-        ? `${root}/smallcard?bg=${bg}&`
-        : `${root}/smallcard?`;
+
     try {
-      const data = await fetchData(id);
-      if (data === null) {
-        res.status(404).send('User not found');
-        return null;
-      }
-      created && (link += `createdDate=${data.created_at}&`);
-      discordLabel && (link += 'discordLabel=true&');
-      wantAccentColor && data.accent_color && (link += `bg=${data.accent_color.replace('#', '')}&`);
-      activity && (link += `activityData=${encodeURIComponent(JSON.stringify(data.activity))}&`);
-      mood && (link += `moodData=${encodeURIComponent(JSON.stringify(data.mood))}&`);
-
-      const page: Page = await browser.newPage();
-      await page.setCacheEnabled(true);
-      await page.setViewport({ width: 1350, height: 450 });
-      await page.setRequestInterception(true);
-      page.on('request', (request) => {
-        request.url().includes('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro')
-          ? request.abort()
-          : request.continue();
-      });
-
-      await page.goto(
-        `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
+      const fullLink = await getSmallCardLink(
+        root,
+        id,
+        res,
+        req.query as { [key: string]: string }
       );
+      if (!fullLink) {
+        res.status(500).send('Internal Server Error');
+        return;
+      }
+      const refinerTime = Date.now() - startRefiner;
 
-      await page.waitForResponse((response) => response.url().includes(`avatars/${id}`));
+      const startBrowser = Date.now();
+      const [page, firstTime]: [Page, boolean] = await selectPage(id, 'small');
+
+      if (firstTime) {
+        await page.goto(fullLink, { waitUntil: 'networkidle' });
+      } else {
+        await page.goto(fullLink);
+        for (const img of await page.getByRole('img').all()) {
+          await expect(img).toHaveJSProperty('complete', true);
+          await expect(img).not.toHaveJSProperty('naturalWidth', 0);
+        }
+      }
 
       const screenshotBuffer = await page.screenshot({
         clip: { x: 0, y: 0, width: 1350, height: 450 },
       });
       res.set('Content-Type', 'image/png');
       res.send(screenshotBuffer);
-      await page.close();
-      logTimestamp('Small', 'PNG', id);
+      const browserTime = Date.now() - startBrowser;
+
+      logTimestamp('Small', 'PNG', id, refinerTime, browserTime);
     } catch (error) {
       res.status(500).send('Internal Server Error');
       console.error(error);
@@ -158,6 +135,7 @@ const monoBackgroundTextColor = (bg: string) => {
 
 app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
   try {
+    const start = Date.now();
     const { id } = req.params;
     const {
       bg,
@@ -171,11 +149,16 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
       wantAccentColor,
     } = req.query as { [key: string]: string };
     try {
-      const data = await fetchData(id);
+      const startRefiner = Date.now();
+      const requiresFullData = wantAccentColor === 'true';
+      const data = await fetchRefinerData(id, requiresFullData);
       if (data === null) {
         res.status(404).send('User not found');
         return null;
       }
+      const refinerTime = Date.now() - startRefiner;
+
+      const startBrowser = Date.now() - start;
       const avatar = await urlToBase64(data.avatar);
       const background = bg
         ? `#${bg}`
@@ -217,12 +200,14 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
         textColor,
         titleSize,
       });
+
       res.set({
         'Content-Type': 'image/svg+xml',
       });
       res.send(svgContent);
+      const browserTime = Date.now() - startBrowser;
 
-      logTimestamp('Small', 'SVG', id);
+      logTimestamp('Small', 'SVG', id, refinerTime, browserTime);
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }
@@ -233,88 +218,56 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
 
 app.get('/largecard/:id', async (req: Request, res: Response) => {
   try {
+    const startRefiner = Date.now();
     const { id } = req.params;
-    const {
-      bg,
-      bg1,
-      bg2,
-      created,
-      aboutMe,
-      pronouns,
-      wantBannerImage,
-      wantAccentColor,
-      activity,
-      mood,
-      bannerColor,
-      bannerID,
-      bannerImage,
-      discordLabel,
-    } = req.query as { [key: string]: string };
-    let link = bg1
-      ? `${root}/largecard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&`
-      : bg
-        ? `${root}/largecard?bg=${bg}&`
-        : `${root}/largecard?`;
-    link += aboutMe ? `aboutMe=${encodeURIComponent(aboutMe)}&` : '';
-    link += pronouns ? `pronouns=${pronouns}&` : '';
+
     try {
-      const data = await fetchData(id);
-      if (data === null) {
-        res.status(404).send('User not found');
-        return null;
-      }
-      created && (link += `createdDate=${data.created_at}&`);
-      discordLabel && (link += 'discordLabel=true&');
-      if (bannerID) {
-        const banner = await getBannerImage(bannerID, false);
-        banner && (link += `bannerImage=${banner}&`);
-      }
-      if (wantBannerImage) {
-        data.banner && (link += `bannerImage=${data.banner}&`);
-        data.accent_color && (link += `accentColor=${data.accent_color.replace('#', '')}&`);
-      }
-      bannerImage && (link += `bannerImage=${bannerImage}&`);
-      wantAccentColor &&
-        data.accent_color &&
-        (link += `accentColor=${data.accent_color.replace('#', '')}&`);
-      bannerColor && (link += `bannerColor=${bannerColor}&`);
-      activity && (link += `activityData=${encodeURIComponent(JSON.stringify(data.activity))}&`);
-      mood && (link += `moodData=${encodeURIComponent(JSON.stringify(data.mood))}&`);
-
-      const page: Page = await browser.newPage();
-      await page.setCacheEnabled(true);
-      await page.setViewport({ width: 1350, height: 450 });
-      await page.setRequestInterception(true);
-      page.on('request', (request) => {
-        request.url().includes('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro')
-          ? request.abort()
-          : request.continue();
-      });
-
-      await page.goto(
-        `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
+      const fullLink = await getLargeCardLink(
+        root,
+        id,
+        res,
+        req.query as { [key: string]: string }
       );
+      if (!fullLink) {
+        res.status(500).send('Internal Server Error');
+        return;
+      }
+      const refinerTime = Date.now() - startRefiner;
 
-      await page.waitForResponse((response) => response.url().includes(`avatars/${id}`));
-      await page.waitForSelector('#banner');
+      const startBrowser = Date.now();
+      const [page, firstTime]: [Page, boolean] = await selectPage(id, 'large');
+
+      if (firstTime) {
+        await page.goto(fullLink, { waitUntil: 'networkidle' });
+      } else {
+        await page.goto(fullLink);
+        for (const img of await page.getByRole('img').all()) {
+          await expect(img).toHaveJSProperty('complete', true);
+          await expect(img).not.toHaveJSProperty('naturalWidth', 0);
+        }
+        await page.waitForSelector('#banner');
+      }
 
       const maxHeight = await page.evaluate(() => {
         const elements = document.querySelectorAll('#disi-large-card');
-        let maxElementHeight = 0;
 
+        let maxElementHeight = 0;
         elements.forEach((element) => {
           const { height } = element.getBoundingClientRect();
           maxElementHeight = Math.max(maxElementHeight, height);
         });
+
         return maxElementHeight;
       });
+
       const screenshotBuffer = await page.screenshot({
         clip: { x: 0, y: 0, width: 807, height: maxHeight },
       });
       res.set('Content-Type', 'image/png');
       res.send(screenshotBuffer);
-      await page.close();
-      logTimestamp('Large', 'PNG', id);
+      const browserTime = Date.now() - startBrowser;
+
+      logTimestamp('Large', 'PNG', id, refinerTime, browserTime);
     } catch (error) {
       res.status(500).send('Internal Server Error');
       console.error(error);
@@ -343,9 +296,17 @@ app.post('/uploadbanner', async (req, res) => {
   }
 });
 
-function logTimestamp(type: string, format: string, id: string) {
-  const timestamp = new Date().toISOString().replace('T', ' ').replace(/\..+/, '');
-  console.log(`[${timestamp} UTC] ${type}, ${format}, ${id}`);
+function logTimestamp(
+  type: string,
+  format: string,
+  id: string,
+  refinerTime: number,
+  browserTime: number
+) {
+  const timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+  console.log(
+    `[${timestamp}] ${type}, ${format}, ${id}, Refiner: ${refinerTime}ms, Browser: ${browserTime}ms, Total: ${refinerTime + browserTime}ms`
+  );
 }
 
 app.listen(1911);
