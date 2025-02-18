@@ -97,11 +97,9 @@ initBrowser().catch((error) => {
   process.exit(1);
 });
 
-// eslint-disable-next-line prefer-const
-let smallPages: { [key: string]: Page } = {};
+const smallPages: { [key: string]: Page } = {};
 
-// eslint-disable-next-line prefer-const
-let largePages: { [key: string]: Page } = {};
+const largePages: { [key: string]: Page } = {};
 
 app.get('/smallcard/:id', async (req: Request, res: Response) => {
   try {
@@ -127,8 +125,18 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
 
       let page: Page;
       let firstTime = false;
-      if (smallPages[id]) {
+
+      if (smallPages[id] && !smallPages[id].isClosed()) {
         page = smallPages[id];
+
+        await page.removeAllListeners('request');
+        await page.setRequestInterception(true);
+        page.on('request', (request) => {
+          request.url().includes('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro')
+            ? request.abort()
+            : request.continue();
+        });
+
         await page.goto('about:blank');
       } else {
         page = await browser.newPage();
@@ -144,18 +152,20 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
         firstTime = true;
       }
 
-      firstTime
-        ? await page.goto(
-            `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
-            {
-              waitUntil: 'networkidle0',
-            }
-          )
-        : await page.goto(
-            `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
-          );
-      !firstTime &&
-        (await page.waitForResponse((response) => response.url().includes(`avatars/${id}`)));
+      if (firstTime) {
+        await page.goto(
+          `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
+          {
+            waitUntil: 'networkidle0',
+          }
+        );
+      } else {
+        await page.goto(
+          `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
+        );
+
+        await page.waitForResponse((response) => response.url().includes(`avatars/${id}`));
+      }
 
       const screenshotBuffer = await page.screenshot({
         clip: { x: 0, y: 0, width: 1350, height: 450 },
@@ -305,13 +315,23 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
 
       let page: Page;
       let firstTime = false;
-      if (largePages[id]) {
+
+      if (largePages[id] && !largePages[id].isClosed()) {
         page = largePages[id];
+
+        await page.removeAllListeners('request');
+        await page.setRequestInterception(true);
+        page.on('request', (request) => {
+          request.url().includes('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro')
+            ? request.abort()
+            : request.continue();
+        });
+
         await page.goto('about:blank');
       } else {
         page = await browser.newPage();
         await page.setCacheEnabled(true);
-        await page.setViewport({ width: 807, height: 1200 });
+        await page.setViewport({ width: 1350, height: 450 });
         await page.setRequestInterception(true);
         page.on('request', (request) => {
           request.url().includes('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro')
@@ -322,20 +342,21 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
         firstTime = true;
       }
 
-      firstTime
-        ? await page.goto(
-            `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
-            {
-              waitUntil: 'networkidle0',
-            }
-          )
-        : await page.goto(
-            `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
-          );
-      !firstTime &&
-        (await page.waitForResponse((response) => response.url().includes(`avatars/${id}`)));
+      if (firstTime) {
+        await page.goto(
+          `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
+          {
+            waitUntil: 'networkidle0',
+          }
+        );
+      } else {
+        await page.goto(
+          `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
+        );
 
-      await page.waitForSelector('#banner');
+        await page.waitForResponse((response) => response.url().includes(`avatars/${id}`));
+        await page.waitForSelector('#banner');
+      }
 
       const maxHeight = await page.evaluate(() => {
         const elements = document.querySelectorAll('#disi-large-card');
