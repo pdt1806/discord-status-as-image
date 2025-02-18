@@ -97,10 +97,6 @@ initBrowser().catch((error) => {
   process.exit(1);
 });
 
-const smallPages: { [key: string]: Page } = {};
-
-const largePages: { [key: string]: Page } = {};
-
 app.get('/smallcard/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -123,46 +119,28 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
       activity && (link += `activityData=${encodeURIComponent(JSON.stringify(data.activity))}&`);
       mood && (link += `moodData=${encodeURIComponent(JSON.stringify(data.mood))}&`);
 
-      let page: Page;
-      let firstTime = false;
+      const page: Page = await browser.newPage();
+      await page.setCacheEnabled(true);
+      await page.setViewport({ width: 1350, height: 450 });
+      await page.setRequestInterception(true);
+      page.on('request', (request) => {
+        request.url().includes('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro')
+          ? request.abort()
+          : request.continue();
+      });
 
-      if (smallPages[id] && !smallPages[id].isClosed()) {
-        page = smallPages[id];
-      } else {
-        page = await browser.newPage();
-        await page.setCacheEnabled(true);
-        await page.setViewport({ width: 1350, height: 450 });
-        await page.setRequestInterception(true);
-        page.on('request', (request) => {
-          request.url().includes('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro')
-            ? request.abort()
-            : request.continue();
-        });
-        smallPages[id] = page;
-        firstTime = true;
-      }
+      await page.goto(
+        `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
+      );
 
-      if (firstTime) {
-        await page.goto(
-          `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
-          {
-            waitUntil: 'networkidle0',
-          }
-        );
-      } else {
-        await page.goto(
-          `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
-        );
-
-        await page.waitForResponse((response) => response.url().includes(`avatars/${id}`));
-      }
+      await page.waitForResponse((response) => response.url().includes(`avatars/${id}`));
 
       const screenshotBuffer = await page.screenshot({
         clip: { x: 0, y: 0, width: 1350, height: 450 },
       });
       res.set('Content-Type', 'image/png');
       res.send(screenshotBuffer);
-
+      await page.close();
       logTimestamp('Small', 'PNG', id);
     } catch (error) {
       res.status(500).send('Internal Server Error');
@@ -303,40 +281,22 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       activity && (link += `activityData=${encodeURIComponent(JSON.stringify(data.activity))}&`);
       mood && (link += `moodData=${encodeURIComponent(JSON.stringify(data.mood))}&`);
 
-      let page: Page;
-      let firstTime = false;
+      const page: Page = await browser.newPage();
+      await page.setCacheEnabled(true);
+      await page.setViewport({ width: 1350, height: 450 });
+      await page.setRequestInterception(true);
+      page.on('request', (request) => {
+        request.url().includes('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro')
+          ? request.abort()
+          : request.continue();
+      });
 
-      if (largePages[id] && !largePages[id].isClosed()) {
-        page = largePages[id];
-      } else {
-        page = await browser.newPage();
-        await page.setCacheEnabled(true);
-        await page.setViewport({ width: 1350, height: 450 });
-        await page.setRequestInterception(true);
-        page.on('request', (request) => {
-          request.url().includes('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro')
-            ? request.abort()
-            : request.continue();
-        });
-        largePages[id] = page;
-        firstTime = true;
-      }
+      await page.goto(
+        `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
+      );
 
-      if (firstTime) {
-        await page.goto(
-          `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
-          {
-            waitUntil: 'networkidle0',
-          }
-        );
-      } else {
-        await page.goto(
-          `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
-        );
-
-        await page.waitForResponse((response) => response.url().includes(`avatars/${id}`));
-        await page.waitForSelector('#banner');
-      }
+      await page.waitForResponse((response) => response.url().includes(`avatars/${id}`));
+      await page.waitForSelector('#banner');
 
       const maxHeight = await page.evaluate(() => {
         const elements = document.querySelectorAll('#disi-large-card');
@@ -353,7 +313,7 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       });
       res.set('Content-Type', 'image/png');
       res.send(screenshotBuffer);
-
+      await page.close();
       logTimestamp('Large', 'PNG', id);
     } catch (error) {
       res.status(500).send('Internal Server Error');
