@@ -79,7 +79,6 @@ app.get('/', (_: Request, res: Response) => {
 });
 
 let browser: Browser;
-// let imagePage: Page;
 
 async function initBrowser() {
   browser = await puppeteer.launch({
@@ -157,7 +156,6 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
           );
       !firstTime &&
         (await page.waitForResponse((response) => response.url().includes(`avatars/${id}`)));
-      await page.waitForSelector('#avatar');
 
       const screenshotBuffer = await page.screenshot({
         clip: { x: 0, y: 0, width: 1350, height: 450 },
@@ -336,6 +334,7 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
           );
       !firstTime &&
         (await page.waitForResponse((response) => response.url().includes(`avatars/${id}`)));
+
       await page.waitForSelector('#banner');
 
       const maxHeight = await page.evaluate(() => {

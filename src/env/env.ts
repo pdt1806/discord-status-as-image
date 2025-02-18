@@ -11,4 +11,4 @@ export const web = {
   true: 'http://localhost:5173',
 };
 
-export const debugging = 'true';
+export const debugging = 'false';
