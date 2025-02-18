@@ -1,13 +1,14 @@
 export const refinerAPI = {
-  prod: 'https://refiner-api.bennynguyen.dev',
-  dev: 'http://localhost:7000',
+  false: 'https://refiner-api.bennynguyen.dev',
+  true: 'http://localhost:7000',
 };
 export const disiAPI = {
-  prod: 'https://disi-api.bennynguyen.dev',
-  dev: 'http://localhost:1911',
+  false: 'https://disi-api.bennynguyen.dev',
+  true: 'http://localhost:1911',
 };
 export const web = {
-  prod: 'https://disi.bennynguyen.dev',
-  dev: 'http://localhost:5173',
+  false: 'https://disi.bennynguyen.dev',
+  true: 'http://localhost:5173',
 };
-export const debugging = false;
+
+export const debugging = 'false';

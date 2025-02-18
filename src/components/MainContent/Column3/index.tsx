@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import {
   Box,
   Combobox,
@@ -70,9 +71,7 @@ const MainContentColumn3 = ({
     {
       value: '🔗 Copy Image URL (.svg)',
       execute: () => {
-        navigator.clipboard.writeText(
-          `${debugging ? disiAPI.dev : disiAPI.prod}/smallcard_svg/${userID}?${smallTail}`
-        );
+        navigator.clipboard.writeText(`${disiAPI[debugging]}/smallcard_svg/${userID}?${smallTail}`);
         copiedNotification();
       },
     },
@@ -80,7 +79,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy Markdown (.svg)',
       execute: () => {
         navigator.clipboard.writeText(
-          `[![My Discord](${debugging ? disiAPI.dev : disiAPI.prod}/smallcard_svg/${userID}?${smallTail})](https://discord.com/users/${userID})`
+          `[![My Discord](${disiAPI[debugging]}/smallcard_svg/${userID}?${smallTail})](https://discord.com/users/${userID})`
         );
         copiedNotification();
       },
@@ -89,7 +88,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy iframe (live card)',
       execute: () => {
         navigator.clipboard.writeText(
-          `<iframe src="${debugging ? web.dev : web.prod}/smallcard?id=${userID}${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
+          `<iframe src="${web[debugging]}/smallcard?id=${userID}${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
         );
         copiedNotification();
       },
@@ -129,7 +128,7 @@ const MainContentColumn3 = ({
       value: '🔗 Copy iframe (live card)',
       execute: () => {
         navigator.clipboard.writeText(
-          `<iframe src="${debugging ? web.dev : web.prod}/largecard?id=${userID}${largeTail}" name="disi-large-card" height="219.7px" width="300px"></iframe>`
+          `<iframe src="${web[debugging]}/largecard?id=${userID}${largeTail}" name="disi-large-card" height="219.7px" width="300px"></iframe>`
         );
         copiedNotification();
       },
@@ -175,7 +174,7 @@ const MainContentColumn3 = ({
   }, [largeCardLink]);
 
   return (
-    <Table.Td>
+    <Table.Td style={{ verticalAlign: 'top' }}>
       {smallCardLink !== '' ? (
         <Box
           display="flex"
@@ -294,9 +293,13 @@ const MainContentColumn3 = ({
               </Text>
             </Box>
           )}
+          <Text mt="sm" style={{ fontSize: '15px' }}>
+            The first time you load the card(s), it may take a while for the image to be loaded.
+            After that, the images are cached and will load faster.
+          </Text>
         </Box>
       ) : (
-        <Box>
+        <Box mt="xl">
           <Text>Complete the previous steps correctly and your card(s) will show here!</Text>
           <Text>It may take a while for the image(s) to be loaded.</Text>
         </Box>

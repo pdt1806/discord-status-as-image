@@ -40,10 +40,10 @@ const LargeCard = () => {
   const pronouns = decodeURIComponent(params.get('pronouns') || '');
   const bannerID = params.get('bannerID');
   const [activity, setActivity] = useState<ActivityType | null>(
-    localStorage.getItem('activity') ? JSON.parse(localStorage.getItem('activity')!) : null
+    params.get('activityData') ? JSON.parse(decodeURIComponent(params.get('activityData')!)) : null
   );
   const [mood, setMood] = useState<MoodType | null>(
-    localStorage.getItem('mood') ? JSON.parse(localStorage.getItem('mood')!) : null
+    params.get('moodData') ? JSON.parse(decodeURIComponent(params.get('moodData')!)) : null
   );
 
   const bg1 = params.get('bg1');

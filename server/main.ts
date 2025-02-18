@@ -1,17 +1,17 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
 import express, { Request, Response } from 'express';
-import puppeteer from 'puppeteer-core';
-import { debugging } from '../src/env/env';
+import puppeteer, { Browser, Page } from 'puppeteer-core';
+import { debugging, web } from '../src/env/env';
 import { getBannerImage } from '../src/pocketbase_client/index';
 import { bgIsLight, blendColors, hexToRgb, setSmallCardTitleSize } from '../src/utils/tools';
-import { RefinerResponse } from '../src/utils/types';
 import { iconsListSmall } from './icons';
 import { uploadBannerImage } from './pocketbase_server';
 import { smallcardSvgContent } from './svgContent';
 import { base64toFile, fetchData, urlToBase64 } from './utils';
 
-const root = debugging ? 'http://localhost:5173' : 'https://disi.bennynguyen.dev';
+const root = web[debugging];
 
 const origin = debugging ? '*' : 'https://disi.bennynguyen.dev';
 
@@ -78,6 +78,31 @@ app.get('/', (_: Request, res: Response) => {
   res.send({ message: 'API of Discord Status as Image' });
 });
 
+let browser: Browser;
+
+async function initBrowser() {
+  browser = await puppeteer.launch({
+    headless: true,
+    executablePath: '/usr/bin/chromium-browser',
+    args: minimal_args,
+  });
+  console.log('Browser started.');
+
+  console.log('Server is running on http://localhost:1911');
+}
+
+// Initialize browser when server starts
+initBrowser().catch((error) => {
+  console.error('Failed to start browser:', error);
+  process.exit(1);
+});
+
+// eslint-disable-next-line prefer-const
+let smallPages: { [key: string]: Page } = {};
+
+// eslint-disable-next-line prefer-const
+let largePages: { [key: string]: Page } = {};
+
 app.get('/smallcard/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -97,39 +122,48 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
       created && (link += `createdDate=${data.created_at}&`);
       discordLabel && (link += 'discordLabel=true&');
       wantAccentColor && data.accent_color && (link += `bg=${data.accent_color.replace('#', '')}&`);
-      const browser = await puppeteer.launch({
-        executablePath: '/usr/bin/chromium-browser',
-        args: minimal_args,
-      });
-      const page = await browser.newPage();
-      await page.setViewport({ width: 1350, height: 450 });
-      await page.goto(
-        `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
-      );
-      activity
-        ? await page.evaluate((data: RefinerResponse) => {
-            localStorage.setItem('activity', JSON.stringify(data.activity));
-          }, data)
-        : await page.evaluate(() => {
-            localStorage.removeItem('activity');
-          });
-      mood
-        ? await page.evaluate((data: RefinerResponse) => {
-            localStorage.setItem('mood', JSON.stringify(data.mood));
-          }, data)
-        : await page.evaluate(() => {
-            localStorage.removeItem('mood');
-          });
-      await page.goto(
-        `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
-        { waitUntil: ['networkidle0'] }
-      );
+      activity && (link += `activityData=${encodeURIComponent(JSON.stringify(data.activity))}&`);
+      mood && (link += `moodData=${encodeURIComponent(JSON.stringify(data.mood))}&`);
+
+      let page: Page;
+      let firstTime = false;
+      if (smallPages[id]) {
+        page = smallPages[id];
+        await page.goto('about:blank');
+      } else {
+        page = await browser.newPage();
+        await page.setCacheEnabled(true);
+        await page.setViewport({ width: 1350, height: 450 });
+        await page.setRequestInterception(true);
+        page.on('request', (request) => {
+          request.url().includes('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro')
+            ? request.abort()
+            : request.continue();
+        });
+        smallPages[id] = page;
+        firstTime = true;
+      }
+
+      firstTime
+        ? await page.goto(
+            `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
+            {
+              waitUntil: 'networkidle0',
+            }
+          )
+        : await page.goto(
+            `${link}displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
+          );
+      !firstTime &&
+        (await page.waitForResponse((response) => response.url().includes(`avatars/${id}`)));
+
       const screenshotBuffer = await page.screenshot({
         clip: { x: 0, y: 0, width: 1350, height: 450 },
       });
       res.set('Content-Type', 'image/png');
       res.send(screenshotBuffer);
-      await browser.close();
+
+      logTimestamp('Small', 'PNG', id);
     } catch (error) {
       res.status(500).send('Internal Server Error');
       console.error(error);
@@ -209,6 +243,8 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
         'Content-Type': 'image/svg+xml',
       });
       res.send(svgContent);
+
+      logTimestamp('Small', 'SVG', id);
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }
@@ -264,34 +300,43 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
         data.accent_color &&
         (link += `accentColor=${data.accent_color.replace('#', '')}&`);
       bannerColor && (link += `bannerColor=${bannerColor}&`);
-      const browser = await puppeteer.launch({
-        executablePath: '/usr/bin/chromium-browser',
-        args: minimal_args,
-      });
-      const page = await browser.newPage();
-      await page.setViewport({ width: 807, height: 1200 });
-      await page.goto(
-        `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
-      );
-      activity
-        ? await page.evaluate((data: RefinerResponse) => {
-            localStorage.setItem('activity', JSON.stringify(data.activity));
-          }, data)
-        : await page.evaluate(() => {
-            localStorage.removeItem('activity');
-          });
-      mood
-        ? await page.evaluate((data: RefinerResponse) => {
-            localStorage.setItem('mood', JSON.stringify(data.mood));
-          }, data)
-        : await page.evaluate(() => {
-            localStorage.removeItem('mood');
-          });
-      await page.goto(
-        `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
-        { waitUntil: ['networkidle0'] }
-      );
+      activity && (link += `activityData=${encodeURIComponent(JSON.stringify(data.activity))}&`);
+      mood && (link += `moodData=${encodeURIComponent(JSON.stringify(data.mood))}&`);
+
+      let page: Page;
+      let firstTime = false;
+      if (largePages[id]) {
+        page = largePages[id];
+        await page.goto('about:blank');
+      } else {
+        page = await browser.newPage();
+        await page.setCacheEnabled(true);
+        await page.setViewport({ width: 807, height: 1200 });
+        await page.setRequestInterception(true);
+        page.on('request', (request) => {
+          request.url().includes('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro')
+            ? request.abort()
+            : request.continue();
+        });
+        largePages[id] = page;
+        firstTime = true;
+      }
+
+      firstTime
+        ? await page.goto(
+            `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`,
+            {
+              waitUntil: 'networkidle0',
+            }
+          )
+        : await page.goto(
+            `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar}&status=${data.status}&id=${id}`
+          );
+      !firstTime &&
+        (await page.waitForResponse((response) => response.url().includes(`avatars/${id}`)));
+
       await page.waitForSelector('#banner');
+
       const maxHeight = await page.evaluate(() => {
         const elements = document.querySelectorAll('#disi-large-card');
         let maxElementHeight = 0;
@@ -307,7 +352,8 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       });
       res.set('Content-Type', 'image/png');
       res.send(screenshotBuffer);
-      await browser.close();
+
+      logTimestamp('Large', 'PNG', id);
     } catch (error) {
       res.status(500).send('Internal Server Error');
       console.error(error);
@@ -336,4 +382,9 @@ app.post('/uploadbanner', async (req, res) => {
   }
 });
 
-app.listen(1911, () => console.log('Server is running on http://localhost:1911'));
+function logTimestamp(type: string, format: string, id: string) {
+  const timestamp = new Date().toISOString().replace('T', ' ').replace(/\..+/, '');
+  console.log(`[${timestamp} UTC] ${type}, ${format}, ${id}`);
+}
+
+app.listen(1911);

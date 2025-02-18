@@ -25,9 +25,7 @@ export const generatingCards = async (
     throw new Error('Invalid banner ID');
   }
 
-  const res = await fetch(
-    `${debugging ? refinerAPI.dev : refinerAPI.prod}/username/${form.values.username}`
-  );
+  const res = await fetch(`${refinerAPI[debugging]}/username/${form.values.username}`);
   if (res.status === 404) throw new Error('User not found');
 
   const data = await res.json();
@@ -38,7 +36,7 @@ export const generatingCards = async (
     const body = {
       image: await fileToBase64(bannerFile),
     };
-    const response = await fetch(`${debugging ? disiAPI.dev : disiAPI.prod}/uploadbanner`, {
+    const response = await fetch(`${disiAPI[debugging]}/uploadbanner`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -86,7 +84,6 @@ export const generatingCards = async (
 
   setSmallTail(smallTail);
   setLargeTail(largeTail);
-  setSmallCardLink(`${debugging ? disiAPI.dev : disiAPI.prod}/smallcard/${data.id}?${smallTail}`);
-  wantLargeCard &&
-    setLargeCardLink(`${debugging ? disiAPI.dev : disiAPI.prod}/largecard/${data.id}?${largeTail}`);
+  setSmallCardLink(`${disiAPI[debugging]}/smallcard/${data.id}?${smallTail}`);
+  wantLargeCard && setLargeCardLink(`${disiAPI[debugging]}/largecard/${data.id}?${largeTail}`);
 };

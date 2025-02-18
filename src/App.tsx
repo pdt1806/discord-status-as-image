@@ -2,44 +2,77 @@ import { createTheme, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
+import React, { Suspense } from 'react';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
-import LargeCard from './components/LargeCard';
-import Layout from './components/Layout';
-import SmallCard from './components/SmallCard';
-import Document from './pages/Document';
-import { Error404 } from './pages/Error/404';
-import Home from './pages/Home';
+import Fallback from './components/Fallback';
 
+// Dynamically import components using React.lazy
+const LargeCard = React.lazy(() => import('./components/LargeCard'));
+const Layout = React.lazy(() => import('./components/Layout'));
+const SmallCard = React.lazy(() => import('./components/SmallCard'));
+const Document = React.lazy(() => import('./pages/Document'));
+const Error404 = React.lazy(() => import('./pages/Error/404'));
+const Home = React.lazy(() => import('./pages/Home'));
+
+// Define the routes with lazy-loaded components
 const routes: RouteObject[] = [
   {
     path: '/',
-    element: <Layout />,
+    element: (
+      <Suspense fallback={<Fallback />}>
+        <Layout />
+      </Suspense>
+    ),
     children: [
       {
         path: '/',
-        element: <Home />,
+        element: (
+          <Suspense fallback={<Fallback />}>
+            <Home />
+          </Suspense>
+        ),
       },
       {
         path: '/privacy-policy',
-        element: <Document id="7hlma44bu7vgn4i" />,
+        element: (
+          <Suspense fallback={<Fallback />}>
+            <Document id="7hlma44bu7vgn4i" />
+          </Suspense>
+        ),
       },
       {
         path: '/terms-of-service',
-        element: <Document id="3tplcyq2zeby7ce" />,
+        element: (
+          <Suspense fallback={<Fallback />}>
+            <Document id="3tplcyq2zeby7ce" />
+          </Suspense>
+        ),
       },
       {
         path: '/*',
-        element: <Error404 />,
+        element: (
+          <Suspense fallback={<Fallback />}>
+            <Error404 />
+          </Suspense>
+        ),
       },
     ],
   },
   {
     path: '/smallcard',
-    element: <SmallCard />,
+    element: (
+      <Suspense fallback={<Fallback />}>
+        <SmallCard />
+      </Suspense>
+    ),
   },
   {
     path: '/largecard',
-    element: <LargeCard />,
+    element: (
+      <Suspense fallback={<Fallback />}>
+        <LargeCard />
+      </Suspense>
+    ),
   },
 ];
 

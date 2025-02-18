@@ -1,14 +1,15 @@
-import { Box, Loader } from '@mantine/core';
+import { Box } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { debugging, disiAPI, refinerAPI } from '../../env/env';
 import { Error500 } from '../../pages/Error/500';
+import Fallback from '../Fallback';
 import Footer from '../Footer';
 import Header from '../Header';
 import ModalNoti from '../ModalNoti';
 
 const Layout = () => {
-  const [page, setPage] = useState(<Loader color="white" type="bars" ml="auto" mr="auto" />);
+  const [page, setPage] = useState(<Fallback />);
   const navigate = useNavigate();
 
   const proceedToDemo = () => {
@@ -28,9 +29,9 @@ const Layout = () => {
           controller.abort();
         }, 3000);
 
-        const responseAPI = await fetch(debugging ? disiAPI.dev : disiAPI.prod, { signal });
+        const responseAPI = await fetch(disiAPI[debugging], { signal });
         const responsePB = await fetch('https://disi-pb.bennynguyen.dev/api', { signal });
-        const responseRefiner = await fetch(debugging ? refinerAPI.dev : refinerAPI.prod, {
+        const responseRefiner = await fetch(refinerAPI[debugging], {
           signal,
         });
 

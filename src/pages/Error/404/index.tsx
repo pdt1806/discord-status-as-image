@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import classes from './index.module.css';
 
-export function Error404() {
+export default function Error404() {
   return (
     <Container className={classes.root}>
       <Helmet>
