@@ -19,10 +19,10 @@ const SmallCard = () => {
   const [createdDate, setCreatedDate] = useState(params.get('createdDate'));
   const [statusImage, setStatusImage] = useState(setStatusImg(status || 'offline'));
   const [activity, setActivity] = useState<ActivityType | null>(
-    localStorage.getItem('activity') ? JSON.parse(localStorage.getItem('activity')!) : null
+    params.get('activityData') ? JSON.parse(decodeURIComponent(params.get('activityData')!)) : null
   );
   const [mood, setMood] = useState<MoodType | null>(
-    localStorage.getItem('mood') ? JSON.parse(localStorage.getItem('mood')!) : null
+    params.get('moodData') ? JSON.parse(decodeURIComponent(params.get('moodData')!)) : null
   );
 
   const id = params.get('id');
@@ -62,6 +62,7 @@ const SmallCard = () => {
   }, []);
 
   useEffect(() => {
+    if (params.get('displayName')) return;
     const intervalID = setInterval(() => {
       updateStatus(
         id || '',
@@ -93,7 +94,7 @@ const SmallCard = () => {
         }}
         className={innerClasses.smallCard}
       >
-        <Image alt="Avatar" src={avatar} className={classes.avatar} />
+        <Image alt="Avatar" src={avatar} className={classes.avatar} id="avatar" />
         <Avatar className={innerClasses.statusImage} src={statusImage} />
         <Box style={{ transform: 'translateX(-10px)' }}>
           <Flex mih={130} direction="column" justify="end">
