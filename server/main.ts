@@ -128,16 +128,6 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
 
       if (smallPages[id] && !smallPages[id].isClosed()) {
         page = smallPages[id];
-
-        await page.removeAllListeners('request');
-        await page.setRequestInterception(true);
-        page.on('request', (request) => {
-          request.url().includes('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro')
-            ? request.abort()
-            : request.continue();
-        });
-
-        await page.goto('about:blank');
       } else {
         page = await browser.newPage();
         await page.setCacheEnabled(true);
@@ -318,16 +308,6 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
 
       if (largePages[id] && !largePages[id].isClosed()) {
         page = largePages[id];
-
-        await page.removeAllListeners('request');
-        await page.setRequestInterception(true);
-        page.on('request', (request) => {
-          request.url().includes('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro')
-            ? request.abort()
-            : request.continue();
-        });
-
-        await page.goto('about:blank');
       } else {
         page = await browser.newPage();
         await page.setCacheEnabled(true);
