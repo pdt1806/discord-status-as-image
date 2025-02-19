@@ -138,7 +138,13 @@ const LargeCard = () => {
           />
         )}
         <Box style={{ transform: 'scale(0.8) translate(20px, -180px)', position: 'absolute' }}>
-          <Image alt="Avatar" src={avatar} className={classes.avatar} crossOrigin="anonymous" />
+          <Image
+            alt="Avatar"
+            src={avatar}
+            className={classes.avatar}
+            id="avatar"
+            crossOrigin="anonymous"
+          />
           <Image src={statusImage} className={innerClasses.statusImage} crossOrigin="anonymous" />
         </Box>
         {(!mood ||

@@ -3,6 +3,7 @@
 /* eslint-disable consistent-return */
 import express, { Request, Response } from 'express';
 import playwright, { Browser, Page } from 'playwright';
+import { expect } from 'playwright/test';
 import { debugging, web } from '../src/env/env';
 import { bgIsLight, blendColors, hexToRgb, setSmallCardTitleSize } from '../src/utils/tools';
 import { iconsListSmall } from './icons';
@@ -96,19 +97,18 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
       const startBrowser = Date.now();
       const [page, firstTime]: [Page, boolean] = await selectPage(id, 'small');
 
-      // if (firstTime) {
-      //   await page.goto(fullLink, { waitUntil: 'networkidle' });
-      // } else {
-      //   await page.goto(fullLink);
-      //   const images = await page.getByRole('img').all();
-      //   await Promise.all(
-      //     images.map(async (img) => {
-      //       await expect(img).toHaveJSProperty('complete', true);
-      //       await expect(img).not.toHaveJSProperty('naturalWidth', 0);
-      //     })
-      //   );
-      // }
-      await page.goto(fullLink, { waitUntil: 'networkidle' });
+      if (firstTime) {
+        await page.goto(fullLink, { waitUntil: 'networkidle' });
+      } else {
+        await page.goto(fullLink);
+        await page.locator('#avatar').waitFor();
+        const images = await page.getByRole('img').all();
+        await Promise.all(
+          images.map(async (img) => {
+            await expect(img).not.toHaveJSProperty('naturalWidth', 0);
+          })
+        );
+      }
 
       const screenshotBuffer = await page.screenshot({
         clip: { x: 0, y: 0, width: 1350, height: 450 },
@@ -236,20 +236,18 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       const startBrowser = Date.now();
       const [page, firstTime]: [Page, boolean] = await selectPage(id, 'large');
 
-      // if (firstTime) {
-      //   await page.goto(fullLink, { waitUntil: 'networkidle' });
-      // } else {
-      //   await page.goto(fullLink);
-      //   const images = await page.getByRole('img').all();
-      //   await Promise.all(
-      //     images.map(async (img) => {
-      //       await expect(img).toHaveJSProperty('complete', true);
-      //       await expect(img).not.toHaveJSProperty('naturalWidth', 0);
-      //     })
-      //   );
-      //   await page.waitForSelector('#banner');
-      // }
-      await page.goto(fullLink, { waitUntil: 'networkidle' });
+      if (firstTime) {
+        await page.goto(fullLink, { waitUntil: 'networkidle' });
+      } else {
+        await page.goto(fullLink);
+        await page.locator('#avatar').waitFor();
+        const images = await page.getByRole('img').all();
+        await Promise.all(
+          images.map(async (img) => {
+            await expect(img).not.toHaveJSProperty('naturalWidth', 0);
+          })
+        );
+      }
 
       const maxHeight = await page.evaluate(() => {
         const elements = document.querySelectorAll('#disi-large-card');
