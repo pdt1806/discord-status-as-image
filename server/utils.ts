@@ -84,8 +84,8 @@ export const minimal_args = [
   '--use-mock-keychain',
   '--headless',
 
-  // '--disable-web-security',
-  // '--allow-running-insecure-content',
+  '--disable-web-security',
+  '--allow-running-insecure-content',
 ];
 
 export const getSmallCardLink = async (
