@@ -13,6 +13,7 @@ import {
   Title,
   useCombobox,
 } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
 import { debugging, disiAPI, web } from '../../../env/env';
 
@@ -164,13 +165,38 @@ const MainContentColumn3 = ({
   const [largeCardLoading, setLargeCardLoading] = useState(true);
 
   useEffect(() => {
+    const smallCardElement = document.getElementById('small-card-image');
     setSmallCardLoading(true);
-    document.getElementById('small-card-image')?.setAttribute('style', 'display: none');
+    smallCardElement?.setAttribute('style', 'display: none');
+
+    setTimeout(() => {
+      if (smallCardElement?.getAttribute('style') === 'display: none') {
+        notifications.show({
+          title: 'Error!',
+          message: "Small card couldn't be loaded. Please try again.",
+          color: 'red',
+          icon: null,
+          autoClose: 5000,
+        });
+      }
+    }, 5000);
   }, [smallCardLink]);
 
   useEffect(() => {
+    const largeCardElement = document.getElementById('large-card-image');
     setLargeCardLoading(true);
-    document.getElementById('large-card-image')?.setAttribute('style', 'display: none');
+    largeCardElement?.setAttribute('style', 'display: none');
+    setTimeout(() => {
+      if (largeCardElement?.getAttribute('style') === 'display: none') {
+        notifications.show({
+          title: 'Error!',
+          message: "Large card couldn't be loaded. Please try again.",
+          color: 'red',
+          icon: null,
+          autoClose: 5000,
+        });
+      }
+    }, 5000);
   }, [largeCardLink]);
 
   return (

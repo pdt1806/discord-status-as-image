@@ -4,6 +4,8 @@ import { getBannerImage } from '../../../pocketbase_client';
 import { fileToBase64 } from '../../../utils/tools';
 import { DISIForm } from '../../../utils/types';
 
+const users: { username: string; id: string }[] = [];
+
 export const generatingCards = async (
   form: UseFormReturnType<DISIForm, (values: DISIForm) => DISIForm>,
   customBannerMode: string,
@@ -25,11 +27,26 @@ export const generatingCards = async (
     throw new Error('Invalid banner ID');
   }
 
-  const res = await fetch(`${refinerAPI[debugging]}/username/${form.values.username}`);
-  if (res.status === 404) throw new Error('User not found');
+  let userID: string;
 
-  const data = await res.json();
-  setUserID(data.id);
+  userID =
+    users.find((user: { username: string; id: string }) => user.username === form.values.username)
+      ?.id || '';
+
+  if (userID === '') {
+    const res = await fetch(`${refinerAPI[debugging]}/username/${form.values.username}`);
+
+    if (res.status === 404) throw new Error('User not found');
+
+    const userData = await res.json();
+    users.push({
+      username: form.values.username as string,
+      id: userData.id,
+    });
+    userID = userData.id;
+  }
+
+  setUserID(userID);
 
   let newBannerID = '';
   if (bannerFile && customBannerMode === 'upload') {
@@ -83,7 +100,9 @@ export const generatingCards = async (
     (form.values.discordLabel ? '&discordLabel=true' : '');
 
   setSmallTail(smallTail);
-  setLargeTail(largeTail);
-  setSmallCardLink(`${disiAPI[debugging]}/smallcard/${data.id}?${smallTail}`);
-  wantLargeCard && setLargeCardLink(`${disiAPI[debugging]}/largecard/${data.id}?${largeTail}`);
+  setSmallCardLink(`${disiAPI[debugging]}/smallcard/${userID}?${smallTail}`);
+  if (wantLargeCard) {
+    setLargeTail(largeTail);
+    setLargeCardLink(`${disiAPI[debugging]}/largecard/${userID}?${largeTail}`);
+  }
 };

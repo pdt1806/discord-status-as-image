@@ -324,7 +324,7 @@ const MainContentColumn2 = ({
             autosize
             {...form.getInputProps('aboutMe')}
             placeholder={
-              'Write something about yourself.\n\nMax characters per line: 53\nFont family: Noto Sans TC'
+              'Write something about yourself.\n\nMax characters per line: 53\nMax number of lines: 5\nFont family: Noto Sans TC'
             }
             onChange={(e) => {
               form.setValues({

@@ -120,7 +120,6 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
       logTimestamp('Small', 'PNG', id, refinerTime, browserTime);
     } catch (error) {
       res.status(500).send('Internal Server Error');
-      console.error(error);
     }
   } catch (error) {
     res.status(500).send('Internal Server Error');
@@ -271,7 +270,6 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
       logTimestamp('Large', 'PNG', id, refinerTime, browserTime);
     } catch (error) {
       res.status(500).send('Internal Server Error');
-      console.error(error);
     }
   } catch (error) {
     res.status(500).send('Internal Server Error');
