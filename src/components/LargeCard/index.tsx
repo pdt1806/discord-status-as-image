@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import { ActionIcon, Box, Flex, Group, Image, Stack, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -90,6 +91,8 @@ const LargeCard = () => {
   };
 
   useEffect(() => {
+    if (params.get('displayName')) return; // request from back-end
+
     async function getBanner() {
       if (!bannerID) return;
       const banner: string = ((await getBannerImage(bannerID, false)) as string) || '';
@@ -102,6 +105,8 @@ const LargeCard = () => {
   }, []);
 
   useEffect(() => {
+    if (params.get('displayName')) return;
+
     const intervalID = setInterval(() => {
       updateStatus(updateStatusArgs);
     }, 15000);

@@ -44,25 +44,26 @@ const SmallCard = () => {
   }, [backgroundColor]);
 
   useEffect(() => {
-    if (!params.get('displayName')) {
-      updateStatus(
-        id || '',
-        params,
-        setDisplayName,
-        setAvatar,
-        setStatus,
-        setStatusImage,
-        setCreatedDate,
-        setBackgroundColor,
-        setActivity,
-        setMood
-      );
-    }
+    if (params.get('displayName')) return; // request from back-end
+    updateStatus(
+      id || '',
+      params,
+      setDisplayName,
+      setAvatar,
+      setStatus,
+      setStatusImage,
+      setCreatedDate,
+      setBackgroundColor,
+      setActivity,
+      setMood
+    );
+
     textColorFn(params, backgroundColor, setTextColor, setBackgroundGradient);
   }, []);
 
   useEffect(() => {
     if (params.get('displayName')) return;
+
     const intervalID = setInterval(() => {
       updateStatus(
         id || '',

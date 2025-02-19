@@ -53,13 +53,9 @@ async function initBrowser() {
     headless: true,
     args: minimal_args,
   });
-  console.log('Browser started.');
-
-  console.log('Server is running on http://localhost:1911');
 }
 
-// Initialize browser when server starts
-initBrowser().catch((error) => {
+await initBrowser().catch((error) => {
   console.error('Failed to start browser:', error);
   process.exit(1);
 });
@@ -105,10 +101,13 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
         await page.goto(fullLink, { waitUntil: 'networkidle' });
       } else {
         await page.goto(fullLink);
-        for (const img of await page.getByRole('img').all()) {
-          await expect(img).toHaveJSProperty('complete', true);
-          await expect(img).not.toHaveJSProperty('naturalWidth', 0);
-        }
+        const images = await page.getByRole('img').all();
+        await Promise.all(
+          images.map(async (img) => {
+            await expect(img).toHaveJSProperty('complete', true);
+            await expect(img).not.toHaveJSProperty('naturalWidth', 0);
+          })
+        );
       }
 
       const screenshotBuffer = await page.screenshot({
@@ -241,10 +240,13 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
         await page.goto(fullLink, { waitUntil: 'networkidle' });
       } else {
         await page.goto(fullLink);
-        for (const img of await page.getByRole('img').all()) {
-          await expect(img).toHaveJSProperty('complete', true);
-          await expect(img).not.toHaveJSProperty('naturalWidth', 0);
-        }
+        const images = await page.getByRole('img').all();
+        await Promise.all(
+          images.map(async (img) => {
+            await expect(img).toHaveJSProperty('complete', true);
+            await expect(img).not.toHaveJSProperty('naturalWidth', 0);
+          })
+        );
         await page.waitForSelector('#banner');
       }
 
@@ -309,4 +311,4 @@ function logTimestamp(
   );
 }
 
-app.listen(1911);
+app.listen(1911, () => console.log('Server is running on http://localhost:1911'));
