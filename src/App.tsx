@@ -3,6 +3,7 @@ import '@mantine/core/styles.css';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 import React, { Suspense } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
 import Fallback from './components/Fallback';
 
@@ -88,8 +89,10 @@ export default function App() {
         },
       })}
     >
-      <Notifications />
-      <RouterProvider router={router} />
+      <HelmetProvider>
+        <Notifications />
+        <RouterProvider router={router} />
+      </HelmetProvider>
     </MantineProvider>
   );
 }
