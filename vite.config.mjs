@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react';
+import path from 'path';
 import { defineConfig } from 'vite';
 import compression from 'vite-plugin-compression';
 
@@ -7,7 +8,7 @@ export default defineConfig({
   plugins: [react(), compression({ algorithm: 'brotliCompress' })],
   resolve: {
     alias: {
-      // '@': path.resolve(__dirname, 'src'),
+      '@': path.resolve(__dirname, 'src'),
       '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
     },
   },
@@ -18,7 +19,7 @@ export default defineConfig({
           if (id.includes('images')) return 'images';
 
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom')) return 'react-vendor';
+            // if (id.includes('react') || id.includes('react-dom')) return 'react-vendor';
             if (id.includes('lodash') || id.includes('axios')) return 'utils-vendor';
             return 'vendor';
           }

@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
+    "serve": "vite preview",
     "server": "cd server && npx tsx main.ts",
     "refiner": "cd .. && cd refiner-discord-bot && source refiner-venv/bin/activate && python main.py",
     "build": "tsc && vite build"
