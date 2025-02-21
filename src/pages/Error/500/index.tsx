@@ -13,7 +13,7 @@ import {
   Title,
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import classes from './index.module.css';
 
 export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {

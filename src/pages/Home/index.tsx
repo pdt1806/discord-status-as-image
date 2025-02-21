@@ -1,7 +1,7 @@
 import { Alert, Box, Center, Divider, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 import MainContent from '../../components/MainContent';
 import { fetchMaintenanceMessage } from '../../utils/tools';

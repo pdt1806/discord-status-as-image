@@ -1,6 +1,6 @@
 import { Box, Container, Loader, Paper, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 // eslint-disable-next-line import/no-cycle
 import { getDocument } from '../../pocketbase_client';
 import { monthsKey } from '../../utils/tools';

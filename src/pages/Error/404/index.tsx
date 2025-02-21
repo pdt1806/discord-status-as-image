@@ -1,5 +1,5 @@
 import { Box, Button, Container, Image, SimpleGrid, Text, Title } from '@mantine/core';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import classes from './index.module.css';
 
