@@ -1,7 +1,6 @@
 import { Box, Flex, Image, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-
 import { formatDate, getEmojiURLfromCDN, setSmallCardTitleSize } from '../../utils/tools';
 import { ActivityType, MoodType } from '../../utils/types';
 import { setStatusImg } from '../LargeCard/utils';
@@ -39,25 +38,26 @@ const SmallCard = () => {
   const [backgroundGradient, setBackgroundGradient] = useState('');
   const [textColor, setTextColor] = useState('');
 
+  const updateStatusArgs = {
+    id,
+    params,
+    setDisplayName,
+    setAvatar,
+    setStatus,
+    setStatusImage,
+    setCreatedDate,
+    setBackgroundColor,
+    setActivity,
+    setMood,
+  };
+
   useEffect(() => {
     textColorFn(params, backgroundColor, setTextColor, setBackgroundGradient);
   }, [backgroundColor]);
 
   useEffect(() => {
     if (params.get('displayName')) return; // request from back-end
-    updateStatus(
-      id || '',
-      params,
-      setDisplayName,
-      setAvatar,
-      setStatus,
-      setStatusImage,
-      setCreatedDate,
-      setBackgroundColor,
-      setActivity,
-      setMood
-    );
-
+    updateStatus(updateStatusArgs);
     textColorFn(params, backgroundColor, setTextColor, setBackgroundGradient);
   }, []);
 
@@ -65,18 +65,7 @@ const SmallCard = () => {
     if (params.get('displayName')) return;
 
     const intervalID = setInterval(() => {
-      updateStatus(
-        id || '',
-        params,
-        setDisplayName,
-        setAvatar,
-        setStatus,
-        setStatusImage,
-        setCreatedDate,
-        setBackgroundColor,
-        setActivity,
-        setMood
-      );
+      updateStatus(updateStatusArgs);
     }, 15000);
 
     // eslint-disable-next-line consistent-return

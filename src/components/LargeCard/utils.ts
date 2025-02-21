@@ -76,7 +76,8 @@ export function updateStatus({
   setActivity: (activity: ActivityType) => void;
   setMood: (mood: MoodType) => void;
 }) {
-  fetch(`${refinerAPI[debugging]}/user/${id}?full=true`, {
+  const fullRequired = params.get('wantBannerImage') || params.get('wantAccentColor');
+  fetch(`${refinerAPI[debugging]}/user/${id}${fullRequired ? '?full=true' : ''}`, {
     headers: {
       'Content-Type': 'application/json',
     },

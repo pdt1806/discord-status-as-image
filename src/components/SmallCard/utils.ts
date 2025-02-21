@@ -3,19 +3,31 @@ import { bgIsLight, blendColors, hexToRgb } from '../../utils/tools';
 import { ActivityType, MoodType } from '../../utils/types';
 import { setStatusImg } from '../LargeCard/utils';
 
-export function updateStatus(
-  id: string,
-  params: URLSearchParams,
-  setDisplayName: (name: string) => void,
-  setAvatar: (avatar: string) => void,
-  setStatus: (status: string) => void,
-  setStatusImage: (statusImage: string) => void,
-  setCreatedDate: (date: string) => void,
-  setBackgroundColor: (color: string) => void,
-  setActivity: (activity: ActivityType) => void,
-  setMood: (mood: MoodType) => void
-) {
-  fetch(`${refinerAPI[debugging]}/user/${id}?full=true`, {
+export function updateStatus({
+  id,
+  params,
+  setDisplayName,
+  setAvatar,
+  setStatus,
+  setStatusImage,
+  setCreatedDate,
+  setBackgroundColor,
+  setActivity,
+  setMood,
+}: {
+  id: string | null;
+  params: URLSearchParams;
+  setDisplayName: (name: string) => void;
+  setAvatar: (avatar: string) => void;
+  setStatus: (status: string) => void;
+  setStatusImage: (statusImage: string) => void;
+  setCreatedDate: (date: string) => void;
+  setBackgroundColor: (color: string) => void;
+  setActivity: (activity: ActivityType) => void;
+  setMood: (mood: MoodType) => void;
+}) {
+  const fullRequired = params.get('wantAccentColor');
+  fetch(`${refinerAPI[debugging]}/user/${id}${fullRequired ? '?full=true' : ''}`, {
     headers: {
       'Content-Type': 'application/json',
     },
