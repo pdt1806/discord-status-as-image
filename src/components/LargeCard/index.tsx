@@ -3,7 +3,7 @@ import { ActionIcon, Box, Flex, Group, Image, Stack, Text, Title } from '@mantin
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { IconMessageCircle2Filled, IconUserPlus } from '@tabler/icons-react';
+import { IconMessageCircleFilled, IconUserPlus } from '@tabler/icons-react';
 import { getBannerImage } from '../../pocketbase_client';
 import { formatDate, hexToRgb, setLargeCardTitleSize } from '../../utils/tools';
 import { ActivityType, MoodType } from '../../utils/types';
@@ -152,7 +152,7 @@ const LargeCard = () => {
           mood.state.length <= (mood.emoji ? 15 : 19)) && (
           <Group gap="xs" className={innerClasses.addMessageGroup}>
             <ActionIcon h={40.8} w={40.8} bg={buttonColor ?? '#4e5057'}>
-              <IconMessageCircle2Filled
+              <IconMessageCircleFilled
                 size={20}
                 style={{ margin: 0, padding: 0 }}
                 color={buttonTextColor}

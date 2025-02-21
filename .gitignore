@@ -133,3 +133,4 @@ dist
 
 server/loaded
 .vscode/
+.vite-cache/

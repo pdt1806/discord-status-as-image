@@ -41,6 +41,7 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
   return (
     <div className={classes.root}>
       <Helmet>
+        <link rel="icon" type="image/png" href="/images/disi-logo-circle.png" />
         <title>500 Internal Server Error - Discord Status as Image</title>
       </Helmet>
       <Container>

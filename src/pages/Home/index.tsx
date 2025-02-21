@@ -29,6 +29,7 @@ const Home = () => {
     <>
       <Helmet>
         <title>Discord Status as Image</title>
+        <link rel="icon" type="image/png" href="/images/disi-logo-circle.png" />
         <link rel="canonical" href="https://disi.bennynguyen.dev/" />
       </Helmet>
       {!!maintenanceMessage[3] && maintenanceMessage[4].includes('SCHEDULED') && (

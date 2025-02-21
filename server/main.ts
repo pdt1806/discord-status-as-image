@@ -4,8 +4,8 @@
 import express, { Request, Response } from 'express';
 import playwright, { Browser, Page } from 'playwright';
 import { expect } from 'playwright/test';
-import { debugging, web } from '../src/env/env';
-import { bgIsLight, blendColors, hexToRgb, setSmallCardTitleSize } from '../src/utils/tools';
+import { debugging, refinerAPI, web } from '../src/env/env';
+import { blendColors, setSmallCardTitleSize } from '../src/utils/tools';
 import { iconsListSmall } from './icons';
 import { uploadBannerImage } from './pocketbase_server';
 import { smallcardSvgContent } from './svgContent';
@@ -15,6 +15,7 @@ import {
   getLargeCardLink,
   getSmallCardLink,
   minimal_args,
+  monoBackgroundTextColor,
   urlToBase64,
 } from './utils';
 
@@ -22,7 +23,16 @@ const root = web[debugging];
 
 const origin = debugging ? '*' : 'https://disi.bennynguyen.dev';
 
+const refinerEndpoint = await detectRefinerEndpoint();
+
 const app = express();
+
+const smallPages = new Map<string, Page>();
+const largePages = new Map<string, Page>();
+
+let browser: Browser;
+
+// ----------------------------------------------
 
 app.use((_, res, next) => {
   res.header({
@@ -46,22 +56,27 @@ app.get('/', (_: Request, res: Response) => {
   res.send({ message: 'API of Discord Status as Image' });
 });
 
-let browser: Browser;
+// ----------------------------------------------
 
-async function initBrowser() {
+async function detectRefinerEndpoint() {
+  const responseOnServer = await fetch(refinerAPI.true); // detect if Refiner API is up and running locally
+  if (!responseOnServer.ok) {
+    console.log('Refiner API is not running locally. Using production Refiner API.');
+    return refinerAPI.false;
+  }
+  console.log('Refiner API is running locally. Using local Refiner API.');
+  return refinerAPI.true;
+}
+
+await (async () => {
   browser = await playwright.chromium.launch({
     headless: true,
     args: minimal_args,
   });
-}
-
-await initBrowser().catch((error) => {
-  console.error('Failed to start browser:', error);
+})().catch((error) => {
+  console.error(error);
   process.exit(1);
 });
-
-const smallPages = new Map<string, Page>();
-const largePages = new Map<string, Page>();
 
 async function selectPage(id: string, type: string): Promise<[Page, boolean]> {
   const reference = type === 'small' ? smallPages : largePages;
@@ -76,16 +91,41 @@ async function selectPage(id: string, type: string): Promise<[Page, boolean]> {
   return [page, true]; // true means the page is newly created
 }
 
+function logTimestamp(
+  type: string,
+  format: string,
+  id: string,
+  refinerTime: number,
+  browserTime: number
+) {
+  const timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+  console.log(
+    `[${timestamp} UTC] ${type}, ${format}, ${id}, Refiner: ${refinerTime}ms, Browser: ${browserTime}ms, Total: ${refinerTime + browserTime}ms`
+  );
+}
+
+// ----------------------------------------------
+
 app.get('/smallcard/:id', async (req: Request, res: Response) => {
   try {
-    const startRefiner = Date.now();
     const { id } = req.params;
+    if (!id) {
+      res.status(400).send('Bad Request');
+      return null;
+    }
 
     try {
+      const startRefiner = Date.now();
+      const requiresFullData = req.query.wantAccentColor === 'true';
+      const data = await fetchRefinerData(refinerEndpoint, id, requiresFullData);
+      if (data === null) {
+        res.status(404).send('User not found');
+        return null;
+      }
       const fullLink = await getSmallCardLink(
         root,
         id,
-        res,
+        data,
         req.query as { [key: string]: string }
       );
       if (!fullLink) {
@@ -119,22 +159,23 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
 
       logTimestamp('Small', 'PNG', id, refinerTime, browserTime);
     } catch (error) {
+      console.error(error);
       res.status(500).send('Internal Server Error');
     }
   } catch (error) {
+    console.error(error);
     res.status(500).send('Internal Server Error');
   }
 });
 
-const monoBackgroundTextColor = (bg: string) => {
-  const color = hexToRgb(bg);
-  return bgIsLight(color!) ? '#202225' : 'white';
-};
-
 app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
   try {
-    const start = Date.now();
     const { id } = req.params;
+    if (!id) {
+      res.status(400).send('Bad Request');
+      return null;
+    }
+
     const {
       bg,
       bg1,
@@ -149,14 +190,14 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
     try {
       const startRefiner = Date.now();
       const requiresFullData = wantAccentColor === 'true';
-      const data = await fetchRefinerData(id, requiresFullData);
+      const data = await fetchRefinerData(refinerEndpoint, id, requiresFullData);
       if (data === null) {
         res.status(404).send('User not found');
         return null;
       }
       const refinerTime = Date.now() - startRefiner;
 
-      const startBrowser = Date.now() - start;
+      const startBrowser = Date.now();
       const avatar = await urlToBase64(data.avatar);
       const background = bg
         ? `#${bg}`
@@ -207,23 +248,37 @@ app.get('/smallcard_svg/:id', async (req: Request, res: Response) => {
 
       logTimestamp('Small', 'SVG', id, refinerTime, browserTime);
     } catch (error) {
+      console.error(error);
       res.status(500).send('Internal Server Error');
     }
   } catch (error) {
+    console.error(error);
     res.status(500).send('Internal Server Error');
   }
 });
 
 app.get('/largecard/:id', async (req: Request, res: Response) => {
   try {
-    const startRefiner = Date.now();
     const { id } = req.params;
+    if (!id) {
+      res.status(400).send('Bad Request');
+      return null;
+    }
 
     try {
+      const startRefiner = Date.now();
+      const requiresFullData = [req.query.wantBannerImage, req.query.wantAccentColor].includes(
+        'true'
+      );
+      const data = await fetchRefinerData(refinerEndpoint, id, requiresFullData);
+      if (data === null) {
+        res.status(404).send('User not found');
+        return null;
+      }
       const fullLink = await getLargeCardLink(
         root,
         id,
-        res,
+        data,
         req.query as { [key: string]: string }
       );
       if (!fullLink) {
@@ -269,9 +324,11 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
 
       logTimestamp('Large', 'PNG', id, refinerTime, browserTime);
     } catch (error) {
+      console.error(error);
       res.status(500).send('Internal Server Error');
     }
   } catch (error) {
+    console.error(error);
     res.status(500).send('Internal Server Error');
   }
 });
@@ -291,21 +348,9 @@ app.post('/uploadbanner', async (req, res) => {
     const id = await uploadBannerImage(blob);
     res.status(200).json({ id });
   } catch (error) {
+    console.error(error);
     res.status(500).send((error as Error).message);
   }
 });
-
-function logTimestamp(
-  type: string,
-  format: string,
-  id: string,
-  refinerTime: number,
-  browserTime: number
-) {
-  const timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
-  console.log(
-    `[${timestamp}] ${type}, ${format}, ${id}, Refiner: ${refinerTime}ms, Browser: ${browserTime}ms, Total: ${refinerTime + browserTime}ms`
-  );
-}
 
 app.listen(1911, () => console.log('Server is running on http://localhost:1911'));

@@ -1,7 +1,11 @@
-import { Response } from 'express';
-import { debugging, refinerAPI } from '../src/env/env';
 import { getBannerImage } from '../src/pocketbase_client';
+import { bgIsLight, hexToRgb } from '../src/utils/tools';
 import { RefinerResponse } from '../src/utils/types';
+
+export const monoBackgroundTextColor = (bg: string) => {
+  const color = hexToRgb(bg);
+  return bgIsLight(color!) ? '#202225' : 'white';
+};
 
 export function base64toFile(base64: string): File | null {
   const match = base64.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,(.+)$/);
@@ -25,10 +29,11 @@ export function base64toFile(base64: string): File | null {
 }
 
 export const fetchRefinerData = async (
+  endpoint: string,
   id: string,
   full: boolean
 ): Promise<RefinerResponse | null> => {
-  const response = await fetch(`${refinerAPI[debugging]}/user/${id}${full ? '?full=true' : ''}`);
+  const response = await fetch(`${endpoint}/user/${id}${full ? '?full=true' : ''}`);
   try {
     if (response.status === 404) {
       return null;
@@ -91,7 +96,7 @@ export const minimal_args = [
 export const getSmallCardLink = async (
   root: string,
   id: string,
-  res: Response,
+  data: RefinerResponse,
   {
     bg,
     bg1,
@@ -109,12 +114,7 @@ export const getSmallCardLink = async (
     : bg
       ? `${root}/smallcard?bg=${bg}&`
       : `${root}/smallcard?`;
-  const requiresFullData = wantAccentColor === 'true';
-  const data = await fetchRefinerData(id, requiresFullData);
-  if (data === null) {
-    res.status(404).send('User not found');
-    return null;
-  }
+
   created && (link += `createdDate=${data.created_at}&`);
   discordLabel && (link += 'discordLabel=true&');
   wantAccentColor && data.accent_color && (link += `bg=${data.accent_color.replace('#', '')}&`);
@@ -127,7 +127,8 @@ export const getSmallCardLink = async (
 export const getLargeCardLink = async (
   root: string,
   id: string,
-  res: Response,
+  data: RefinerResponse,
+
   {
     bg,
     bg1,
@@ -152,12 +153,7 @@ export const getLargeCardLink = async (
       : `${root}/largecard?`;
   link += aboutMe ? `aboutMe=${encodeURIComponent(aboutMe)}&` : '';
   link += pronouns ? `pronouns=${pronouns}&` : '';
-  const requiresFullData = [wantBannerImage, wantAccentColor].includes('true');
-  const data = await fetchRefinerData(id, requiresFullData);
-  if (data === null) {
-    res.status(404).send('User not found');
-    return null;
-  }
+
   created && (link += `createdDate=${data.created_at}&`);
   discordLabel && (link += 'discordLabel=true&');
   if (bannerID) {

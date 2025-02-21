@@ -1,12 +1,14 @@
 import react from '@vitejs/plugin-react';
-import path from 'path';
 import { defineConfig } from 'vite';
+import compression from 'vite-plugin-compression';
 
 export default defineConfig({
-  plugins: [react()],
+  cacheDir: '.vite-cache',
+  plugins: [react(), compression({ algorithm: 'brotliCompress' })],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      // '@': path.resolve(__dirname, 'src'),
+      '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
     },
   },
   build: {
@@ -14,8 +16,11 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('images')) return 'images';
+
           if (id.includes('node_modules')) {
-            return id.toString().split('node_modules/')[1].split('/')[0].toString();
+            if (id.includes('react') || id.includes('react-dom')) return 'react-vendor';
+            if (id.includes('lodash') || id.includes('axios')) return 'utils-vendor';
+            return 'vendor';
           }
         },
       },

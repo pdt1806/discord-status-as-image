@@ -42,6 +42,7 @@ const Document = ({ id }: { id: string }) => {
     <Container mt="xl" mb="xl">
       <Helmet>
         <title>{document.title} - Discord Status as Image</title>
+        <link rel="icon" type="image/png" href="/images/disi-logo-circle.png" />
         <link
           rel="canonical"
           href={`https://disi.bennynguyen.dev/${document.title.toLowerCase().replaceAll(' ', '-')}`}

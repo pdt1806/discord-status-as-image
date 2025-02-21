@@ -8,6 +8,7 @@ export default function Error404() {
     <Container className={classes.root}>
       <Helmet>
         <title>404 Not Found - Discord Status as Image</title>
+        <link rel="icon" type="image/png" href="/images/disi-logo-circle.png" />
         <link rel="canonical" href="https://disi.bennynguyen.dev/404" />
       </Helmet>
       <SimpleGrid spacing={{ base: 40, sm: 80 }} cols={{ base: 1, sm: 2 }}>
