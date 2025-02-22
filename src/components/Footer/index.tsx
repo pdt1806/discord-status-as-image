@@ -36,7 +36,7 @@ export default function Footer() {
           {items}
         </Group>
         <Text mt={isMobile ? 'md' : '0'} mb={isMobile ? 'sm' : '0'} ta="center">
-          Made with ❤️ from Antelope, CA
+          Made with ❤️ in Antelope, CA
         </Text>
       </div>
     </div>
