@@ -6,6 +6,7 @@ import { setStatusImg } from '../LargeCard/utils';
 export function updateStatus({
   id,
   params,
+  displayUsername,
   setDisplayName,
   setAvatar,
   setStatus,
@@ -17,6 +18,7 @@ export function updateStatus({
 }: {
   id: string | null;
   params: URLSearchParams;
+  displayUsername: boolean;
   setDisplayName: (name: string) => void;
   setAvatar: (avatar: string) => void;
   setStatus: (status: string) => void;
@@ -34,7 +36,7 @@ export function updateStatus({
   })
     .then((res) => res.json())
     .then((data) => {
-      setDisplayName(data.display_name);
+      setDisplayName(displayUsername ? data.username : data.display_name);
       setAvatar(data.avatar);
       setStatus(data.status);
       setStatusImage(setStatusImg(data.status));

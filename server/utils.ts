@@ -107,6 +107,7 @@ export const getSmallCardLink = async (
     mood,
     discordLabel,
     wantAccentColor,
+    displayUsername,
   }: { [key: string]: string }
 ) => {
   let link = bg1
@@ -121,14 +122,13 @@ export const getSmallCardLink = async (
   activity && (link += `activityData=${encodeURIComponent(JSON.stringify(data.activity))}&`);
   mood && (link += `moodData=${encodeURIComponent(JSON.stringify(data.mood))}&`);
   link += `urls=${encodeURIComponent(JSON.stringify(data.urls))}&`;
-  return `${link}displayName=${data.display_name}&avatar=${data.avatar.replace('size=512', 'size=256')}&status=${data.status}&id=${id}`;
+  return `${link}displayName=${displayUsername === 'true' ? data.username : data.display_name}&avatar=${data.avatar.replace('size=512', 'size=256')}&status=${data.status}&id=${id}`;
 };
 
 export const getLargeCardLink = async (
   root: string,
   id: string,
   data: RefinerResponse,
-
   {
     bg,
     bg1,

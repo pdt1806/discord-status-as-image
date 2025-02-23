@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Group, Image, Progress, Space, Text, Title } from '@mantine/core';
+import { Box, Flex, Group, Image, Progress, Space, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import {
   formatActivityImageUrl,
@@ -70,7 +70,7 @@ export default function ActivityBox({
               />
             )}
           </Flex>
-          <Group gap="md" mt="lg">
+          <Group gap="lg" mt="lg">
             <Image
               src={
                 activity.platform
@@ -97,6 +97,8 @@ export default function ActivityBox({
                 <Text ff="Noto Sans TC" fz={22}>{`on ${activity.album.name}`}</Text>
               )}
             </Box>
+          </Group>
+          <Box mt="xl">
             <Progress
               mt="md"
               radius="xl"
@@ -105,7 +107,7 @@ export default function ActivityBox({
               bg="var(--mantine-color-dimmed)"
               w="100%"
             />
-            <Flex justify="space-between" align="center" w="100%">
+            <Flex justify="space-between" align="center" w="100%" mt="sm">
               <Text ff="Noto Sans TC" fz={22}>
                 {listeningProgress.elapsedTime}
               </Text>
@@ -113,7 +115,7 @@ export default function ActivityBox({
                 {listeningProgress.totalTime}
               </Text>
             </Flex>
-          </Group>
+          </Box>
         </>
       )}
       {activity.type === 'playing' && (
@@ -234,7 +236,7 @@ function OtherAssets({ activity }: { activity: ActivityType }) {
             transform: 'translateX(5px)',
           }}
         >
-          <Avatar
+          <Image
             ml="auto"
             src={
               small_image.includes('https')
@@ -242,8 +244,13 @@ function OtherAssets({ activity }: { activity: ActivityType }) {
                 : getImageURLfromCDN(activity.application_id, small_image)
             }
             alt="Small Image"
-            size={40}
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+            }}
             bg="black"
+            crossOrigin="anonymous"
           />
         </Flex>
       )}
