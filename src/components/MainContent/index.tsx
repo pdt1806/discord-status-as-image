@@ -29,6 +29,7 @@ const MainContent = () => {
       backgroundGradient1: '',
       backgroundGradient2: '',
       backgroundGradientAngle: 0,
+      displayUsername: false,
       activity: false,
       mood: false,
       created: false,

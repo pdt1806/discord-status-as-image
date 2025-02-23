@@ -3,6 +3,7 @@ import {
   Button,
   Checkbox,
   ColorPicker,
+  Divider,
   FileInput,
   Group,
   HoverCard,
@@ -151,6 +152,7 @@ const MainContentColumn2 = ({
           form.setFieldValue('created', e.currentTarget.checked);
         }}
       />
+      <Divider mt="xl" />
       <Box mt="xl">
         <Title order={4}>Background color</Title>
         <NativeSelect
@@ -290,6 +292,19 @@ const MainContentColumn2 = ({
           )
         )}
       </Box>
+      <Divider mt="xl" />
+      <Box mt="xl">
+        <Title order={4}>Small card settings</Title>
+        <Checkbox
+          label="Display Username instead of Display name"
+          mt="md"
+          {...form.getInputProps('displayUsername')}
+          onChange={(e) => {
+            form.setFieldValue('displayUsername', e.currentTarget.checked);
+          }}
+        />
+      </Box>
+      <Divider mt="xl" />
       <Checkbox
         label="Get a large card"
         mt="lg"

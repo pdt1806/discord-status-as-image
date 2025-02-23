@@ -82,8 +82,9 @@ export const generatingCards = async (
   const smallTail =
     newTail +
     (colorMode === 'Gradient' ? `&angle=${form.values.backgroundGradientAngle}` : '') +
+    (colorMode === 'Discord Accent Color' ? '&wantAccentColor=true' : '') +
     (form.values.discordLabel ? '&discordLabel=true' : '') +
-    (colorMode === 'Discord Accent Color' ? '&wantAccentColor=true' : '');
+    (form.values.displayUsername ? '&displayUsername=true' : '');
 
   const largeTail =
     newTail +

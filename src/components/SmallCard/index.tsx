@@ -25,7 +25,8 @@ const SmallCard = () => {
   );
 
   const id = params.get('id');
-  const discordLabel = params.get('discordLabel');
+  const discordLabel = params.get('discordLabel') === 'true';
+  const displayUsername = params.get('displayUsername') === 'true';
 
   const [backgroundColor, setBackgroundColor] = useState(
     params.get('bg')
@@ -41,6 +42,7 @@ const SmallCard = () => {
   const updateStatusArgs = {
     id,
     params,
+    displayUsername,
     setDisplayName,
     setAvatar,
     setStatus,

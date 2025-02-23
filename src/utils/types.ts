@@ -5,6 +5,7 @@ export type DISIForm = {
   backgroundGradient1: string;
   backgroundGradient2: string;
   backgroundGradientAngle: number;
+  displayUsername: boolean;
   activity: boolean;
   mood: boolean;
   created: boolean;
