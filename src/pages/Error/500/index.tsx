@@ -1,41 +1,19 @@
 /* eslint-disable react/no-unescaped-entities */
-import {
-  Anchor,
-  Badge,
-  Box,
-  Button,
-  Center,
-  Container,
-  Divider,
-  Flex,
-  Image,
-  Text,
-  Title,
-} from '@mantine/core';
+import { Anchor, Badge, Box, Button, Center, Container, Divider, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { fetchMaintenanceMessage } from '../../../utils/tools';
+import { MaintenanceMessageType } from '../../../utils/types';
 import classes from './index.module.css';
 
-export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
-  const [maintenanceMessage, setMaintenanceMessage] = useState<string[]>();
+export function Error500() {
+  const [maintenanceMessage, setMaintenanceMessage] = useState<MaintenanceMessageType | null>(null);
 
   useEffect(() => {
-    const fetchMaintenanceMessage = async () => {
-      try {
-        const response = await fetch(
-          'https://api.allorigins.win/raw?url=https://pastebin.com/raw/xPgJnKkA',
-          { cache: 'no-store' }
-        );
-        if (response.ok) {
-          const text = await response.text();
-          text.length > 0 && setMaintenanceMessage(text.split('\n'));
-        }
-      } catch (e) {
-        // pass
-      }
-    };
-
-    fetchMaintenanceMessage();
+    (async () => {
+      const message = await fetchMaintenanceMessage();
+      setMaintenanceMessage(message);
+    })();
   }, []);
 
   return (
@@ -59,21 +37,22 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
             </Button>
           </Center>
         </Box>
-        <Divider my="xl" />
+
         {maintenanceMessage ? (
-          maintenanceMessage[4].includes('500') ? (
+          maintenanceMessage.error500.active ? (
             <>
+              <Divider my="xl" />
               <Badge color="orange" variant="light" size="lg">
-                {maintenanceMessage[0]}
+                {maintenanceMessage.error500.date}
               </Badge>
               <Title order={3} mb="lg" mt="lg">
-                {maintenanceMessage[1]}
+                {maintenanceMessage.error500.title}
               </Title>
-              <Text>{maintenanceMessage[2]}</Text>
-              <Divider my="xl" />
+              <Text>{maintenanceMessage.error500.message}</Text>
             </>
           ) : (
             <>
+              <Divider my="xl" />
               <Badge color="orange" variant="light" size="lg">
                 NEW ISSUE
               </Badge>
@@ -87,13 +66,23 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
                     me@bennynguyen.dev
                   </Anchor>
                 </span>{' '}
+                or ping{' '}
+                <span>
+                  <Text style={{ fontStyle: 'italic', display: 'inline' }}>@pdteggman</Text>
+                </span>{' '}
+                in the{' '}
+                <span>
+                  <Anchor c="orange" href="https://discord.com/invite/WWDkkjmD">
+                    Discord server
+                  </Anchor>
+                </span>{' '}
                 to notify me of this issue and I will work on it ASAP. Thank you in advance.
               </Text>
-              <Divider my="xl" />
+              {/* <Divider my="xl" /> */}
             </>
           )
         ) : null}
-        <Title order={5}>
+        {/* <Title order={5}>
           Click the button below if you still want to proceed to the app (the images will not work!)
         </Title>
         <Button
@@ -131,7 +120,7 @@ export function Error500({ proceedToDemo }: { proceedToDemo: () => void }) {
               style={{ aspectRatio: '807/985' }}
             />
           </a>
-        </Flex>
+        </Flex> */}
       </Container>
     </div>
   );

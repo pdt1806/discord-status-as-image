@@ -1,6 +1,6 @@
 import { Box } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import classes from '../../App.module.css';
 import { debugging, disiAPI, refinerAPI } from '../../env/env';
 import { Error500 } from '../../pages/Error/500';
@@ -11,12 +11,6 @@ import ModalNoti from '../ModalNoti';
 
 const Layout = () => {
   const [page, setPage] = useState(<Fallback />);
-  const navigate = useNavigate();
-
-  const proceedToDemo = () => {
-    navigate('/');
-    setPage(<Outlet />);
-  };
 
   const modalNoti = ModalNoti();
 
@@ -44,7 +38,7 @@ const Layout = () => {
 
         setPage(<Outlet />);
       } catch (e) {
-        setPage(<Error500 proceedToDemo={proceedToDemo} />);
+        setPage(<Error500 />);
       }
     };
 

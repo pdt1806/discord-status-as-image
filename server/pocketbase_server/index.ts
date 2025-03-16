@@ -11,8 +11,8 @@ dotenv.config({ path: `${__dirname}/.env` });
 const pocketbase = new PocketBase('https://disi-pb.bennynguyen.dev');
 
 await pocketbase.admins.authWithPassword(
-  process.env.POCKETBASE_EMAIL as string,
-  process.env.POCKETBASE_PASSWORD as string
+  process.env.DISI_POCKETBASE_EMAIL as string,
+  process.env.DISI_POCKETBASE_PASSWORD as string
 );
 
 export const uploadBannerImage = async (image: Blob) => {

@@ -5,15 +5,15 @@
 
 ![](https://raw.githubusercontent.com/pdt1806/discord-status-as-image/main/public/images/disi-readme.png)
 
-## 💪 Features
+## Features
 
-- **Simple**: Just input your Discord username and you're all set.
-- **Customizable**: Set your own banner (yes, even your own image), background color, etc. to make your status image unique.
-- **Live**: Your status image updates in real-time, so you don't have to worry about it being outdated.
-- **Multiple formats**: Deliver your status image in multiple formats, including .png, .svg, and embeddable iframe.
-- **Shareable**: Share your status image with friends or on social media with just a click of a button.
+- ✅ **Simple**: Just input your Discord username and you're all set.
+- ✅ **Customizable**: Set your own banner (yes, even your own image), background color, etc. to make your status image unique.
+- ✅ **Live**: Your status image updates in real-time, so you don't have to worry about it being outdated.
+- ✅ **Multiple formats**: Deliver your status image in multiple formats, including .png, .svg, and embeddable iframe.
+- ✅ **Shareable**: Share your status image with friends or on social media with just a click of a button.
 
-## 📙 How to get a Discord Status image?
+## How to get a Discord Status image?
 
 1. Access this website: https://disi.bennynguyen.dev
 2. Following the instructions on the website
@@ -21,7 +21,7 @@
    2. Fill out the form with your Discord username and the desired settings.
    3. Hit Generate and you're all set.
 
-## ⚙️ Technologies
+## Technologies
 
 - [React](https://reactjs.org/)
 - [Mantine](https://mantine.dev/)
@@ -34,20 +34,20 @@
   - [FastAPI](https://fastapi.tiangolo.com/)
   - [Uvicorn](https://www.uvicorn.org/)
 
-## 👩‍💻 Main developer
+## Main developer
 
 | <a href="https://github.com/pdt1806" target="_blank"> <img src="https://avatars.githubusercontent.com/u/78996937?v=4" alt="" width="96px" height="96px"> </a> |
 | :-----------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |                                                             [pdt1806](https://github.com/pdt1806)                                                             |
 
-## 📄 License
+## License
 
 Discord Status as Image is licensed under the MIT License. See the [`LICENSE`](https://github.com/pdt1806/discord-status-as-image/blob/main/LICENSE).
 
-## 🔗 An example use case
+## An example use case
 
 Go to [my GitHub profile](https://github.com/pdt1806) and look at the README to see how I use this tool to display my Discord status.
 
-## 🤝 Contributions
+## Contributions
 
 Any contribution is appreciated. Just create an issue/pull request and I will review it ASAP.

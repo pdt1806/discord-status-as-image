@@ -137,20 +137,15 @@ export const scrollToSection = (id: string) => {
 };
 
 export const fetchMaintenanceMessage = async () => {
-  let message: string[] = [];
   try {
-    const response = await fetch(
-      'https://api.allorigins.win/raw?url=https://pastebin.com/raw/xPgJnKkA',
-      { cache: 'no-store' }
-    );
-    if (response.ok) {
-      const text = await response.text();
-      text.length > 0 && (message = text.split('\n'));
-    }
+    const response = await fetch('https://corsproxy.io/?url=https://pastebin.com/raw/8VsA8p66', {
+      cache: 'no-store',
+    });
+    if (response.ok) return await response.json();
   } catch (e) {
     // pass
   }
-  return message;
+  return null;
 };
 
 const formatMilliseconds = (milliseconds: number) => {

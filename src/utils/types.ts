@@ -101,3 +101,16 @@ export type RefinerResponse = {
   mood: MoodType;
   urls: string[];
 };
+
+export type MaintenanceMessageType = {
+  error500: {
+    date: string;
+    title: string;
+    message: string;
+    active: boolean;
+  };
+  scheduled: {
+    date: string;
+    active: boolean;
+  };
+};
