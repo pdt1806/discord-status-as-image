@@ -15,27 +15,28 @@ import {
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
-import { debugging, disiAPI, web } from '../../../env/env';
+import { useDISIStore } from '../../../stores/UseDISIStore';
+import { debugging, disiAPI, web } from '../../../utils/const';
 
-const MainContentColumn3 = ({
-  smallCardLink,
-  largeCardLink,
-  smallTail,
-  largeTail,
-  userID,
-  wantLargeCard,
-  customBannerMode,
-  copiedNotification,
-}: {
-  smallCardLink: string;
-  largeCardLink: string;
-  smallTail: string;
-  largeTail: string;
-  userID: string;
-  wantLargeCard: boolean;
-  customBannerMode: string;
-  copiedNotification: () => void;
-}) => {
+const MainContentColumn3 = () => {
+  const smallCardLink = useDISIStore((state) => state.smallCardLink);
+  const largeCardLink = useDISIStore((state) => state.largeCardLink);
+  const smallTail = useDISIStore((state) => state.smallTail);
+  const largeTail = useDISIStore((state) => state.largeTail);
+  const userID = useDISIStore((state) => state.userID);
+  const wantLargeCard = useDISIStore((state) => state.wantLargeCard);
+  const customBannerMode = useDISIStore((state) => state.customBannerMode);
+
+  const copiedNotification = () => {
+    notifications.show({
+      title: 'Copied!',
+      message: 'Copied to clipboard',
+      color: 'teal',
+      icon: null,
+      autoClose: 2000,
+    });
+  };
+
   const comboboxForSmallCard = useCombobox({
     onDropdownClose: () => comboboxForSmallCard.resetSelectedOption(),
   });
@@ -173,7 +174,7 @@ const MainContentColumn3 = ({
       if (smallCardElement?.getAttribute('style') === 'display: none') {
         notifications.show({
           title: 'Error!',
-          message: "Small card couldn't be loaded. Please try again.",
+          message: "Small card couldn't load. Please try again.",
           color: 'red',
           icon: null,
           autoClose: 5000,
@@ -190,7 +191,7 @@ const MainContentColumn3 = ({
       if (largeCardElement?.getAttribute('style') === 'display: none') {
         notifications.show({
           title: 'Error!',
-          message: "Large card couldn't be loaded. Please try again.",
+          message: "Large card couldn't load. Please try again.",
           color: 'red',
           icon: null,
           autoClose: 5000,
@@ -320,14 +321,14 @@ const MainContentColumn3 = ({
             </Box>
           )}
           <Text mt="sm" style={{ fontSize: '15px' }}>
-            The first time you generate the card(s), it may take a while for the image to be loaded
-            due to initialization. After that, it should be loaded almost-instantly!
+            The first time you generate the card(s), it may take a while for the image to load due
+            to initialization. After that, it should load almost-instantly!
           </Text>
         </Box>
       ) : (
         <Box mt="xl">
           <Text>Complete the previous steps correctly and your card(s) will show here!</Text>
-          <Text>It may take a while for the image(s) to be loaded.</Text>
+          <Text>It may take a while for the image(s) to load.</Text>
         </Box>
       )}
     </Table.Td>

@@ -77,6 +77,7 @@ export const minimal_args = [
   '--disable-sync',
   '--hide-scrollbars',
   '--ignore-gpu-blacklist',
+  '--disable-gpu',
   '--metrics-recording-only',
   '--mute-audio',
   '--no-default-browser-check',

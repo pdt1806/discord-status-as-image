@@ -1,20 +1,3 @@
-export type DISIForm = {
-  username: string | null;
-  colorMode: string;
-  backgroundSingle: string;
-  backgroundGradient1: string;
-  backgroundGradient2: string;
-  backgroundGradientAngle: number;
-  displayUsername: boolean;
-  activity: boolean;
-  mood: boolean;
-  created: boolean;
-  aboutMe: string;
-  bannerColor: string;
-  pronouns: string;
-  discordLabel: boolean;
-};
-
 type GeneralActivityType = {
   type: string;
   name: string;
@@ -114,3 +97,52 @@ export type MaintenanceMessageType = {
     active: boolean;
   };
 };
+
+export type ColorMode = 'Single' | 'Gradient' | 'Discord Accent Color';
+export type BannerMode = 'Custom Color' | string;
+
+export interface DISIForm {
+  username: string | null;
+  colorMode: ColorMode;
+  backgroundSingle: string;
+  backgroundGradient1: string;
+  backgroundGradient2: string;
+  backgroundGradientAngle: number;
+  displayUsername: boolean;
+  activity: boolean;
+  mood: boolean;
+  created: boolean;
+  aboutMe: string;
+  bannerColor: string;
+  pronouns: string;
+  discordLabel: boolean;
+}
+
+export interface DISIStore {
+  smallCardLink: string;
+  largeCardLink: string;
+  smallTail: string;
+  largeTail: string;
+  userID: string;
+  colorMode: ColorMode;
+  wantLargeCard: boolean;
+  bannerMode: BannerMode;
+  customBannerMode: string;
+  externalImageURL: string;
+  bannerPBID: string;
+  bannerFile: File | null;
+
+  // Setters
+  setSmallCardLink: (v: string) => void;
+  setLargeCardLink: (v: string) => void;
+  setSmallTail: (v: string) => void;
+  setLargeTail: (v: string) => void;
+  setUserID: (v: string) => void;
+  setColorMode: (v: ColorMode) => void;
+  setWantLargeCard: (v: boolean) => void;
+  setBannerMode: (v: BannerMode) => void;
+  setCustomBannerMode: (v: string) => void;
+  setExternalImageURL: (v: string) => void;
+  setBannerPBID: (v: string) => void;
+  setBannerFile: (file: File | null) => void;
+}

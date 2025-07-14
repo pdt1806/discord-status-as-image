@@ -12,3 +12,10 @@ export const web = {
 };
 
 export const debugging = 'false';
+
+export const bannerModeList = [
+  'Custom Color',
+  'Custom Image Banner',
+  'Discord Accent Color',
+  'Discord Image Banner (Nitro User Only)',
+];

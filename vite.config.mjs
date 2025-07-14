@@ -1,3 +1,4 @@
+import reactScan from '@react-scan/vite-plugin-react-scan';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
@@ -5,7 +6,13 @@ import compression from 'vite-plugin-compression';
 
 export default defineConfig({
   cacheDir: '.vite-cache',
-  plugins: [react(), compression({ algorithm: 'brotliCompress' })],
+  plugins: [
+    react(),
+    compression({ algorithm: 'brotliCompress' }),
+    reactScan({
+      enable: false,
+    }),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

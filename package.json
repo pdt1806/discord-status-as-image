@@ -1,11 +1,11 @@
 {
   "name": "discord-status-as-image",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
     "serve": "vite preview",
-    "server": "cd server && npx tsx main.ts",
+    "server": "cd server && npx tsx watch main.ts",
     "refiner": "cd .. && cd refiner-discord-bot && source refiner-venv/bin/activate && python main.py",
     "build": "tsc && vite build"
   },
@@ -15,6 +15,7 @@
     "@mantine/hooks": "7.17.1",
     "@mantine/notifications": "^7.17.1",
     "@playwright/test": "^1.50.1",
+    "@react-scan/vite-plugin-react-scan": "^0.1.8",
     "@tabler/icons-react": "^3.1.0",
     "dotenv": "^16.4.7",
     "express": "^4.19.2",
@@ -23,7 +24,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^6.22.3"
+    "react-router-dom": "^6.22.3",
+    "react-scan": "^0.4.3",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.4",

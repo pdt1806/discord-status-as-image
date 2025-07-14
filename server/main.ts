@@ -4,7 +4,7 @@
 import express, { Request, Response } from 'express';
 import playwright, { Browser, Page } from 'playwright';
 import { expect } from 'playwright/test';
-import { debugging, refinerAPI, web } from '../src/env/env';
+import { debugging, refinerAPI, web } from '../src/utils/const';
 import { blendColors, setSmallCardTitleSize } from '../src/utils/tools';
 import { iconsListSmall } from './icons';
 import { uploadBannerImage } from './pocketbase_server';
@@ -152,6 +152,7 @@ app.get('/smallcard/:id', async (req: Request, res: Response) => {
 
       const screenshotBuffer = await page.screenshot({
         clip: { x: 0, y: 0, width: 1350, height: 450 },
+        type: 'png',
       });
       res.set('Content-Type', 'image/png');
       res.send(screenshotBuffer);
@@ -317,6 +318,7 @@ app.get('/largecard/:id', async (req: Request, res: Response) => {
 
       const screenshotBuffer = await page.screenshot({
         clip: { x: 0, y: 0, width: 807, height: maxHeight },
+        type: 'png',
       });
       res.set('Content-Type', 'image/png');
       res.send(screenshotBuffer);

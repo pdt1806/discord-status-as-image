@@ -1,27 +1,31 @@
 import { UseFormReturnType } from '@mantine/form';
-import { debugging, disiAPI, refinerAPI } from '../../../env/env';
 import { getBannerImage } from '../../../pocketbase_client';
+import { useDISIStore } from '../../../stores/UseDISIStore';
+import { debugging, disiAPI, refinerAPI } from '../../../utils/const';
 import { fileToBase64 } from '../../../utils/tools';
 import { DISIForm } from '../../../utils/types';
 
 const users: { username: string; id: string }[] = [];
 
 export const generatingCards = async (
-  form: UseFormReturnType<DISIForm, (values: DISIForm) => DISIForm>,
-  customBannerMode: string,
-  bannerFile: File | null,
-  bannerPBID: string,
-  setUserID: (id: string) => void,
-  colorMode: string,
-  setSmallTail: (tail: string) => void,
-  setLargeTail: (tail: string) => void,
-  setSmallCardLink: (link: string) => void,
-  setLargeCardLink: (link: string) => void,
-  wantLargeCard: boolean,
-  bannerMode: string,
-  externalImageURL: string,
-  setBannerFile: (file: File | null) => void
+  form: UseFormReturnType<DISIForm, (values: DISIForm) => DISIForm>
 ) => {
+  const {
+    customBannerMode,
+    bannerFile,
+    bannerPBID,
+    setUserID,
+    colorMode,
+    setSmallTail,
+    setLargeTail,
+    setSmallCardLink,
+    setLargeCardLink,
+    wantLargeCard,
+    bannerMode,
+    externalImageURL,
+    setBannerFile,
+  } = useDISIStore.getState();
+
   if (customBannerMode === 'upload' && !bannerFile) throw new Error('Please upload a banner');
   if (customBannerMode === 'pbid' && !(await getBannerImage(bannerPBID, true))) {
     throw new Error('Invalid banner ID');
