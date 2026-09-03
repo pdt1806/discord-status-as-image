@@ -1,14 +1,20 @@
-import PocketBase from 'pocketbase';
+import PocketBase from "pocketbase";
 // eslint-disable-next-line import/no-cycle
-import { DocumentProps } from '../pages/Document';
+import { DocumentProps } from "../pages/Document";
 
-const pocketbase = new PocketBase('https://disi-pb.bennynguyen.dev');
+const pocketbase = new PocketBase("https://disi-pb.bennynguyen.dev");
 
-export const getBannerImage = async (id: string, validating: boolean = false) => {
+export const getBannerImage = async (
+  id: string,
+  validating: boolean = false,
+) => {
   try {
-    const imageModel = await pocketbase.collection('banners').getOne(id, { requestKey: null });
+    const imageModel = await pocketbase
+      .collection("banners")
+      .getOne(id, { requestKey: null });
     if (!imageModel) return null;
-    if (!validating) return pocketbase.getFileUrl(imageModel, imageModel.image);
+    if (!validating)
+      return pocketbase.files.getURL(imageModel, imageModel.image);
     return true;
   } catch {
     return null;
@@ -16,4 +22,4 @@ export const getBannerImage = async (id: string, validating: boolean = false) =>
 };
 
 export const getDocument = async (id: string): Promise<DocumentProps | null> =>
-  pocketbase.collection('documents').getOne(id, { requestKey: null });
+  pocketbase.collection("documents").getOne(id, { requestKey: null });

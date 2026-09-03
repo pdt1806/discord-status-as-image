@@ -1,14 +1,16 @@
-import { getBannerImage } from '../src/pocketbase_client';
-import { bgIsLight, hexToRgb } from '../src/utils/tools';
-import { RefinerResponse } from '../src/utils/types';
+import { getBannerImage } from "../src/pocketbase_client";
+import { bgIsLight, hexToRgb } from "../src/utils/tools";
+import { RefinerResponse } from "../src/utils/types";
 
 export const monoBackgroundTextColor = (bg: string) => {
   const color = hexToRgb(bg);
-  return bgIsLight(color!) ? '#202225' : 'white';
+  return bgIsLight(color!) ? "#202225" : "white";
 };
 
 export function base64toFile(base64: string): File | null {
-  const match = base64.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,(.+)$/);
+  const match = base64.match(
+    /^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,(.+)$/,
+  );
 
   if (!match) return null;
 
@@ -31,15 +33,17 @@ export function base64toFile(base64: string): File | null {
 export const fetchRefinerData = async (
   endpoint: string,
   id: string,
-  full: boolean
+  full: boolean,
 ): Promise<RefinerResponse | null> => {
-  const response = await fetch(`${endpoint}/user/${id}${full ? '?full=true' : ''}`);
+  const response = await fetch(
+    `${endpoint}/user/${id}${full ? "?full=true" : ""}`,
+  );
   try {
     if (response.status === 404) {
       return null;
     }
   } catch {
-    throw new Error('Internal Server Error');
+    throw new Error("Internal Server Error");
   }
   return response.json();
 };
@@ -47,51 +51,51 @@ export const fetchRefinerData = async (
 export async function urlToBase64(imgUrl: string): Promise<string> {
   const fetchImageUrl = await fetch(imgUrl);
   const responseArrBuffer = await fetchImageUrl.arrayBuffer();
-  const toBase64 = `data:${fetchImageUrl.headers.get('Content-Type') || 'image/png'};base64,${Buffer.from(responseArrBuffer).toString('base64')}`;
+  const toBase64 = `data:${fetchImageUrl.headers.get("Content-Type") || "image/png"};base64,${Buffer.from(responseArrBuffer).toString("base64")}`;
   return toBase64;
 }
 
 export const minimal_args = [
-  '--autoplay-policy=user-gesture-required',
-  '--disable-background-networking',
-  '--disable-background-timer-throttling',
-  '--disable-backgrounding-occluded-windows',
-  '--disable-breakpad',
-  '--disable-client-side-phishing-detection',
-  '--disable-component-update',
-  '--disable-default-apps',
-  '--disable-dev-shm-usage',
-  '--disable-domain-reliability',
-  '--disable-extensions',
-  '--disable-features=AudioServiceOutOfProcess',
-  '--disable-hang-monitor',
-  '--disable-ipc-flooding-protection',
-  '--disable-notifications',
-  '--disable-offer-store-unmasked-wallet-cards',
-  '--disable-popup-blocking',
-  '--disable-print-preview',
-  '--disable-prompt-on-repost',
-  '--disable-renderer-backgrounding',
-  '--disable-setuid-sandbox',
-  '--disable-speech-api',
-  '--disable-sync',
-  '--hide-scrollbars',
-  '--ignore-gpu-blacklist',
-  '--disable-gpu',
-  '--metrics-recording-only',
-  '--mute-audio',
-  '--no-default-browser-check',
-  '--no-first-run',
-  '--no-pings',
-  '--no-sandbox',
-  '--no-zygote',
-  '--password-store=basic',
-  '--use-gl=swiftshader',
-  '--use-mock-keychain',
-  '--headless',
+  "--autoplay-policy=user-gesture-required",
+  "--disable-background-networking",
+  "--disable-background-timer-throttling",
+  "--disable-backgrounding-occluded-windows",
+  "--disable-breakpad",
+  "--disable-client-side-phishing-detection",
+  "--disable-component-update",
+  "--disable-default-apps",
+  "--disable-dev-shm-usage",
+  "--disable-domain-reliability",
+  "--disable-extensions",
+  "--disable-features=AudioServiceOutOfProcess",
+  "--disable-hang-monitor",
+  "--disable-ipc-flooding-protection",
+  "--disable-notifications",
+  "--disable-offer-store-unmasked-wallet-cards",
+  "--disable-popup-blocking",
+  "--disable-print-preview",
+  "--disable-prompt-on-repost",
+  "--disable-renderer-backgrounding",
+  "--disable-setuid-sandbox",
+  "--disable-speech-api",
+  "--disable-sync",
+  "--hide-scrollbars",
+  "--ignore-gpu-blacklist",
+  "--disable-gpu",
+  "--metrics-recording-only",
+  "--mute-audio",
+  "--no-default-browser-check",
+  "--no-first-run",
+  "--no-pings",
+  "--no-sandbox",
+  "--no-zygote",
+  "--password-store=basic",
+  "--use-gl=swiftshader",
+  "--use-mock-keychain",
+  "--headless",
 
-  '--disable-web-security',
-  '--allow-running-insecure-content',
+  "--disable-web-security",
+  "--allow-running-insecure-content",
 ];
 
 export const getSmallCardLink = async (
@@ -109,7 +113,9 @@ export const getSmallCardLink = async (
     discordLabel,
     wantAccentColor,
     displayUsername,
-  }: { [key: string]: string }
+    avatarDecoration,
+    primaryGuild,
+  }: { [key: string]: string },
 ) => {
   let link = bg1
     ? `${root}/smallcard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&angle=${angle}&`
@@ -118,12 +124,20 @@ export const getSmallCardLink = async (
       : `${root}/smallcard?`;
 
   created && (link += `createdDate=${data.created_at}&`);
-  discordLabel && (link += 'discordLabel=true&');
-  wantAccentColor && data.accent_color && (link += `bg=${data.accent_color.replace('#', '')}&`);
-  activity && (link += `activityData=${encodeURIComponent(JSON.stringify(data.activity))}&`);
-  mood && (link += `moodData=${encodeURIComponent(JSON.stringify(data.mood))}&`);
+  discordLabel && (link += "discordLabel=true&");
+  wantAccentColor &&
+    data.accent_color &&
+    (link += `bg=${data.accent_color.replace("#", "")}&`);
+  activity &&
+    (link += `activityData=${encodeURIComponent(JSON.stringify(data.activity))}&`);
+  mood &&
+    (link += `moodData=${encodeURIComponent(JSON.stringify(data.mood))}&`);
+  avatarDecoration && (link += `avatarDecoration=${data.avatar_decoration}&`);
+  primaryGuild &&
+    (link += `primaryGuild=${JSON.stringify(data.primary_guild)}&`);
   link += `urls=${encodeURIComponent(JSON.stringify(data.urls))}&`;
-  return `${link}displayName=${displayUsername === 'true' ? data.username : data.display_name}&avatar=${data.avatar.replace('size=512', 'size=256')}&status=${data.status}&id=${id}`;
+
+  return `${link}displayName=${displayUsername === "true" ? data.username : data.display_name}&avatar=${data.avatar.replace("size=512", "size=256")}&status=${data.status}&id=${id}`;
 };
 
 export const getLargeCardLink = async (
@@ -139,39 +153,48 @@ export const getLargeCardLink = async (
     pronouns,
     wantBannerImage,
     wantAccentColor,
+    avatarDecoration,
     activity,
     mood,
     bannerColor,
     bannerID,
     bannerImage,
     discordLabel,
-  }: { [key: string]: string }
+    primaryGuild,
+  }: { [key: string]: string },
 ) => {
   let link = bg1
     ? `${root}/largecard?bg=${bg}&bg1=${bg1}&bg2=${bg2}&`
     : bg
       ? `${root}/largecard?bg=${bg}&`
       : `${root}/largecard?`;
-  link += aboutMe ? `aboutMe=${encodeURIComponent(aboutMe)}&` : '';
-  link += pronouns ? `pronouns=${pronouns}&` : '';
+  link += aboutMe ? `aboutMe=${encodeURIComponent(aboutMe)}&` : "";
+  link += pronouns ? `pronouns=${pronouns}&` : "";
 
   created && (link += `createdDate=${data.created_at}&`);
-  discordLabel && (link += 'discordLabel=true&');
+  discordLabel && (link += "discordLabel=true&");
   if (bannerID) {
     const banner = await getBannerImage(bannerID, false);
     banner && (link += `bannerImage=${banner}&`);
   }
   if (wantBannerImage) {
     data.banner && (link += `bannerImage=${data.banner}&`);
-    data.accent_color && (link += `accentColor=${data.accent_color.replace('#', '')}&`);
+    data.accent_color &&
+      (link += `accentColor=${data.accent_color.replace("#", "")}&`);
   }
   bannerImage && (link += `bannerImage=${bannerImage}&`);
   wantAccentColor &&
     data.accent_color &&
-    (link += `accentColor=${data.accent_color.replace('#', '')}&`);
+    (link += `accentColor=${data.accent_color.replace("#", "")}&`);
   bannerColor && (link += `bannerColor=${bannerColor}&`);
-  activity && (link += `activityData=${encodeURIComponent(JSON.stringify(data.activity))}&`);
-  mood && (link += `moodData=${encodeURIComponent(JSON.stringify(data.mood))}&`);
+  activity &&
+    (link += `activityData=${encodeURIComponent(JSON.stringify(data.activity))}&`);
+  mood &&
+    (link += `moodData=${encodeURIComponent(JSON.stringify(data.mood))}&`);
+  avatarDecoration && (link += `avatarDecoration=${data.avatar_decoration}&`);
+  primaryGuild &&
+    (link += `primaryGuild=${JSON.stringify(data.primary_guild)}&`);
   link += `urls=${encodeURIComponent(JSON.stringify(data.urls))}&`;
-  return `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar.replace('size=512', 'size=256')}&status=${data.status}&id=${id}`;
+
+  return `${link}username=${data.username}&displayName=${data.display_name}&avatar=${data.avatar.replace("size=512", "size=256")}&status=${data.status}&id=${id}`;
 };

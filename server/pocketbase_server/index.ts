@@ -10,10 +10,17 @@ dotenv.config({ path: `${__dirname}/.env` });
 
 const pocketbase = new PocketBase('https://disi-pb.bennynguyen.dev');
 
-await pocketbase.admins.authWithPassword(
-  process.env.DISI_POCKETBASE_EMAIL as string,
-  process.env.DISI_POCKETBASE_PASSWORD as string
-);
+// await pocketbase.admins.authWithPassword(
+//   process.env.DISI_POCKETBASE_EMAIL as string,
+//   process.env.DISI_POCKETBASE_PASSWORD as string
+// );
+
+await pocketbase
+  .collection('_superusers')
+  .authWithPassword(
+    process.env.DISI_POCKETBASE_EMAIL as string,
+    process.env.DISI_POCKETBASE_PASSWORD as string
+  );
 
 export const uploadBannerImage = async (image: Blob) => {
   const pbImage = await pocketbase.collection('banners').create({ image }, { requestKey: null });

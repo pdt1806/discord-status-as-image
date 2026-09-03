@@ -59,11 +59,11 @@ export const smallcardSvgContent = ({
             .cls-33{fill:#ec3e4a;fill-rule:evenodd;}
             .cls-4{clip-path:url(#clip-path);}
             .cls-10,.cls-5,.cls-6{isolation:isolate;}
-            .cls-6{font-size:${22 * (titleSize / 100)}px;font-family:"Noto Sans TC","Tahoma",Sans-Serif;font-weight:500;}
+            .cls-6{font-size:${22 * (titleSize / 100)}px;font-family:"gg sans","Tahoma",Sans-Serif;font-weight:500;}
             .cls-10,.cls-6,.cls-9{fill:${textColor};}
             .cls-7{letter-spacing:-0.021em;}
             .cls-8{letter-spacing:-0.01501em;}
-            .cls-10{font-size:8.85069px;font-family:"Noto Sans TC","Tahoma",Sans-Serif;font-weight:400;}
+            .cls-10{font-size:8.85069px;font-family:"gg sans","Tahoma",Sans-Serif;font-weight:400;}
             .cls-11{fill:#5865f2;}
             .cls-12{fill:#fff;}}
             </style>

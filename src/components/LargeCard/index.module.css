@@ -6,35 +6,30 @@
   transform-origin: top left;
 }
 
-.statusImage {
-  width: 75px;
-  height: 75px;
-  transform: translate(202px, -72px);
-  background: transparent;
-}
 
-.friendRequest {
+
+/* .friendRequest {
   padding: 8px 18px 8px 18px;
   color: white;
   font-size: 20px;
   font-weight: 400;
   border-radius: 5px;
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: 'gg sans', sans-serif;
 }
 
 .addMessageGroup {
   position: absolute;
   transform: translate(579px, 30px);
-}
+} */
 
 .name {
-  margin-top: 140px;
+  margin-top: -140px;
   padding-bottom: 30px;
-  transform: translateX(30px);
+  margin-left: 30px;
 }
 
 .aboutMeBox {
-  transform: translateX(30px);
+  margin-left: 30px;
   border-radius: 15px;
   z-index: 0;
   width: 747px;
@@ -44,16 +39,17 @@
 }
 
 .aboutMe {
-  margin-top: var(--mantine-spacing-sm);
-  font-size: 22px;
+  /* margin-top: var(--mantine-spacing-sm); */
+  /* font-size: 25px; */
   max-width: 700px;
   word-wrap: break-word;
   white-space: pre-line;
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: 'gg sans', sans-serif;
 }
 
 .discordLabel {
   height: 60px;
   width: 225.86px;
-  transform: translateX(581.13px);
+  /* transform: translateX(581.13px); */
+  margin-left: 581.13px;
 }

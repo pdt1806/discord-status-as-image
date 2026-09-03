@@ -3,35 +3,36 @@
   <head>
     <script>
       function createLink(href) {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'image';
-        link.fetchPriority = 'high';
+        const link = document.createElement("link");
+        link.rel = "preload";
+        link.as = "image";
+        link.fetchPriority = "high";
         link.href = href;
-        link.crossOrigin = 'anonymous';
+        link.crossOrigin = "anonymous";
         document.head.appendChild(link);
       }
 
       const urlParams = new URLSearchParams(window.location.search);
-      const slug = window.location.pathname.split('/').pop();
+      const slug = window.location.pathname.split("/").pop();
 
-      if (['smallcard', 'largecard'].includes(slug))
+      if (["smallcard", "largecard"].includes(slug))
         createLink(`${window.location.origin}/images/avatar_overlay.svg`);
-      if (slug === 'largecard') {
+      if (slug === "largecard") {
         createLink(`${window.location.origin}/images/banner_overlay.svg`);
-        if (urlParams.has('bannerImage')) createLink(urlParams.get('bannerImage'));
+        if (urlParams.has("bannerImage"))
+          createLink(urlParams.get("bannerImage"));
       }
-      if (urlParams.has('urls')) {
-        const urls = JSON.parse(decodeURIComponent(urlParams.get('urls')));
+      if (urlParams.has("urls")) {
+        const urls = JSON.parse(decodeURIComponent(urlParams.get("urls")));
         urls.forEach((url) => createLink(url));
       }
-      if (urlParams.has('status')) {
-        const status = urlParams.get('status');
+      if (urlParams.has("status")) {
+        const status = urlParams.get("status");
         createLink(`${window.location.origin}/images/icons/${status}.svg`);
       }
-      if (urlParams.has('discordLabel'))
+      if (urlParams.has("discordLabel"))
         createLink(`${window.location.origin}/images/discord-label.svg`);
-      if (urlParams.has('createdDate') && slug === 'smallcard')
+      if (urlParams.has("createdDate") && slug === "smallcard")
         createLink(`${window.location.origin}/images/discord.svg`);
     </script>
     <base href="/" />
@@ -57,7 +58,10 @@
       property="og:description"
       content="Turn your Discord status into a simple, eye-catching image for easy sharing and display. With your username and just a few clicks, setting things up is quick and easy!"
     />
-    <meta property="og:image" content="https://disi.bennynguyen.dev/images/disi-thumbnail.png" />
+    <meta
+      property="og:image"
+      content="https://disi.bennynguyen.dev/images/disi-thumbnail.png"
+    />
     <meta property="og:url" content="https://disi.bennynguyen.dev" />
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -67,10 +71,121 @@
       name="twitter:description"
       content="Turn your Discord status into a simple, eye-catching image for easy sharing and display. With your username and just a few clicks, setting things up is quick and easy!"
     />
-    <meta name="twitter:image" content="https://disi.bennynguyen.dev/images/disi-thumbnail.png" />
+    <meta
+      name="twitter:image"
+      content="https://disi.bennynguyen.dev/images/disi-thumbnail.png"
+    />
     <style>
+      /* ========================
+         gg sans (Standard)
+         ======================== */
+
+      /* Regular */
+      @font-face {
+        font-family: "gg sans";
+        src: url("/fonts/ggsans/ggsans.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      /* Italic */
+      @font-face {
+        font-family: "gg sans";
+        src: url("/fonts/ggsans/ggsansitalic.woff2") format("woff2");
+        font-weight: 400;
+        font-style: italic;
+      }
+
+      /* Medium */
+      @font-face {
+        font-family: "gg sans";
+        src: url("/fonts/ggsans/ggsansmedium.woff2") format("woff2");
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      /* Medium Italic */
+      @font-face {
+        font-family: "gg sans";
+        src: url("/fonts/ggsans/ggsansmediumitalic.woff2") format("woff2");
+        font-weight: 500;
+        font-style: italic;
+      }
+
+      /* SemiBold */
+      @font-face {
+        font-family: "gg sans";
+        src: url("/fonts/ggsans/ggsanssemibold.woff2") format("woff2");
+        font-weight: 600;
+        font-style: normal;
+      }
+
+      /* SemiBold Italic */
+      @font-face {
+        font-family: "gg sans";
+        src: url("/fonts/ggsans/ggsanssemibolditalic.woff2") format("woff2");
+        font-weight: 600;
+        font-style: italic;
+      }
+
+      /* Bold */
+      @font-face {
+        font-family: "gg sans";
+        src: url("/fonts/ggsans/ggsansbold.woff2") format("woff2");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      /* Bold Italic */
+      @font-face {
+        font-family: "gg sans";
+        src: url("/fonts/ggsans/ggsansbolditalic.woff2") format("woff2");
+        font-weight: 700;
+        font-style: italic;
+      }
+
+      /* ExtraBold */
+      @font-face {
+        font-family: "gg sans";
+        src: url("/fonts/ggsans/ggsansextrabold.woff2") format("woff2");
+        font-weight: 800;
+        font-style: normal;
+      }
+
+      /* ExtraBold Italic */
+      @font-face {
+        font-family: "gg sans";
+        src: url("/fonts/ggsans/ggsansextrabolditalic.woff2") format("woff2");
+        font-weight: 800;
+        font-style: italic;
+      }
+
+      /* ========================
+         gg sans mono (Monospace)
+         ======================== */
+
+      /* Mono Regular */
+      @font-face {
+        font-family: "gg sans mono";
+        src: url("/fonts/ggsans/ggsansmono.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      /* Mono Bold */
+      @font-face {
+        font-family: "gg sans mono";
+        src: url("/fonts/ggsans/ggsansmonobold.woff2") format("woff2");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      .layout {
+        font-family: "Be Vietnam Pro", sans-serif;
+      }
+
       body {
-        font-family: 'Noto Sans TC', sans-serif;
+        font-family: "gg sans", sans-serif;
         overflow-x: hidden;
       }
     </style>

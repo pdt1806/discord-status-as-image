@@ -1,54 +1,73 @@
 /* eslint-disable consistent-return */
-import { ActionIcon, Box, Flex, Group, Image, Stack, Text, Title } from '@mantine/core';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Box, Group, Image, Stack, Text, Title } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
-import { IconMessageCircleFilled, IconUserPlus } from '@tabler/icons-react';
-import { getBannerImage } from '../../pocketbase_client';
-import { formatDate, hexToRgb, setLargeCardTitleSize } from '../../utils/tools';
-import { ActivityType, MoodType } from '../../utils/types';
-import classes from '../style/profile.module.css';
-import ActivityBox from './ActivityBox';
-import innerClasses from './index.module.css';
-import MoodBox from './Mood';
+import { getBannerImage } from "../../pocketbase_client";
 import {
-  BG1TextColor,
-  adjustHexColor,
-  isDark,
-  notBG1TextColor,
+  formatDate,
+  setLargeCardTitleSize,
   setStatusImg,
   updateStatus,
-} from './utils';
+} from "../../utils/tools";
+import { ActivityType, MoodType } from "../../utils/types";
+import DiscordAvatar from "../DiscordAvatar";
+import ServerTag from "../ServerTag";
+import classes from "../style/profile.module.css";
+import ActivityBox from "./ActivityBox";
+import innerClasses from "./index.module.css";
+import MoodBox from "./Mood";
+import { BG1TextColor, notBG1TextColor } from "./utils";
 
 const LargeCard = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
-  const [username, setUsername] = useState(params.get('username'));
-  const [displayName, setDisplayName] = useState(params.get('displayName'));
-  const [avatar, setAvatar] = useState(params.get('avatar'));
-  const [status, setStatus] = useState(params.get('status'));
-  const [createdDate, setCreatedDate] = useState(params.get('createdDate'));
-  const [bannerImage, setBannerImage] = useState(params.get('bannerImage'));
-  const [statusImage, setStatusImage] = useState(setStatusImg(status || 'offline'));
+
+  // these values are from refiner api
+  const [username, setUsername] = useState(params.get("username"));
+  const [displayName, setDisplayName] = useState(params.get("displayName"));
+  const [avatar, setAvatar] = useState(params.get("avatar"));
+  const [avatarDecoration, setAvatarDecoration] = useState(
+    params.get("avatarDecoration"),
+  );
+  const [primaryGuild, setPrimaryGuild] = useState(
+    params.get("primaryGuild")
+      ? JSON.parse(decodeURIComponent(params.get("primaryGuild")!))
+      : null,
+  );
+  const [status, setStatus] = useState(params.get("status"));
+  const [createdDate, setCreatedDate] = useState(params.get("createdDate"));
+  const [bannerImage, setBannerImage] = useState(params.get("bannerImage"));
+  const [statusImage, setStatusImage] = useState(
+    setStatusImg(status || "offline"),
+  );
   const [accentColor, setAccentColor] = useState(
-    params.get('accentColor') && `#${params.get('accentColor')}` // for api -> png
-  );
-  const id = params.get('id');
-  const backgroundColor = params.get('bg') ? `#${params.get('bg')}` : '#111214';
-  const discordLabel = params.get('discordLabel');
-  const bannerColor = params.get('bannerColor') ? `#${params.get('bannerColor')}` : '#212121';
-  const aboutMe = decodeURIComponent(params.get('aboutMe') || '');
-  const pronouns = decodeURIComponent(params.get('pronouns') || '');
-  const bannerID = params.get('bannerID');
-  const [activity, setActivity] = useState<ActivityType | null>(
-    params.get('activityData') ? JSON.parse(decodeURIComponent(params.get('activityData')!)) : null
-  );
-  const [mood, setMood] = useState<MoodType | null>(
-    params.get('moodData') ? JSON.parse(decodeURIComponent(params.get('moodData')!)) : null
+    params.get("accentColor") && `#${params.get("accentColor")}`, // for api -> png
   );
 
-  const bg1 = params.get('bg1');
-  const bg2 = params.get('bg2');
+  // these values are from url params
+  const id = params.get("id");
+  const backgroundColor = params.get("bg") ? `#${params.get("bg")}` : "#111214";
+  const discordLabel = params.get("discordLabel");
+  const bannerColor = params.get("bannerColor")
+    ? `#${params.get("bannerColor")}`
+    : "#212121";
+  const aboutMe = decodeURIComponent(params.get("aboutMe") || "");
+  const pronouns = decodeURIComponent(params.get("pronouns") || "");
+  const bannerID = params.get("bannerID");
+  const [activity, setActivity] = useState<ActivityType | null>(
+    params.get("activityData")
+      ? JSON.parse(decodeURIComponent(params.get("activityData")!))
+      : null,
+  );
+  const [mood, setMood] = useState<MoodType | null>(
+    params.get("moodData")
+      ? JSON.parse(decodeURIComponent(params.get("moodData")!))
+      : null,
+  );
+
+  const bg1 = params.get("bg1");
+  const bg2 = params.get("bg2");
 
   let backgroundGradient;
   let textColor;
@@ -57,31 +76,35 @@ const LargeCard = () => {
     [backgroundGradient, textColor] = colors;
   } else textColor = notBG1TextColor(backgroundColor);
 
-  const dimmedColor = textColor === 'white' ? 'rgba(255, 255, 255, 0.75)' : 'rgba(0, 0, 0, 0.75)';
+  const dimmedColor =
+    textColor === "white" ? "rgba(255, 255, 255, 0.75)" : "rgba(0, 0, 0, 0.75)";
 
-  let buttonColor = null;
-  if (bg1 && bg2) {
-    buttonColor = adjustHexColor(bg1, 100 * (isDark(hexToRgb(bg1)!) ? -1 : 1));
-  } else if (backgroundColor) {
-    buttonColor = adjustHexColor(
-      backgroundColor,
-      100 * (isDark(hexToRgb(backgroundColor)!) ? -1 : 1)
-    );
-  }
+  // let buttonColor = null;
+  // if (bg1 && bg2) {
+  //   buttonColor = adjustHexColor(bg1, 100 * (isDark(hexToRgb(bg1)!) ? -1 : 1));
+  // } else if (backgroundColor) {
+  //   buttonColor = adjustHexColor(
+  //     backgroundColor,
+  //     100 * (isDark(hexToRgb(backgroundColor)!) ? -1 : 1)
+  //   );
+  // }
 
-  const buttonTextColor = buttonColor
-    ? isDark(hexToRgb(buttonColor)!)
-      ? 'black'
-      : 'white'
-    : 'black';
+  // const buttonTextColor = buttonColor
+  //   ? isDark(hexToRgb(buttonColor)!)
+  //     ? 'black'
+  //     : 'white'
+  //   : 'black';
 
   const updateStatusArgs = {
-    params,
     id,
+    params,
+    displayUsername: false, // LargeCard displays both
     setUsername,
     setDisplayName,
     setAvatar,
     setStatus,
+    setAvatarDecoration,
+    setPrimaryGuild,
     setStatusImage,
     setCreatedDate,
     setBannerImage,
@@ -91,11 +114,12 @@ const LargeCard = () => {
   };
 
   useEffect(() => {
-    if (params.get('displayName')) return; // request from back-end
+    if (params.get("displayName")) return; // request from back-end
 
     async function getBanner() {
       if (!bannerID) return;
-      const banner: string = ((await getBannerImage(bannerID, false)) as string) || '';
+      const banner: string =
+        ((await getBannerImage(bannerID, false)) as string) || "";
       if (!banner) return;
       setBannerImage(banner);
     }
@@ -105,7 +129,7 @@ const LargeCard = () => {
   }, []);
 
   useEffect(() => {
-    if (params.get('displayName')) return;
+    if (params.get("displayName")) return;
 
     const intervalID = setInterval(() => {
       updateStatus(updateStatusArgs);
@@ -114,22 +138,26 @@ const LargeCard = () => {
     return () => clearInterval(intervalID);
   }, []);
 
-  const titleSize = setLargeCardTitleSize(displayName || '');
+  const titleSize = setLargeCardTitleSize(displayName || "");
 
   const ratio = window.innerWidth / 807;
 
   return (
-    <a href={`https://discord.com/users/${id}`} target="_blank" rel="noreferrer">
+    <a
+      href={`https://discord.com/users/${id}`}
+      target="_blank"
+      rel="noreferrer"
+    >
       <Box
         id="disi-large-card"
         className={innerClasses.largeCard}
         style={{
           background: backgroundGradient || backgroundColor,
-          transform: `${ratio < 1 ? `scale(${ratio})` : ''}`,
+          transform: `${ratio < 1 ? `scale(${ratio})` : ""}`,
         }}
       >
         {bannerImage ? (
-          <Image src={bannerImage} className={classes.banner} id="banner" crossOrigin="anonymous" />
+          <Image src={bannerImage} className={classes.banner} id="banner" />
         ) : (
           <Box
             id="banner"
@@ -137,17 +165,19 @@ const LargeCard = () => {
             className={classes.banner}
           />
         )}
-        <Box style={{ transform: 'scale(0.8) translate(20px, -180px)', position: 'absolute' }}>
-          <Image
-            alt="Avatar"
-            src={avatar}
-            className={classes.avatar}
-            id="avatar"
-            crossOrigin="anonymous"
+        <Box
+          style={{
+            transform: "scale(0.8) translate(-47px, -180px)",
+          }}
+          mt={10}
+        >
+          <DiscordAvatar
+            avatar={avatar}
+            statusImage={statusImage}
+            avatarDecoration={avatarDecoration}
           />
-          <Image src={statusImage} className={innerClasses.statusImage} crossOrigin="anonymous" />
         </Box>
-        {(!mood ||
+        {/* {(!mood ||
           mood.state === 'Custom Status' ||
           mood.state.length <= (mood.emoji ? 15 : 19)) && (
           <Group gap="xs" className={innerClasses.addMessageGroup}>
@@ -168,82 +198,68 @@ const LargeCard = () => {
               </Group>
             </Box>
           </Group>
-        )}
+        )} */}
         <Box mb={15} className={innerClasses.name}>
-          <Title fw={600} size={titleSize} c={textColor} ff="Noto Sans TC">
+          <Title fw={600} size={titleSize} c={textColor} ff="gg sans">
             {displayName}
           </Title>
-          <Flex mt={15}>
-            <Title fw={400} size={25} c={dimmedColor} ff="Noto Sans TC">
+          <Group gap={5} mt={15}>
+            <Title fw={400} size={30} c={dimmedColor} ff="gg sans">
               {username}
             </Title>
             {pronouns && (
               <>
-                <Title fw={700} mx={5} size={25} c={dimmedColor} ff="Noto Sans TC">
+                <Title fw={700} mx={5} size={30} c={dimmedColor} ff="gg sans">
                   •
                 </Title>
-                <Title fw={400} size={25} c={dimmedColor} ff="Noto Sans TC">
+                <Title fw={400} size={30} c={dimmedColor} ff="gg sans">
                   {pronouns}
                 </Title>
               </>
             )}
-          </Flex>
+            <Box w={10} />
+            {primaryGuild && (
+              <ServerTag textColor={textColor} primaryGuild={primaryGuild} />
+            )}
+          </Group>
         </Box>
         {mood && <MoodBox mood={mood} textColor={textColor} />}
-        {activity &&
-          ['playing', 'listening', 'streaming', 'watching', 'competing'].includes(
-            activity.type
-          ) && (
-            <ActivityBox
-              background={
-                textColor === 'white'
-                  ? bg1 && bg2
-                    ? 'rgba(0,0,0,0.3)'
-                    : '#232528'
-                  : bg1 && bg2
-                    ? 'rgba(255,255,255,0.7)'
-                    : '#f5f5f5'
-              }
-              textColor={textColor}
-              activity={activity}
-            />
-          )}
         {(aboutMe || createdDate) && (
           <Box
             className={innerClasses.aboutMeBox}
             style={{
               backgroundColor:
-                textColor === 'white'
+                textColor === "white"
                   ? bg1 && bg2
-                    ? 'rgba(0,0,0,0.3)'
-                    : '#232528'
+                    ? "rgba(0,0,0,0.3)"
+                    : "#232528"
                   : bg1 && bg2
-                    ? 'rgba(255,255,255,0.7)'
-                    : '#f5f5f5',
+                    ? "rgba(255,255,255,0.7)"
+                    : "#f5f5f5",
             }}
           >
             <Stack gap="xl">
               {aboutMe && (
-                <Box>
-                  <Title size={20} c={textColor} ff="Noto Sans TC">
-                    About Me
-                  </Title>
-                  <Text c={textColor} lineClamp={5} className={innerClasses.aboutMe}>
-                    {aboutMe}
-                  </Text>
-                </Box>
+                <Text
+                  c={textColor}
+                  lineClamp={5}
+                  className={innerClasses.aboutMe}
+                  fz={25}
+                >
+                  {aboutMe}
+                </Text>
               )}
               {createdDate && (
                 <Box>
-                  <Title size={20} c={textColor} ff="Noto Sans TC">
+                  <Title size={25} c={textColor} ff="gg sans">
                     Member Since
                   </Title>
                   <Text
                     c={textColor}
                     lineClamp={4}
                     mt="sm"
-                    style={{ fontSize: '22px' }}
-                    ff="Noto Sans TC"
+                    fz={25}
+                    ff="gg sans"
                   >
                     {formatDate(createdDate)}
                   </Text>
@@ -252,12 +268,34 @@ const LargeCard = () => {
             </Stack>
           </Box>
         )}
+        {activity &&
+          [
+            "playing",
+            "listening",
+            "streaming",
+            "watching",
+            "competing",
+          ].includes(activity.type) && (
+            <ActivityBox
+              background={
+                textColor === "white"
+                  ? bg1 && bg2
+                    ? "rgba(0,0,0,0.3)"
+                    : "#232528"
+                  : bg1 && bg2
+                    ? "rgba(255,255,255,0.7)"
+                    : "#f5f5f5"
+              }
+              textColor={textColor}
+              activity={activity}
+            />
+          )}
+
         {discordLabel && (
           <Image
             alt="discord-logo"
             src="/images/discord-label.svg"
             className={innerClasses.discordLabel}
-            crossOrigin="anonymous"
           />
         )}
       </Box>

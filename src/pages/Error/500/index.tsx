@@ -25,11 +25,21 @@ export function Error500() {
       <Container>
         <Box>
           <div className={classes.label}>500</div>
-          <Title className={classes.title}>Something bad just happened...</Title>
+          <Title className={classes.title}>Something is not right...</Title>
           <Text size="lg" ta="center" className={classes.description}>
             The server is currently down, please try again later. <br />
             Don't worry, I may have been notified of this issue and will work to resolve it as soon
             as possible.
+          </Text>
+          <Text size="lg" ta="center" className={classes.description}>
+            Check the status on{' '}
+            <Anchor
+              href="https://uptime.bennynguyen.dev/status/discord-status-as-image"
+              target="_blank"
+              rel="noreferrer"
+            >
+              our status monitoring page.
+            </Anchor>{' '}
           </Text>
           <Center>
             <Button variant="outline" size="md" onClick={() => window.location.reload()}>

@@ -16,7 +16,7 @@ import {
 import { notifications } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
 import { useDISIStore } from '../../../stores/UseDISIStore';
-import { debugging, disiAPI, web } from '../../../utils/const';
+import { web } from '../../../utils/const';
 
 const MainContentColumn3 = () => {
   const smallCardLink = useDISIStore((state) => state.smallCardLink);
@@ -70,27 +70,27 @@ const MainContentColumn3 = () => {
         copiedNotification();
       },
     },
-    {
-      value: '🔗 Copy Image URL (.svg)',
-      execute: () => {
-        navigator.clipboard.writeText(`${disiAPI[debugging]}/smallcard_svg/${userID}?${smallTail}`);
-        copiedNotification();
-      },
-    },
-    {
-      value: '🔗 Copy Markdown (.svg)',
-      execute: () => {
-        navigator.clipboard.writeText(
-          `[![My Discord](${disiAPI[debugging]}/smallcard_svg/${userID}?${smallTail})](https://discord.com/users/${userID})`
-        );
-        copiedNotification();
-      },
-    },
+    // {
+    //   value: '🔗 Copy Image URL (.svg)',
+    //   execute: () => {
+    //     navigator.clipboard.writeText(`${disiAPI}/smallcard_svg/${userID}?${smallTail}`);
+    //     copiedNotification();
+    //   },
+    // },
+    // {
+    //   value: '🔗 Copy Markdown (.svg)',
+    //   execute: () => {
+    //     navigator.clipboard.writeText(
+    //       `[![My Discord](${disiAPI}/smallcard_svg/${userID}?${smallTail})](https://discord.com/users/${userID})`
+    //     );
+    //     copiedNotification();
+    //   },
+    // },
     {
       value: '🔗 Copy iframe (live card)',
       execute: () => {
         navigator.clipboard.writeText(
-          `<iframe src="${web[debugging]}/smallcard?id=${userID}${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
+          `<iframe src="${web}/smallcard?id=${userID}${smallTail}" name="disi-small-card" height="100px" width="300px"></iframe>`
         );
         copiedNotification();
       },
@@ -130,7 +130,7 @@ const MainContentColumn3 = () => {
       value: '🔗 Copy iframe (live card)',
       execute: () => {
         navigator.clipboard.writeText(
-          `<iframe src="${web[debugging]}/largecard?id=${userID}${largeTail}" name="disi-large-card" height="219.7px" width="300px"></iframe>`
+          `<iframe src="${web}/largecard?id=${userID}${largeTail}" name="disi-large-card" height="219.7px" width="300px"></iframe>`
         );
         copiedNotification();
       },
@@ -141,14 +141,14 @@ const MainContentColumn3 = () => {
         window.open(`/largecard?id=${userID}${largeTail}`, '_blank');
       },
     },
-    {
-      value: '🔗 Copy Image URL (.svg) - Unsupported',
-      execute: () => {},
-    },
-    {
-      value: '🔗 Copy Markdown (.svg) - Unsupported',
-      execute: () => {},
-    },
+    // {
+    //   value: '🔗 Copy Image URL (.svg) - Unsupported',
+    //   execute: () => {},
+    // },
+    // {
+    //   value: '🔗 Copy Markdown (.svg) - Unsupported',
+    //   execute: () => {},
+    // },
   ];
 
   const largeCardComboboxOptions = largeCardOptions.map((option) => (

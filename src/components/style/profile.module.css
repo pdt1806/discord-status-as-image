@@ -8,6 +8,15 @@
   -moz-mask-size: cover;
 }
 
+.avatarDecoration {
+  /* height: 70%;
+  width: 273px; */
+  -webkit-mask-image: url('/images/avatar-decoration_overlay.png');
+  -moz-mask-image: url('/images/avatar-decoration_overlay.png');
+  -webkit-mask-size: cover;
+  -moz-mask-size: cover;
+}
+
 .banner {
   width: 807px !important;
   height: 300px !important;
@@ -17,4 +26,11 @@
   -webkit-mask-size: 807px auto;
   -moz-mask-size: 807px auto;
   object-fit: cover;
+}
+
+.statusImage {
+  width: 75px;
+  height: 75px;
+  transform: translate(202px, -72px);
+  /* background: transparent; */
 }

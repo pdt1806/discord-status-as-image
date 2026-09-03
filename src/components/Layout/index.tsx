@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import classes from '../../App.module.css';
 import { Error500 } from '../../pages/Error/500';
-import { debugging, disiAPI, refinerAPI } from '../../utils/const';
+import { disiAPI, refinerAPI } from '../../utils/const';
 import Fallback from '../Fallback';
 import Footer from '../Footer';
 import Header from '../Header';
@@ -24,9 +24,9 @@ const Layout = () => {
           controller.abort();
         }, 3000);
 
-        const responseAPI = await fetch(disiAPI[debugging], { signal });
+        const responseAPI = await fetch(disiAPI, { signal });
         const responsePB = await fetch('https://disi-pb.bennynguyen.dev/api', { signal });
-        const responseRefiner = await fetch(refinerAPI[debugging], {
+        const responseRefiner = await fetch(refinerAPI, {
           signal,
         });
 
