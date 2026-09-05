@@ -1,6 +1,6 @@
 import PocketBase from "pocketbase";
+import { DocumentProps } from "../utils/types";
 // eslint-disable-next-line import/no-cycle
-import { DocumentProps } from "../pages/Document";
 
 const pocketbase = new PocketBase("https://disi-pb.bennynguyen.dev");
 

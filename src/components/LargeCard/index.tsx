@@ -3,6 +3,7 @@ import { Box, Group, Image, Stack, Text, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
+import { Helmet } from "react-helmet-async";
 import { getBannerImage } from "../../pocketbase_client";
 import {
   formatDate,
@@ -79,22 +80,6 @@ const LargeCard = () => {
   const dimmedColor =
     textColor === "white" ? "rgba(255, 255, 255, 0.75)" : "rgba(0, 0, 0, 0.75)";
 
-  // let buttonColor = null;
-  // if (bg1 && bg2) {
-  //   buttonColor = adjustHexColor(bg1, 100 * (isDark(hexToRgb(bg1)!) ? -1 : 1));
-  // } else if (backgroundColor) {
-  //   buttonColor = adjustHexColor(
-  //     backgroundColor,
-  //     100 * (isDark(hexToRgb(backgroundColor)!) ? -1 : 1)
-  //   );
-  // }
-
-  // const buttonTextColor = buttonColor
-  //   ? isDark(hexToRgb(buttonColor)!)
-  //     ? 'black'
-  //     : 'white'
-  //   : 'black';
-
   const updateStatusArgs = {
     id,
     params,
@@ -129,7 +114,7 @@ const LargeCard = () => {
   }, []);
 
   useEffect(() => {
-    if (params.get("displayName")) return;
+    if (window.__PLAYWRIGHT_SERVER__) return;
 
     const intervalID = setInterval(() => {
       updateStatus(updateStatusArgs);
@@ -142,12 +127,35 @@ const LargeCard = () => {
 
   const ratio = window.innerWidth / 807;
 
+  const boxBackgroundColor =
+    textColor === "white"
+      ? backgroundColor || (bg1 && bg2)
+        ? "rgba(0,0,0,0.3)"
+        : "#232528"
+      : backgroundColor || (bg1 && bg2)
+        ? "rgba(255,255,255,0.7)"
+        : "#f5f5f5";
+
+  // expose to playwright
+  useEffect(() => {
+    window.refreshDiscordStatus = () => {
+      return updateStatus(updateStatusArgs);
+    };
+
+    return () => {
+      delete window.refreshDiscordStatus;
+    };
+  }, []);
+
   return (
     <a
       href={`https://discord.com/users/${id}`}
       target="_blank"
       rel="noreferrer"
     >
+      <Helmet>
+        <title>{`${id} - Large - Discord Status as Image`}</title>
+      </Helmet>
       <Box
         id="disi-large-card"
         className={innerClasses.largeCard}
@@ -177,28 +185,6 @@ const LargeCard = () => {
             avatarDecoration={avatarDecoration}
           />
         </Box>
-        {/* {(!mood ||
-          mood.state === 'Custom Status' ||
-          mood.state.length <= (mood.emoji ? 15 : 19)) && (
-          <Group gap="xs" className={innerClasses.addMessageGroup}>
-            <ActionIcon h={40.8} w={40.8} bg={buttonColor ?? '#4e5057'}>
-              <IconMessageCircleFilled
-                size={20}
-                style={{ margin: 0, padding: 0 }}
-                color={buttonTextColor}
-              />
-            </ActionIcon>
-            <Box
-              className={innerClasses.friendRequest}
-              style={{ backgroundColor: buttonColor ?? '#5865f2' }}
-            >
-              <Group gap="xs">
-                <IconUserPlus size={20} color={buttonTextColor} />
-                <Text c={buttonTextColor}>Add Friend</Text>
-              </Group>
-            </Box>
-          </Group>
-        )} */}
         <Box mb={15} className={innerClasses.name}>
           <Title fw={600} size={titleSize} c={textColor} ff="gg sans">
             {displayName}
@@ -228,14 +214,7 @@ const LargeCard = () => {
           <Box
             className={innerClasses.aboutMeBox}
             style={{
-              backgroundColor:
-                textColor === "white"
-                  ? bg1 && bg2
-                    ? "rgba(0,0,0,0.3)"
-                    : "#232528"
-                  : bg1 && bg2
-                    ? "rgba(255,255,255,0.7)"
-                    : "#f5f5f5",
+              backgroundColor: boxBackgroundColor,
             }}
           >
             <Stack gap="xl">
@@ -277,15 +256,7 @@ const LargeCard = () => {
             "competing",
           ].includes(activity.type) && (
             <ActivityBox
-              background={
-                textColor === "white"
-                  ? bg1 && bg2
-                    ? "rgba(0,0,0,0.3)"
-                    : "#232528"
-                  : bg1 && bg2
-                    ? "rgba(255,255,255,0.7)"
-                    : "#f5f5f5"
-              }
+              background={boxBackgroundColor}
               textColor={textColor}
               activity={activity}
             />

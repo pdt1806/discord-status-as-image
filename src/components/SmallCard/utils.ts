@@ -1,51 +1,5 @@
 import { bgIsLight, blendColors, hexToRgb } from "../../utils/tools";
 
-// export function updateStatus({
-//   id,
-//   params,
-
-//   setDisplayName,
-//   setAvatar,
-//   setStatus,
-//   setStatusImage,
-//   setCreatedDate,
-
-//   setActivity,
-//   setMood,
-// }: {
-//   id: string | null;
-//   params: URLSearchParams;
-
-//   setDisplayName: (name: string) => void;
-//   setAvatar: (avatar: string) => void;
-//   setStatus: (status: string) => void;
-//   setStatusImage: (statusImage: string) => void;
-//   setCreatedDate: (date: string) => void;
-//   setBackgroundColor: (color: string) => void;
-//   setActivity: (activity: ActivityType) => void;
-//   setMood: (mood: MoodType) => void;
-// }) {
-//   const fullRequired = params.get("wantAccentColor");
-//   fetch(`${refinerAPI}/user/${id}${fullRequired ? "?full=true" : ""}`, {
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   })
-//     .then((res) => res.json())
-//     .then((data) => {
-//       setDisplayName(displayUsername ? data.username : data.display_name);
-//       setAvatar(data.avatar);
-//       setStatus(data.status);
-//       setStatusImage(setStatusImg(data.status));
-//       if (params.get("created")) {
-//         setCreatedDate(data.created_at);
-//       }
-//       if (params.get("wantAccentColor")) setBackgroundColor(data.accent_color);
-//       if (params.get("activity")) setActivity(data.activity);
-//       if (params.get("mood")) setMood(data.mood);
-//     });
-// }
-
 export function textColorFn(
   params: URLSearchParams,
   backgroundColor: string,

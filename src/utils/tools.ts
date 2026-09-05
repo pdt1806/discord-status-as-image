@@ -260,7 +260,17 @@ export function updateStatus({
 }) {
   const fullRequired =
     params.get("wantBannerImage") || params.get("wantAccentColor");
-  fetch(`${refinerAPI}/user/${id}${fullRequired ? "?full=true" : ""}`, {
+  const extendedData = ["avatarDecoration", "primaryGuild", "activity"]
+    .filter((key) => !!params.get(key))
+    .join(",");
+
+  const refinerParams = new URLSearchParams();
+  if (fullRequired) refinerParams.set("full", fullRequired);
+  if (extendedData) refinerParams.set("extend", extendedData);
+  const query = refinerParams.toString();
+  const url = `${refinerAPI}/user/${id}${query ? `?${query}` : ""}`;
+
+  return fetch(url, {
     headers: {
       "Content-Type": "application/json",
     },

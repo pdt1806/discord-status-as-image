@@ -1,1 +1,0 @@
-npx tsx ../main.ts

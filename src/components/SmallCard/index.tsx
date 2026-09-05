@@ -1,5 +1,6 @@
-import { Box, Flex, Group, Image, Title } from "@mantine/core";
+import { Box, Flex, Group, Image, Text, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
 import TwemojiImport from "react-twemoji";
 import {
@@ -92,7 +93,7 @@ const SmallCard = () => {
   }, []);
 
   useEffect(() => {
-    if (params.get("displayName")) return;
+    if (window.__PLAYWRIGHT_SERVER__) return;
 
     const intervalID = setInterval(() => {
       updateStatus(updateStatusArgs);
@@ -106,12 +107,26 @@ const SmallCard = () => {
 
   const ratio = window.innerWidth / 1350;
 
+  // expose to playwright
+  useEffect(() => {
+    window.refreshDiscordStatus = () => {
+      return updateStatus(updateStatusArgs);
+    };
+
+    return () => {
+      delete window.refreshDiscordStatus;
+    };
+  }, []);
+
   return (
     <a
       href={`https://discord.com/users/${id}`}
       target="_blank"
       rel="noreferrer"
     >
+      <Helmet>
+        <title>{`${id} - Small - Discord Status as Image`}</title>
+      </Helmet>
       <Box
         style={{
           background: backgroundGradient || backgroundColor,
@@ -197,28 +212,33 @@ const SmallCard = () => {
               maw={720}
             >
               {mood && (
-                <>
+                <Text
+                  ff="gg sans"
+                  fz={45}
+                  c={
+                    status !== "offline" ||
+                    (status === "offline" && textColor === "white")
+                      ? textColor
+                      : "#5d5f6b"
+                  }
+                  lineClamp={1}
+                >
                   {mood.emoji && mood.emoji.id && (
-                    <Image
-                      src={getEmojiURLfromCDN(mood.emoji)}
-                      alt={mood.emoji.name}
-                      style={{ width: 58, height: 58 }}
-                      mr="lg"
-                    />
+                    <span
+                      style={{
+                        display: "inline-block",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      <Image
+                        src={getEmojiURLfromCDN(mood.emoji)}
+                        alt={mood.emoji.name}
+                        style={{ width: 58, height: 58 }}
+                        mr="lg"
+                      />
+                    </span>
                   )}
-
-                  <Title
-                    lineClamp={1}
-                    size={45}
-                    c={
-                      status !== "offline" ||
-                      (status === "offline" && textColor === "white")
-                        ? textColor
-                        : "#5d5f6b"
-                    }
-                    fw={400}
-                    ff="gg sans"
-                  >
+                  {mood.emoji && !mood.emoji.id && (
                     <Twemoji
                       options={{ className: innerClasses.twemoji }}
                       style={{
@@ -229,9 +249,9 @@ const SmallCard = () => {
                     >
                       <span style={{ fontSize: 45 }}>{mood.emoji.name}</span>
                     </Twemoji>
-                    {mood.state === "Custom Status" ? "" : mood.state}
-                  </Title>
-                </>
+                  )}
+                  {mood.state === "Custom Status" ? "" : mood.state}
+                </Text>
               )}
               {activity && (mood?.state === "Custom Status" || !mood) && (
                 <Title

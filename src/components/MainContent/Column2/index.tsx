@@ -118,17 +118,6 @@ const MainContentColumn2 = () => {
           }}
         />
         <Checkbox
-          label="Display Discord label"
-          mt="md"
-          {...form.getInputProps("discordLabel")}
-          onChange={(e) => {
-            form.setValues({
-              ...form.values,
-              discordLabel: e.currentTarget.checked,
-            });
-          }}
-        />
-        <Checkbox
           label="Display Activity"
           mt="md"
           {...form.getInputProps("activity")}
@@ -145,14 +134,6 @@ const MainContentColumn2 = () => {
           }}
         />
         <Checkbox
-          label="Display account created date"
-          mt="md"
-          {...form.getInputProps("created")}
-          onChange={(e) => {
-            form.setFieldValue("created", e.currentTarget.checked);
-          }}
-        />
-        <Checkbox
           label="Display Avatar Decoration (if available)"
           mt="md"
           {...form.getInputProps("avatarDecoration")}
@@ -166,6 +147,25 @@ const MainContentColumn2 = () => {
           {...form.getInputProps("primaryGuild")}
           onChange={(e) => {
             form.setFieldValue("primaryGuild", e.currentTarget.checked);
+          }}
+        />
+        <Checkbox
+          label="Display account created date"
+          mt="md"
+          {...form.getInputProps("created")}
+          onChange={(e) => {
+            form.setFieldValue("created", e.currentTarget.checked);
+          }}
+        />
+        <Checkbox
+          label="Display Discord label"
+          mt="md"
+          {...form.getInputProps("discordLabel")}
+          onChange={(e) => {
+            form.setValues({
+              ...form.values,
+              discordLabel: e.currentTarget.checked,
+            });
           }}
         />
         <Divider mt="xl" />

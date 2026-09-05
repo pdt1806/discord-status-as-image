@@ -103,7 +103,7 @@ export type MaintenanceMessageType = {
 };
 
 export type ColorMode = "Single" | "Gradient" | "Discord Accent Color";
-export type BannerMode = "Custom Color" | string;
+type BannerMode = "Custom Color" | string;
 
 export interface DISIForm {
   username: string | null;
@@ -152,3 +152,11 @@ export interface DISIStore {
   setBannerPBID: (v: string) => void;
   setBannerFile: (file: File | null) => void;
 }
+
+export type DocumentProps = {
+  id: string;
+  title: string;
+  content: string;
+  created: string;
+  updated: string;
+};
