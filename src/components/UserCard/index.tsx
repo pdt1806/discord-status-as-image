@@ -6,7 +6,6 @@ import {
   IconWorld,
 } from "@tabler/icons-react";
 import { JSX, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import classes from "./index.module.css";
 
 interface UserData {
@@ -49,9 +48,7 @@ const buttons = [
 
 export default function UserCard() {
   const [info, setInfo] = useState<UserData | null>(null);
-  const [items, setItems] = useState<Array<JSX.Element>>([]);
-
-  const navigate = useNavigate();
+  const [items, setItems] = useState<Array<JSX.Element>>([]);  
 
   useEffect(() => {
     fetch("https://api.github.com/users/pdt1806")

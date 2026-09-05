@@ -1,4 +1,4 @@
-export const debugging = false;
+export const debugging = process.env.NODE_ENV === "development";
 
 export const web = debugging
   ? "http://localhost:5173"

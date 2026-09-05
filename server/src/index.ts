@@ -257,5 +257,5 @@ app.post("/uploadbanner", async (req, res) => {
 });
 
 app.listen(1911, () =>
-  console.log(`Server is running on http://localhost:1911`),
+  console.log(`MODE: ${process.env.NODE_ENV}\nServer is running on http://localhost:1911`),
 );

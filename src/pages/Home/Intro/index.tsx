@@ -17,7 +17,7 @@ export default function Intro({ isMobile }: { isMobile: boolean | undefined }) {
             <Title mb="lg" ta="center">
               Discord Status as Image
             </Title>
-            <Text mb="xl" ta="center">
+            <Text mb="xl" ta="center" maw="75%">
               Turn your Discord status into a simple, eye-catching image for easy sharing and
               display. With your username and just a few clicks, setting things up is quick and
               easy!

@@ -1,0 +1,8 @@
+services:
+  discord-status-as-image-server:
+    build: .
+    ports:
+      - "1911:1911"
+    volumes:
+      - ./src/pocketbase/.env:/app/dist/.env:ro
+    restart: unless-stopped

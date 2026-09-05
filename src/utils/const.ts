@@ -1,4 +1,4 @@
-export const debugging = false;
+export const debugging = import.meta.env.DEV;
 
 export const refinerAPI = debugging
   ? "http://localhost:7000"
