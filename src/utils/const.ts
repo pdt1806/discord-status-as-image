@@ -1,16 +1,10 @@
 export const debugging = import.meta.env.DEV;
 
-export const refinerAPI = debugging
-  ? "http://localhost:7000"
-  : "https://refiner-api.bennynguyen.dev";
+export const refinerAPI = debugging ? "http://localhost:7000" : "https://refiner-api.bennynguyen.dev";
 
-export const disiAPI = debugging
-  ? "http://localhost:1911"
-  : "https://disi-api.bennynguyen.dev";
+export const disiAPI = debugging ? "http://localhost:1911" : "https://disi-api.bennynguyen.dev";
 
-export const web = debugging
-  ? "http://localhost:5173"
-  : "https://disi.bennynguyen.dev";
+export const web = debugging ? "http://localhost:5173" : "https://disi.bennynguyen.dev";
 
 export const bannerModeList = [
   "Custom Color",

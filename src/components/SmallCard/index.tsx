@@ -3,13 +3,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
 import TwemojiImport from "react-twemoji";
-import {
-  formatDate,
-  getEmojiURLfromCDN,
-  setSmallCardTitleSize,
-  setStatusImg,
-  updateStatus,
-} from "../../utils/tools";
+import { formatDate, getEmojiURLfromCDN, setSmallCardTitleSize, setStatusImg, updateStatus } from "../../utils/tools";
 import { ActivityType, MoodType } from "../../utils/types";
 import DiscordAvatar from "../DiscordAvatar";
 import ServerTag from "../ServerTag";
@@ -24,28 +18,18 @@ const SmallCard = () => {
 
   const [displayName, setDisplayName] = useState(params.get("displayName"));
   const [avatar, setAvatar] = useState(params.get("avatar"));
-  const [avatarDecoration, setAvatarDecoration] = useState(
-    params.get("avatarDecoration"),
-  );
+  const [avatarDecoration, setAvatarDecoration] = useState(params.get("avatarDecoration"));
   const [primaryGuild, setPrimaryGuild] = useState(
-    params.get("primaryGuild")
-      ? JSON.parse(decodeURIComponent(params.get("primaryGuild")!))
-      : null,
+    params.get("primaryGuild") ? JSON.parse(decodeURIComponent(params.get("primaryGuild")!)) : null,
   );
   const [status, setStatus] = useState(params.get("status"));
   const [createdDate, setCreatedDate] = useState(params.get("createdDate"));
-  const [statusImage, setStatusImage] = useState(
-    setStatusImg(status || "offline"),
-  );
+  const [statusImage, setStatusImage] = useState(setStatusImg(status || "offline"));
   const [activity, setActivity] = useState<ActivityType | null>(
-    params.get("activityData")
-      ? JSON.parse(decodeURIComponent(params.get("activityData")!))
-      : null,
+    params.get("activityData") ? JSON.parse(decodeURIComponent(params.get("activityData")!)) : null,
   );
   const [mood, setMood] = useState<MoodType | null>(
-    params.get("moodData")
-      ? JSON.parse(decodeURIComponent(params.get("moodData")!))
-      : null,
+    params.get("moodData") ? JSON.parse(decodeURIComponent(params.get("moodData")!)) : null,
   );
 
   const id = params.get("id");
@@ -53,11 +37,7 @@ const SmallCard = () => {
   const displayUsername = params.get("displayUsername") === "true";
 
   const [backgroundColor, setBackgroundColor] = useState(
-    params.get("bg")
-      ? `#${params.get("bg")}`
-      : params.get("accentColor")
-        ? `#${params.get("accentColor")}`
-        : "#2b2d31",
+    params.get("bg") ? `#${params.get("bg")}` : params.get("accentColor") ? `#${params.get("accentColor")}` : "#2b2d31",
   );
 
   const [backgroundGradient, setBackgroundGradient] = useState("");
@@ -119,11 +99,7 @@ const SmallCard = () => {
   }, []);
 
   return (
-    <a
-      href={`https://discord.com/users/${id}`}
-      target="_blank"
-      rel="noreferrer"
-    >
+    <a href={`https://discord.com/users/${id}`} target="_blank" rel="noreferrer">
       <Helmet>
         <title>{`${id} - Small - Discord Status as Image`}</title>
       </Helmet>
@@ -134,11 +110,7 @@ const SmallCard = () => {
         }}
         className={innerClasses.smallCard}
       >
-        <DiscordAvatar
-          avatar={avatar}
-          avatarDecoration={avatarDecoration}
-          statusImage={statusImage}
-        />
+        <DiscordAvatar avatar={avatar} avatarDecoration={avatarDecoration} statusImage={statusImage} />
         <Box style={{ transform: "translateX(60px)" }}>
           <Flex mih={130} direction="column" justify="center">
             <Group gap="xl">
@@ -146,12 +118,7 @@ const SmallCard = () => {
                 mt="auto"
                 fw={600}
                 size={titleSize}
-                c={
-                  status !== "offline" ||
-                  (status === "offline" && textColor === "white")
-                    ? textColor
-                    : "#5d5f6b"
-                }
+                c={status !== "offline" || (status === "offline" && textColor === "white") ? textColor : "#5d5f6b"}
                 ff="gg sans"
                 lh={1.1}
               >
@@ -165,10 +132,7 @@ const SmallCard = () => {
                     marginTop: 15,
                   }}
                 >
-                  <ServerTag
-                    textColor={textColor}
-                    primaryGuild={primaryGuild}
-                  />
+                  <ServerTag textColor={textColor} primaryGuild={primaryGuild} />
                 </Box>
               )}
             </Group>
@@ -190,12 +154,7 @@ const SmallCard = () => {
               />
               <Title
                 size={40}
-                c={
-                  status !== "offline" ||
-                  (status === "offline" && textColor === "white")
-                    ? textColor
-                    : "#5d5f6b"
-                }
+                c={status !== "offline" || (status === "offline" && textColor === "white") ? textColor : "#5d5f6b"}
                 fw={400}
                 ff="gg sans"
               >
@@ -204,23 +163,12 @@ const SmallCard = () => {
             </Box>
           )}
           {(activity || mood) && (
-            <Box
-              mt="lg"
-              display="flex"
-              style={{ alignItems: "center" }}
-              h={60}
-              maw={720}
-            >
+            <Box mt="lg" display="flex" style={{ alignItems: "center" }} h={60} maw={720}>
               {mood && (
                 <Text
                   ff="gg sans"
                   fz={45}
-                  c={
-                    status !== "offline" ||
-                    (status === "offline" && textColor === "white")
-                      ? textColor
-                      : "#5d5f6b"
-                  }
+                  c={status !== "offline" || (status === "offline" && textColor === "white") ? textColor : "#5d5f6b"}
                   lineClamp={1}
                 >
                   {mood.emoji && mood.emoji.id && (
@@ -257,12 +205,7 @@ const SmallCard = () => {
                 <Title
                   lineClamp={1}
                   size={45}
-                  c={
-                    status !== "offline" ||
-                    (status === "offline" && textColor === "white")
-                      ? textColor
-                      : "#5d5f6b"
-                  }
+                  c={status !== "offline" || (status === "offline" && textColor === "white") ? textColor : "#5d5f6b"}
                   fw={400}
                   ff="gg sans"
                 >
@@ -278,9 +221,7 @@ const SmallCard = () => {
                   <span style={{ fontWeight: 600 }}>
                     {
                       {
-                        listening: activity.platform
-                          ? activity.artists.join(", ")
-                          : activity.state,
+                        listening: activity.platform ? activity.artists.join(", ") : activity.state,
                         watching: activity.name,
                         playing: activity.name,
                         streaming: activity.details,
@@ -307,17 +248,17 @@ const SmallCard = () => {
               )}
             </Box>
           )}
-          {discordLabel && (
-            <Image
-              alt="discord-logo"
-              src="/images/discord-label.svg"
-              className={innerClasses.discordLabel}
-              style={{
-                transform: `translate(603.3px, ${createdDate || activity || mood ? "30px" : "70px"})`,
-              }}
-            />
-          )}
         </Box>
+        {discordLabel && (
+          <Image
+            alt="discord-logo"
+            src="/images/discord-label.svg"
+            className={innerClasses.discordLabel}
+            // style={{
+            //   transform: `translate(603.3px, ${createdDate || activity || mood ? "30px" : "70px"})`,
+            // }}
+          />
+        )}
       </Box>
     </a>
   );

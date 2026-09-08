@@ -3,12 +3,8 @@ import { LRUCache } from "lru-cache";
 import playwright, { Browser, Page } from "playwright";
 import { expect } from "playwright/test";
 import { uploadBannerImage } from "./pocketbase";
-import { debugging, minimal_args, web } from "./utils/const";
+import { minimal_args, origin, web as root } from "./utils/const";
 import { base64toFile, joinedParams, logTimestamp } from "./utils/tools";
-
-const root = web;
-
-const origin = debugging ? "*" : "https://disi.bennynguyen.dev";
 
 const app = express();
 
@@ -110,11 +106,7 @@ async function selectPage(id: string, type: string): Promise<[Page, boolean]> {
   return [page, true];
 }
 
-const processPage = async (
-  page: playwright.Page,
-  firstTime: boolean,
-  link: string,
-) => {
+const processPage = async (page: playwright.Page, firstTime: boolean, link: string) => {
   if (firstTime) {
     await page.goto(link, { waitUntil: "networkidle" });
   } else if (page.url() !== link) {
@@ -256,6 +248,4 @@ app.post("/uploadbanner", async (req, res) => {
   }
 });
 
-app.listen(1911, () =>
-  console.log(`MODE: ${process.env.NODE_ENV}\nServer is running on http://localhost:1911`),
-);
+app.listen(1911, () => console.log(`MODE: ${process.env.NODE_ENV}\nServer is running on http://localhost:1911`));

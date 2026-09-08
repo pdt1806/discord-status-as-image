@@ -31,6 +31,8 @@
   height: 90px;
   width: 338.8px;
   position: absolute;
+  bottom: 0;
+  right: 0;
 }
 
 .twemoji {

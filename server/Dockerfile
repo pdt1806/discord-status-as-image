@@ -1,8 +1,8 @@
 FROM oven/bun:latest AS builder
 WORKDIR /app
 
-COPY package.json bun.lockb ./
-RUN bun install
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
 
 COPY . .
 RUN bun run build
@@ -12,9 +12,9 @@ WORKDIR /app
 
 RUN npm install -g bun
 
-COPY package.json bun.lockb ./
+COPY package.json bun.lock ./
 
-RUN bun install --production
+RUN bun install --frozen-lockfile
 
 COPY --from=builder /app/dist ./dist
 

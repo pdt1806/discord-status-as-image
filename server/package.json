@@ -8,11 +8,11 @@
     "start": "NODE_ENV=production node dist/index.js"
   },
   "dependencies": {
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "lru-cache": "^11.5.2",
-    "playwright": "^1.62.1",
-    "pocketbase": "^0.28.0"
+    "dotenv": "17.4.2",
+    "express": "5.2.1",
+    "lru-cache": "11.5.2",
+    "playwright": "1.62.1",
+    "pocketbase": "0.28.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

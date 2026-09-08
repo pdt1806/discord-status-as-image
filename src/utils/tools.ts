@@ -1,13 +1,6 @@
 import { UseFormReturnType } from "@mantine/form";
 import { refinerAPI } from "./const";
-import {
-  ActivityType,
-  DISIForm,
-  EmojiType,
-  MoodType,
-  PrimaryGuildType,
-  RefinerResponse,
-} from "./types";
+import { ActivityType, DISIForm, EmojiType, MoodType, PrimaryGuildType, RefinerResponse } from "./types";
 
 export function hexToRgb(hex: string) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -144,21 +137,6 @@ export const scrollToSection = (id: string) => {
   }
 };
 
-export const fetchMaintenanceMessage = async () => {
-  try {
-    const response = await fetch(
-      "https://corsproxy.io/?url=https://pastebin.com/raw/8VsA8p66",
-      {
-        cache: "no-store",
-      },
-    );
-    if (response.ok) return await response.json();
-  } catch (e) {
-    // pass
-  }
-  return null;
-};
-
 const formatMilliseconds = (milliseconds: number) => {
   const totalSeconds = Math.floor(milliseconds / 1000);
   const hours = Math.floor(totalSeconds / 3600);
@@ -170,10 +148,7 @@ const formatMilliseconds = (milliseconds: number) => {
     : `${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 };
 
-export const getElapsedProgessListening = (timestamps: {
-  start: string;
-  end: string;
-}) => {
+export const getElapsedProgessListening = (timestamps: { start: string; end: string }) => {
   const startTime = new Date(timestamps.start).getTime();
   const endTime = new Date(timestamps.end).getTime();
   const currentTime = new Date().getTime();
@@ -183,9 +158,7 @@ export const getElapsedProgessListening = (timestamps: {
   const totalTime = endTime - startTime;
 
   return {
-    elapsedTime: formatMilliseconds(
-      elapsedTime <= totalTime ? elapsedTime : totalTime,
-    ),
+    elapsedTime: formatMilliseconds(elapsedTime <= totalTime ? elapsedTime : totalTime),
     totalTime: formatMilliseconds(totalTime),
     progress: (elapsedTime / totalTime) * 100,
   };
@@ -193,9 +166,7 @@ export const getElapsedProgessListening = (timestamps: {
 
 export const formatActivityImageUrl = (encodedUrl: string) => {
   const startIndex = encodedUrl.indexOf("https/");
-  const url = decodeURIComponent(
-    encodedUrl.slice(startIndex).replace("https/", ""),
-  );
+  const url = decodeURIComponent(encodedUrl.slice(startIndex).replace("https/", ""));
   return url ? `https://${url}` : "";
 };
 
@@ -213,9 +184,7 @@ export const getImageURLfromCDN = (appID: string, imageID: string) =>
 export const getEmojiURLfromCDN = (emoji: EmojiType) => {
   const { id, animated } = emoji;
 
-  return animated
-    ? `https://cdn.discordapp.com/emojis/${id}.gif`
-    : `https://cdn.discordapp.com/emojis/${id}.png`;
+  return animated ? `https://cdn.discordapp.com/emojis/${id}.gif` : `https://cdn.discordapp.com/emojis/${id}.png`;
 };
 
 export function setStatusImg(status?: string) {
@@ -258,11 +227,8 @@ export function updateStatus({
   setActivity: (activity: ActivityType) => void;
   setMood: (mood: MoodType) => void;
 }) {
-  const fullRequired =
-    params.get("wantBannerImage") || params.get("wantAccentColor");
-  const extendedData = ["avatarDecoration", "primaryGuild", "activity"]
-    .filter((key) => !!params.get(key))
-    .join(",");
+  const fullRequired = params.get("wantBannerImage") || params.get("wantAccentColor");
+  const extendedData = ["avatarDecoration", "primaryGuild", "activity"].filter((key) => !!params.get(key)).join(",");
 
   const refinerParams = new URLSearchParams();
   if (fullRequired) refinerParams.set("full", fullRequired);
@@ -282,16 +248,14 @@ export function updateStatus({
       setAvatar(data.avatar);
       setStatus(data.status);
       setStatusImage(setStatusImg(data.status));
-      if (params.get("avatarDecoration"))
-        setAvatarDecoration(data.avatar_decoration || "");
+      if (params.get("avatarDecoration")) setAvatarDecoration(data.avatar_decoration || "");
       if (params.get("primaryGuild")) setPrimaryGuild(data.primary_guild);
       if (params.get("created")) setCreatedDate(data.created_at);
       if (setBannerImage && params.get("wantBannerImage")) {
         setBannerImage(data.banner);
         setAccentColor(data.accent_color || "");
       }
-      if (params.get("wantAccentColor"))
-        setAccentColor(data.accent_color || "");
+      if (params.get("wantAccentColor")) setAccentColor(data.accent_color || "");
       if (params.get("activity")) setActivity(data.activity);
       if (params.get("mood")) setMood(data.mood);
     });

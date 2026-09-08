@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@mantine/core": "9.6.0",
-    "@mantine/form": "^9.6.0",
+    "@mantine/form": "9.6.0",
     "@mantine/hooks": "9.6.0",
-    "@mantine/notifications": "^9.6.0",
+    "@mantine/notifications": "9.6.0",
     "@react-scan/vite-plugin-react-scan": "^0.2.7",
     "@tabler/icons-react": "^3.46.0",
     "@types/react-twemoji": "^0.4.3",
