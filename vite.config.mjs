@@ -1,4 +1,3 @@
-import reactScan from "@react-scan/vite-plugin-react-scan";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vite";
@@ -11,13 +10,7 @@ export default defineConfig({
       usePolling: true,
     },
   },
-  plugins: [
-    react(),
-    compression({ algorithm: "brotliCompress" }),
-    reactScan({
-      enable: false,
-    }),
-  ],
+  plugins: [react(), compression({ algorithm: "brotliCompress" })],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),

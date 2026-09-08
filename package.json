@@ -13,7 +13,6 @@
     "@mantine/form": "9.6.0",
     "@mantine/hooks": "9.6.0",
     "@mantine/notifications": "9.6.0",
-    "@react-scan/vite-plugin-react-scan": "^0.2.7",
     "@tabler/icons-react": "^3.46.0",
     "@types/react-twemoji": "^0.4.3",
     "pocketbase": "^0.28.0",
@@ -21,7 +20,6 @@
     "react-dom": "^19.2.8",
     "react-helmet-async": "^3.0.0",
     "react-router-dom": "^7.18.3",
-    "react-scan": "^0.5.7",
     "react-twemoji": "^0.7.2",
     "zustand": "^5.0.15"
   },
