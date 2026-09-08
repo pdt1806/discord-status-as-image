@@ -1,4 +1,4 @@
-<p align="center"><img src="https://disi.bennynguyen.dev/images/disi-logo.png" width="20%"></img></p>
+<p align="center"><img src="https://disi.fyi/images/disi-logo.png" width="20%" style="min-width: 300px"></img></p>
 <h1 align="center">Discord Status as Image</h1>
 
 <p align="center">Turn your Discord status into a simple, eye-catching image for easy sharing and display. With your username and just a few clicks, setting things up is quick and easy!</p>
@@ -7,15 +7,15 @@
 
 ## Features
 
-- ✅ **Simple**: Just input your Discord username and you're all set.
-- ✅ **Customizable**: Set your own banner (yes, even your own image), background color, etc. to make your status image unique.
-- ✅ **Live**: Your status image updates in real-time, so you don't have to worry about it being outdated.
-- ✅ **Multiple formats**: Deliver your status image in multiple formats, including .png, .svg, and embeddable iframe.
-- ✅ **Shareable**: Share your status image with friends or on social media with just a click of a button.
+- **Simple**: Just input your Discord username and you're all set.
+- **Customizable**: Set your own banner (yes, even your own image), background color, etc. to make your status image unique.
+- **Live**: Your status image updates in real-time, so you don't have to worry about it being outdated.
+- **Multiple formats**: Deliver your status image in multiple formats, including .png, .svg, and embeddable iframe.
+- **Shareable**: Share your status image with friends or on social media with just a click of a button.
 
 ## How to get a Discord Status image?
 
-1. Access this website: https://disi.bennynguyen.dev
+1. Access this website: https://disi.fyi
 2. Following the instructions on the website
    1. Click on the invite link to join the server.
    2. Fill out the form with your Discord username and the desired settings.
@@ -26,7 +26,6 @@
 - [React](https://reactjs.org/)
 - [Mantine](https://mantine.dev/)
 - [Cloudflare Pages](https://pages.cloudflare.com/)
-- [Node.js](https://nodejs.org/en/)
 - [Express](https://expressjs.com/)
 - [Playwright](https://playwright.dev/)
 - [Refiner Discord Bot](https://github.com/pdt1806/refiner-discord-bot)
@@ -42,7 +41,7 @@
 
 ## License
 
-Discord Status as Image is licensed under the MIT License. See the [`LICENSE`](https://github.com/pdt1806/discord-status-as-image/blob/main/LICENSE).
+Discord Status as Image is licensed under the MIT License. See [`LICENSE`](https://github.com/pdt1806/discord-status-as-image/blob/main/LICENSE).
 
 ## An example use case
 

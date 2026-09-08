@@ -1,21 +1,9 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Anchor, Badge, Box, Button, Center, Container, Divider, Text, Title } from '@mantine/core';
-import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { fetchMaintenanceMessage } from '../../../utils/tools';
-import { MaintenanceMessageType } from '../../../utils/types';
-import classes from './index.module.css';
+import { Anchor, Box, Button, Center, Container, Text, Title } from "@mantine/core";
+import { Helmet } from "react-helmet-async";
+import classes from "./index.module.css";
 
 export function Error500() {
-  const [maintenanceMessage, setMaintenanceMessage] = useState<MaintenanceMessageType | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      const message = await fetchMaintenanceMessage();
-      setMaintenanceMessage(message);
-    })();
-  }, []);
-
   return (
     <div className={classes.root}>
       <Helmet>
@@ -25,11 +13,20 @@ export function Error500() {
       <Container>
         <Box>
           <div className={classes.label}>500</div>
-          <Title className={classes.title}>Something bad just happened...</Title>
+          <Title className={classes.title}>Something is not right...</Title>
           <Text size="lg" ta="center" className={classes.description}>
             The server is currently down, please try again later. <br />
-            Don't worry, I may have been notified of this issue and will work to resolve it as soon
-            as possible.
+            Don't worry, we may have been notified of this issue and will work to resolve it as soon as possible.
+          </Text>
+          <Text size="lg" ta="center" className={classes.description}>
+            Check the status on{" "}
+            <Anchor
+              href="https://uptime.bennynguyen.dev/status/discord-status-as-image"
+              target="_blank"
+              rel="noreferrer"
+            >
+              our status monitoring page.
+            </Anchor>{" "}
           </Text>
           <Center>
             <Button variant="outline" size="md" onClick={() => window.location.reload()}>
@@ -38,50 +35,6 @@ export function Error500() {
           </Center>
         </Box>
 
-        {maintenanceMessage ? (
-          maintenanceMessage.error500.active ? (
-            <>
-              <Divider my="xl" />
-              <Badge color="orange" variant="light" size="lg">
-                {maintenanceMessage.error500.date}
-              </Badge>
-              <Title order={3} mb="lg" mt="lg">
-                {maintenanceMessage.error500.title}
-              </Title>
-              <Text>{maintenanceMessage.error500.message}</Text>
-            </>
-          ) : (
-            <>
-              <Divider my="xl" />
-              <Badge color="orange" variant="light" size="lg">
-                NEW ISSUE
-              </Badge>
-              <Title order={3} mb="lg" mt="lg">
-                This issue has not been known yet
-              </Title>
-              <Text>
-                Please send a message to{' '}
-                <span>
-                  <Anchor c="orange" href="mailto:me@bennynguyen.dev">
-                    me@bennynguyen.dev
-                  </Anchor>
-                </span>{' '}
-                or ping{' '}
-                <span>
-                  <Text style={{ fontStyle: 'italic', display: 'inline' }}>@pdteggman</Text>
-                </span>{' '}
-                in the{' '}
-                <span>
-                  <Anchor c="orange" href="https://discord.com/invite/WWDkkjmD">
-                    Discord server
-                  </Anchor>
-                </span>{' '}
-                to notify me of this issue and I will work on it ASAP. Thank you in advance.
-              </Text>
-              {/* <Divider my="xl" /> */}
-            </>
-          )
-        ) : null}
         {/* <Title order={5}>
           Click the button below if you still want to proceed to the app (the images will not work!)
         </Title>

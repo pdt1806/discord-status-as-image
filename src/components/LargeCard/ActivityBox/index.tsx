@@ -1,13 +1,22 @@
-import { Box, Flex, Group, Image, Progress, Space, Text, Title } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import {
+  Box,
+  Flex,
+  Group,
+  Image,
+  Progress,
+  Space,
+  Text,
+  Title,
+} from "@mantine/core";
+import { useEffect, useState } from "react";
 import {
   formatActivityImageUrl,
   getElapsedProgessListening,
   getImageURLfromCDN,
   getPlayingTimestamp,
-} from '../../../utils/tools';
-import { ActivityType } from '../../../utils/types';
-import classes from '../index.module.css';
+} from "../../../utils/tools";
+import { ActivityType } from "../../../utils/types";
+import classes from "../index.module.css";
 
 export default function ActivityBox({
   background,
@@ -19,23 +28,23 @@ export default function ActivityBox({
   activity: ActivityType;
 }) {
   const [listeningProgress, setListeningProgress] = useState(
-    getElapsedProgessListening(activity.timestamps)
+    getElapsedProgessListening(activity.timestamps),
   );
 
   const [playingTimestamp, setPlayingTimestamp] = useState(
-    getPlayingTimestamp(activity.timestamps)
+    getPlayingTimestamp(activity.timestamps),
   );
 
   useEffect(() => {
     const interval = setInterval(() => {
       switch (activity.type) {
-        case 'listening':
+        case "listening":
           setListeningProgress(getElapsedProgessListening(activity.timestamps));
           break;
-        case 'playing':
-        case 'streaming':
-        case 'watching':
-        case 'competing':
+        case "playing":
+        case "streaming":
+        case "watching":
+        case "competing":
           setPlayingTimestamp(getPlayingTimestamp(activity.timestamps));
           break;
         default:
@@ -54,22 +63,21 @@ export default function ActivityBox({
         backgroundColor: background,
       }}
     >
-      {activity.type === 'listening' && (
+      {activity.type === "listening" && (
         <>
-          <Flex justify="space-between" align="center">
-            <Title order={3} ff="Noto Sans TC">
+          <Group gap="sm">
+            <Title order={3} ff="gg sans" size={25}>
               Listening to {activity.platform ?? activity.name}
             </Title>
-            {activity.platform && (
+            {/* {activity.platform == "Spotify" && (
               <Image
                 src="/images/logos/spotify.svg"
                 alt="Spotify"
-                width={30}
-                height={30}
-                crossOrigin="anonymous"
+                style={{ width: 30, height: 30 }}
+                mt={-2}
               />
-            )}
-          </Flex>
+            )} */}
+          </Group>
           <Group gap="lg" mt="lg">
             <Image
               src={
@@ -79,65 +87,63 @@ export default function ActivityBox({
               }
               alt="Large Image"
               style={{
-                height: '150px',
-                aspectRatio: '1/1',
+                height: 150,
+                width: 150,
+                aspectRatio: "1/1",
                 borderRadius: 10,
               }}
-              crossOrigin="anonymous"
             />
-            <Box maw={500}>
-              <Title ff="Noto Sans TC" order={3}>
+            <Box style={{ width: "75%" }}>
+              <Title ff="gg sans" order={3} fz={28} lineClamp={1}>
                 {activity.platform ? activity.name : activity.details}
               </Title>
               <Space h={3} />
-              <Text ff="Noto Sans TC" fz={22}>
-                {`by ${activity.platform ? activity.artists.join(', ') : activity.state}`}
+              <Text ff="gg sans" fz={25}>
+                {`by ${activity.platform ? activity.artists.join(", ") : activity.state}`}
               </Text>
-              {activity.platform && (
-                <Text ff="Noto Sans TC" fz={22}>{`on ${activity.album.name}`}</Text>
-              )}
+              {/* {activity.platform && (
+                <Text ff="gg sans" fz={25}>{`on ${activity.album.name}`}</Text>
+              )} */}
             </Box>
           </Group>
-          <Box mt="xl">
+          <Flex mt="md" justify="space-between" align="center" w="100%">
+            <Text ff="gg sans mono" fz={22}>
+              {listeningProgress.elapsedTime}
+            </Text>
             <Progress
-              mt="md"
+              mx="md"
               radius="xl"
               value={listeningProgress.progress}
               color={textColor}
               bg="var(--mantine-color-dimmed)"
               w="100%"
             />
-            <Flex justify="space-between" align="center" w="100%" mt="sm">
-              <Text ff="Noto Sans TC" fz={22}>
-                {listeningProgress.elapsedTime}
-              </Text>
-              <Text ff="Noto Sans TC" fz={22}>
-                {listeningProgress.totalTime}
-              </Text>
-            </Flex>
-          </Box>
+            <Text ff="gg sans mono" fz={22}>
+              {listeningProgress.totalTime}
+            </Text>
+          </Flex>
         </>
       )}
-      {activity.type === 'playing' && (
+      {activity.type === "playing" && (
         <>
-          <Title order={3} ff="Noto Sans TC">
-            Playing a game
+          <Title order={3} ff="gg sans" size={25}>
+            Playing
           </Title>
           <Group gap="lg" mt="lg">
             {activity.assets && <OtherAssets activity={activity} />}
             <Box maw={500}>
-              <Title ff="Noto Sans TC" order={3} lineClamp={1}>
+              <Title ff="gg sans" order={3} lineClamp={1} fz={28}>
                 {activity.name}
               </Title>
               <Space h={3} />
-              <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
+              <Text ff="gg sans" fz={25} lineClamp={1}>
                 {activity.details}
               </Text>
-              <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
+              <Text ff="gg sans" fz={25} lineClamp={1}>
                 {activity.state}
               </Text>
               {activity.timestamps.start && (
-                <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
+                <Text ff="gg sans" fz={25} lineClamp={1}>
                   {playingTimestamp} elapsed
                 </Text>
               )}
@@ -145,23 +151,23 @@ export default function ActivityBox({
           </Group>
         </>
       )}
-      {activity.type === 'streaming' && (
+      {activity.type === "streaming" && (
         <>
-          <Title order={3} ff="Noto Sans TC">
+          <Title order={3} ff="gg sans" size={25}>
             Live on {activity.platform}
           </Title>
           <Group gap="lg" mt="lg">
             {activity.assets && <OtherAssets activity={activity} />}
             <Box maw={500}>
-              <Title ff="Noto Sans TC" order={3} lineClamp={1}>
+              <Title ff="gg sans" order={3} lineClamp={1} fz={28}>
                 {activity.details}
               </Title>
               <Space h={3} />
-              <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
+              <Text ff="gg sans" fz={25} lineClamp={1}>
                 playing {activity.game}
               </Text>
               {activity.timestamps.start && (
-                <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
+                <Text ff="gg sans" fz={25} lineClamp={1}>
                   {playingTimestamp} elapsed
                 </Text>
               )}
@@ -169,29 +175,29 @@ export default function ActivityBox({
           </Group>
         </>
       )}
-      {['watching', 'competing'].includes(activity.type) && (
+      {["watching", "competing"].includes(activity.type) && (
         <>
-          {activity.type === 'watching' ? (
-            <Title order={3} ff="Noto Sans TC">
+          {activity.type === "watching" ? (
+            <Title order={3} ff="gg sans" size={25}>
               Watching {activity.name}
             </Title>
           ) : (
-            <Title order={3} ff="Noto Sans TC">
+            <Title order={3} ff="gg sans">
               Competing in {activity.name}
             </Title>
           )}
           <Group gap="lg" mt="lg">
             {activity.assets && <OtherAssets activity={activity} />}
             <Box maw={500}>
-              <Title ff="Noto Sans TC" order={3} lineClamp={2}>
+              <Title ff="gg sans" order={3} lineClamp={2} fz={28}>
                 {activity.details}
               </Title>
               <Space h={3} />
-              <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
+              <Text ff="gg sans" fz={25} lineClamp={1}>
                 {activity.state}
               </Text>
               {activity.timestamps.start && (
-                <Text ff="Noto Sans TC" fz={22} lineClamp={1}>
+                <Text ff="gg sans" fz={25} lineClamp={1}>
                   {playingTimestamp} elapsed
                 </Text>
               )}
@@ -206,51 +212,46 @@ export default function ActivityBox({
 function OtherAssets({ activity }: { activity: ActivityType }) {
   const { large_image, small_image } = activity.assets;
 
+  const resolveImageUrl = (imageName?: string) => {
+    if (!imageName) return "";
+
+    return imageName.includes("https")
+      ? formatActivityImageUrl(imageName)
+      : getImageURLfromCDN(activity.application_id, imageName);
+  };
+
+  const primaryImageUrl = resolveImageUrl(large_image ?? small_image);
+  const secondaryImageUrl = resolveImageUrl(small_image);
+
   return (
     <Box>
       <Image
-        src={
-          large_image
-            ? large_image.includes('https')
-              ? formatActivityImageUrl(large_image)
-              : getImageURLfromCDN(activity.application_id, large_image)
-            : small_image
-              ? small_image.includes('https')
-                ? formatActivityImageUrl(small_image)
-                : getImageURLfromCDN(activity.application_id, small_image)
-              : ''
-        }
+        src={primaryImageUrl}
         alt="Large Image"
         style={{
-          height: '150px',
-          aspectRatio: '1/1',
+          height: "150px",
+          aspectRatio: "1/1",
           borderRadius: 10,
         }}
-        crossOrigin="anonymous"
       />
       {small_image && large_image && (
         <Flex
           w="100%"
-          mt={-35}
+          mt={-45}
           style={{
-            transform: 'translateX(5px)',
+            transform: "translateX(10px)",
           }}
         >
           <Image
             ml="auto"
-            src={
-              small_image.includes('https')
-                ? formatActivityImageUrl(small_image)
-                : getImageURLfromCDN(activity.application_id, small_image)
-            }
+            src={secondaryImageUrl}
             alt="Small Image"
             style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
+              width: "50px",
+              height: "50px",
+              borderRadius: "50%",
             }}
             bg="black"
-            crossOrigin="anonymous"
           />
         </Flex>
       )}

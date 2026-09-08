@@ -76,14 +76,18 @@ export type RefinerResponse = {
   username: string;
   display_name: string;
   avatar: string;
+  avatar_decoration: string | null;
   status: string;
   banner: string | null;
   accent_color: string | null;
   created_at: string;
   activity: ActivityType;
   mood: MoodType;
+  primary_guild: PrimaryGuildType;
   urls: string[];
 };
+
+export type PrimaryGuildType = { badge: string; tag: string };
 
 export type MaintenanceMessageType = {
   error500: {
@@ -98,8 +102,8 @@ export type MaintenanceMessageType = {
   };
 };
 
-export type ColorMode = 'Single' | 'Gradient' | 'Discord Accent Color';
-export type BannerMode = 'Custom Color' | string;
+export type ColorMode = "Single" | "Gradient" | "Discord Accent Color";
+type BannerMode = "Custom Color" | string;
 
 export interface DISIForm {
   username: string | null;
@@ -116,6 +120,8 @@ export interface DISIForm {
   bannerColor: string;
   pronouns: string;
   discordLabel: boolean;
+  avatarDecoration: boolean;
+  primaryGuild: boolean;
 }
 
 export interface DISIStore {
@@ -146,3 +152,11 @@ export interface DISIStore {
   setBannerPBID: (v: string) => void;
   setBannerFile: (file: File | null) => void;
 }
+
+export type DocumentProps = {
+  id: string;
+  title: string;
+  content: string;
+  created: string;
+  updated: string;
+};

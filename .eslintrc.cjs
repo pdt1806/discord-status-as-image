@@ -1,6 +1,6 @@
 module.exports = {
   ignorePatterns: ['.eslintrc.cjs', 'vite.config.mjs', 'postcss.config.cjs'],
-  extends: ['mantine', 'eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+  extends: ['mantine', 'eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
   parserOptions: {
     project: './tsconfig.json',
   },

@@ -1,0 +1,24 @@
+{
+  "name": "discord-status-as-image-server",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "NODE_ENV=development tsx watch src/index.ts",
+    "build": "tsup src/index.ts --format esm --clean",
+    "start": "NODE_ENV=production node dist/index.js"
+  },
+  "dependencies": {
+    "dotenv": "17.4.2",
+    "express": "5.2.1",
+    "lru-cache": "11.5.2",
+    "playwright": "1.62.1",
+    "pocketbase": "0.28.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.4.1",
+    "tsup": "^8.5.1",
+    "tsx": "^4.23.13",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,7 +1,12 @@
-import { Avatar, Button, Card, Group, Text } from '@mantine/core';
-import { IconBrandGithubFilled, IconCoffee, IconHeart, IconWorld } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
-import classes from './index.module.css';
+import { Avatar, Button, Card, Group, Text } from "@mantine/core";
+import {
+  IconBrandGithubFilled,
+  IconCoffee,
+  IconHeart,
+  IconWorld,
+} from "@tabler/icons-react";
+import { JSX, useEffect, useState } from "react";
+import classes from "./index.module.css";
 
 interface UserData {
   followers: number;
@@ -13,40 +18,40 @@ interface UserData {
 const buttons = [
   {
     icon: IconBrandGithubFilled,
-    text: 'GitHub',
-    link: 'https://github.com/pdt1806',
-    bg: 'black',
-    c: 'white',
+    text: "GitHub",
+    link: "https://github.com/pdt1806",
+    bg: "black",
+    c: "white",
   },
   {
     icon: IconWorld,
-    text: 'My Website',
-    link: 'https://bennynguyen.dev',
-    bg: 'blue',
-    c: 'white',
+    text: "My Website",
+    link: "https://bennynguyen.dev",
+    bg: "blue",
+    c: "white",
   },
   {
     icon: IconCoffee,
-    text: 'Buy me a coffee!',
-    link: 'https://www.buymeacoffee.com/pdteggman',
-    bg: '#fbe13b',
-    c: 'black',
+    text: "Buy me a coffee!",
+    link: "https://www.buymeacoffee.com/pdteggman",
+    bg: "#fbe13b",
+    c: "black",
   },
   {
     icon: IconHeart,
-    text: 'Sponsor me!',
-    link: 'https://github.com/sponsors/pdt1806',
-    bg: 'pink',
-    c: 'white',
+    text: "Sponsor me!",
+    link: "https://github.com/sponsors/pdt1806",
+    bg: "pink",
+    c: "white",
   },
 ];
 
 export default function UserCard() {
   const [info, setInfo] = useState<UserData | null>(null);
-  const [items, setItems] = useState<Array<JSX.Element>>([]);
+  const [items, setItems] = useState<Array<JSX.Element>>([]);  
 
   useEffect(() => {
-    fetch('https://api.github.com/users/pdt1806')
+    fetch("https://api.github.com/users/pdt1806")
       .then((response) => response.json())
       .then((data) => setInfo(data));
   }, []);
@@ -93,7 +98,7 @@ export default function UserCard() {
         pdt1806
       </Text>
       <Text ta="center" fz="sm" c="dimmed">
-        {info?.bio || 'Software Developer'}
+        {info?.bio || "Software Developer"}
       </Text>
       <Group mt="md" mb="md" justify="center" gap={30}>
         {items}
@@ -108,9 +113,7 @@ export default function UserCard() {
           mt="md"
           size="md"
           variant="default"
-          onClick={() => {
-            window.location.href = button.link;
-          }}
+          onClick={() => window.open(button.link, "_blank")}
         >
           <Group>
             <button.icon size={20} />
