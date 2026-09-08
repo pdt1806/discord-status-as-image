@@ -1,13 +1,13 @@
-import { Box } from '@mantine/core';
-import { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import classes from '../../App.module.css';
-import { Error500 } from '../../pages/Error/500';
-import { disiAPI, refinerAPI } from '../../utils/const';
-import Fallback from '../Fallback';
-import Footer from '../Footer';
-import Header from '../Header';
-import ModalNoti from '../ModalNoti';
+import { Box } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
+import classes from "../../App.module.css";
+import { Error500 } from "../../pages/Error/500";
+import { disiAPI, refinerAPI } from "../../utils/const";
+import Fallback from "../Fallback";
+import Footer from "../Footer";
+import Header from "../Header";
+import ModalNoti from "../ModalNoti";
 
 const Layout = () => {
   const [page, setPage] = useState(<Fallback />);
@@ -25,7 +25,7 @@ const Layout = () => {
         }, 3000);
 
         const responseAPI = await fetch(disiAPI, { signal });
-        const responsePB = await fetch('https://disi-pb.bennynguyen.dev/api', { signal });
+        const responsePB = await fetch("https://pocketbase.disi.fyi/api", { signal });
         const responseRefiner = await fetch(refinerAPI, {
           signal,
         });
@@ -33,7 +33,7 @@ const Layout = () => {
         clearTimeout(timeoutId);
 
         if (![responseAPI, responsePB, responseRefiner].every((response) => response.ok)) {
-          throw new Error('One or more requests failed');
+          throw new Error("One or more requests failed");
         }
 
         setPage(<Outlet />);
@@ -52,18 +52,18 @@ const Layout = () => {
       w="100vw"
       bg="#111111"
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-        color: 'white',
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        color: "white",
       }}
     >
       {/* {modalNoti.element} */}
       <Header />
       {/* <HeaderNoti /> */}
-      <Box style={{ flexGrow: '1' }} />
+      <Box style={{ flexGrow: "1" }} />
       {page}
-      <Box style={{ flexGrow: '1' }} />
+      <Box style={{ flexGrow: "1" }} />
       <Footer />
     </Box>
   );

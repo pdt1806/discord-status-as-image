@@ -17,7 +17,7 @@ const Home = () => {
       <Helmet>
         <title>Discord Status as Image</title>
         <link rel="icon" type="image/png" href="/images/disi-logo-circle.png" />
-        <link rel="canonical" href="https://disi.bennynguyen.dev/" />
+        <link rel="canonical" href="https://disi.fyi/" />
       </Helmet>
 
       <Box className={classes.mainContent}>

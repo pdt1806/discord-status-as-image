@@ -1,7 +1,7 @@
-import { Box, Button, Container, Image, SimpleGrid, Text, Title } from '@mantine/core';
-import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
-import classes from './index.module.css';
+import { Box, Button, Container, Image, SimpleGrid, Text, Title } from "@mantine/core";
+import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
+import classes from "./index.module.css";
 
 export default function Error404() {
   return (
@@ -9,7 +9,7 @@ export default function Error404() {
       <Helmet>
         <title>404 Not Found - Discord Status as Image</title>
         <link rel="icon" type="image/png" href="/images/disi-logo-circle.png" />
-        <link rel="canonical" href="https://disi.bennynguyen.dev/404" />
+        <link rel="canonical" href="https://disi.fyi/404" />
       </Helmet>
       <SimpleGrid spacing={{ base: 40, sm: 80 }} cols={{ base: 1, sm: 2 }}>
         <Box className={classes.mobileImage}>
@@ -18,27 +18,20 @@ export default function Error404() {
             <Link
               to="https://www.freepik.com/free-vector/page-found-concept-illustration_7887410.htm#query=404%20page&position=4&from_view=keyword&track=ais&uuid=4f5238cf-1545-49fa-9cc2-c9a7012eeb9b"
               target="_blank"
-              style={{ color: 'white' }}
+              style={{ color: "white" }}
             >
               Image by storyset
-            </Link>{' '}
+            </Link>{" "}
             on Freepik
           </Text>
         </Box>
         <Box className={classes.content}>
           <Title className={classes.title}>Something is not right...</Title>
           <Text c="dimmed" size="lg">
-            Page you are trying to open does not exist. You may have mistyped the address, or the
-            page has been moved to another URL. If you think this is an error contact support.
+            Page you are trying to open does not exist. You may have mistyped the address, or the page has been moved to
+            another URL. If you think this is an error contact support.
           </Text>
-          <Button
-            variant="outline"
-            size="md"
-            mt="xl"
-            className={classes.control}
-            component={Link}
-            to="/"
-          >
+          <Button variant="outline" size="md" mt="xl" className={classes.control} component={Link} to="/">
             Get back to home page
           </Button>
         </Box>
@@ -48,10 +41,10 @@ export default function Error404() {
             <Link
               to="https://www.freepik.com/free-vector/page-found-concept-illustration_7887410.htm#query=404%20page&position=4&from_view=keyword&track=ais&uuid=4f5238cf-1545-49fa-9cc2-c9a7012eeb9b"
               target="_blank"
-              style={{ color: 'white' }}
+              style={{ color: "white" }}
             >
               Image by storyset
-            </Link>{' '}
+            </Link>{" "}
             on Freepik
           </Text>
         </Box>
