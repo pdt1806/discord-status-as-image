@@ -2,7 +2,7 @@ export const debugging = process.env.NODE_ENV === "development";
 
 export const web = debugging ? "http://localhost:5173" : "https://disi.fyi";
 
-export const origin = debugging ? "*" : ["https://disi.bennynguyen.dev", "https://disi.fyi"];
+export const origins = ["https://disi.bennynguyen.dev", "https://disi.fyi"];
 
 export const minimal_args = [
   "--autoplay-policy=user-gesture-required",

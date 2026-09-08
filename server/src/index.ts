@@ -1,9 +1,10 @@
+import cors, { CorsOptions } from "cors";
 import express, { Request, Response } from "express";
 import { LRUCache } from "lru-cache";
 import playwright, { Browser, Page } from "playwright";
 import { expect } from "playwright/test";
 import { uploadBannerImage } from "./pocketbase";
-import { minimal_args, origin, web as root } from "./utils/const";
+import { debugging, minimal_args, origins, web as root } from "./utils/const";
 import { base64toFile, joinedParams, logTimestamp } from "./utils/tools";
 
 const app = express();
@@ -16,10 +17,21 @@ let browser: Browser;
 // ----------------------------------------------
 // express
 
+const corsOptions: CorsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    if (!origin) return callback(null, true);
+
+    if (origins.includes(origin) || debugging) return callback(null, true);
+
+    callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST"],
+};
+
+app.use(cors(corsOptions));
+
 app.use((_, res, next) => {
   res.header({
-    "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Methods": "GET, POST",
     "Access-Control-Allow-Headers": "Content-Type",
     "Cache-Control": "no-cache, no-store, must-revalidate, proxy-revalidate",
     Pragma: "no-cache",
