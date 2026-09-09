@@ -22,17 +22,17 @@
         if (urlParams.has("bannerImage"))
           createLink(urlParams.get("bannerImage"));
       }
-      if (urlParams.has("urls")) {
-        const urls = JSON.parse(decodeURIComponent(urlParams.get("urls")));
-        urls.forEach((url) => createLink(url));
-      }
-      if (urlParams.has("status")) {
-        const status = urlParams.get("status");
-        createLink(`${window.location.origin}/images/icons/${status}.svg`);
-      }
+      // if (urlParams.has("urls")) {
+      //   const urls = JSON.parse(decodeURIComponent(urlParams.get("urls")));
+      //   urls.forEach((url) => createLink(url));
+      // }
+      // if (urlParams.has("status")) {
+      //   const status = urlParams.get("status");
+      //   createLink(`${window.location.origin}/images/icons/${status}.svg`);
+      // }
       if (urlParams.has("discordLabel"))
         createLink(`${window.location.origin}/images/discord-label.svg`);
-      if (urlParams.has("createdDate") && slug === "smallcard")
+      if (urlParams.has("created") && slug === "smallcard")
         createLink(`${window.location.origin}/images/discord.svg`);
     </script>
     <base href="/" />

@@ -4,11 +4,19 @@ import { DocumentProps } from "../utils/types";
 
 const pocketbase = new PocketBase("https://pocketbase.disi.fyi");
 
-export const getBannerImage = async (id: string, validating: boolean = false) => {
+export const getBannerImage = async (
+  id: string,
+  validating: boolean = false,
+) => {
   try {
-    const imageModel = await pocketbase.collection("banners").getOne(id, { requestKey: null });
+    const imageModel = await pocketbase
+      .collection("banners")
+      .getOne(id, { requestKey: null });
     if (!imageModel) return null;
-    if (!validating) return pocketbase.files.getURL(imageModel, imageModel.image);
+    if (!validating)
+      return pocketbase.files.getURL(imageModel, imageModel.image, {
+        thumb: "0x600",
+      });
     return true;
   } catch {
     return null;

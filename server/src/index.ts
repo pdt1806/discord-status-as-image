@@ -2,7 +2,6 @@ import cors, { CorsOptions } from "cors";
 import express, { Request, Response } from "express";
 import { LRUCache } from "lru-cache";
 import playwright, { Browser, Page } from "playwright";
-import { expect } from "playwright/test";
 import { uploadBannerImage } from "./pocketbase";
 import { debugging, minimal_args, origins, web as root } from "./utils/const";
 import { base64toFile, joinedParams, logTimestamp } from "./utils/tools";
@@ -18,7 +17,10 @@ let browser: Browser;
 // express
 
 const corsOptions: CorsOptions = {
-  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+  origin: (
+    origin: string | undefined,
+    callback: (err: Error | null, allow?: boolean) => void,
+  ) => {
     if (!origin) return callback(null, true);
 
     if (origins.includes(origin) || debugging) return callback(null, true);
@@ -64,14 +66,17 @@ await (async () => {
 });
 
 const imageCache = new LRUCache<string, { body: Buffer; contentType: string }>({
-  // cap by RAM usage (50MB)
-  maxSize: 50 * 1024 * 1024,
+  // cap by RAM usage (100MB)
+  maxSize: 100 * 1024 * 1024,
   sizeCalculation: (value) => {
     return value.body.length;
   },
 });
 
-async function selectPage(id: string, type: string): Promise<[Page, boolean]> {
+const selectPage = async (
+  id: string,
+  type: string,
+): Promise<[Page, boolean]> => {
   const reference = type === "small" ? smallPages : largePages;
   if (reference.has(id)) return [reference.get(id)!, false];
 
@@ -91,7 +96,6 @@ async function selectPage(id: string, type: string): Promise<[Page, boolean]> {
 
       // instantly serve from node memory
       if (imageCache.has(url)) {
-        // console.log(`image found in cache. serving from cache (${url})`);
         const cached = imageCache.get(url)!;
         return route.fulfill({
           body: cached.body,
@@ -110,135 +114,88 @@ async function selectPage(id: string, type: string): Promise<[Page, boolean]> {
     return route.continue();
   });
 
-  type === "small"
-    ? await page.setViewportSize({ width: 1350, height: 450 })
-    : await page.setViewportSize({ width: 807, height: 1500 });
+  type === "small" &&
+    (await page.setViewportSize({ width: 1350, height: 450 }));
+
   reference.set(id, page);
 
   return [page, true];
-}
+};
 
-const processPage = async (page: playwright.Page, firstTime: boolean, link: string) => {
-  if (firstTime) {
-    await page.goto(link, { waitUntil: "networkidle" });
-  } else if (page.url() !== link) {
+const waitForImgs = async (page: Page, link: string) => {
+  await page.locator("#avatar").waitFor({ state: "visible" });
+
+  if (link.includes("largecard"))
+    // verify the path before checking the params
+    (link.includes("bannerID") || link.includes("bannerImage")) &&
+      (await page.locator("#banner").waitFor({ state: "visible" }));
+
+  await page.waitForFunction(() => {
+    const images = Array.from(document.querySelectorAll("img"));
+
+    return images.every((img) => img.complete && img.naturalWidth > 0);
+  });
+};
+
+const processPage = async (page: Page, firstTime: boolean, link: string) => {
+  if (firstTime || page.url() !== link) {
     await page.goto(link);
-    await page.locator("#avatar").waitFor();
-    const images = await page.getByRole("img").all();
-    await Promise.all(
-      images.map(async (img) => {
-        await expect(img).not.toHaveJSProperty("naturalWidth", 0);
-      }),
-    );
   } else {
     await page.evaluate(async () => {
       if (window.refreshDiscordStatus) await window.refreshDiscordStatus();
     });
-
-    await page.locator("#avatar").waitFor();
-    const images = await page.getByRole("img").all();
-    await Promise.all(
-      images.map(async (img) => {
-        await expect(img).not.toHaveJSProperty("naturalWidth", 0);
-      }),
-    );
   }
+  await waitForImgs(page, link);
 };
 
 // ----------------------------------------------
 // main logic
 
-app.get("/smallcard/:id", async (req: Request, res: Response) => {
+const processCard = async (
+  req: Request,
+  res: Response,
+  type: "small" | "large",
+) => {
   try {
+    const startTime = performance.now();
+
     const id: string = String(req.params.id);
     if (!id) {
       res.status(400).send("Bad Request");
       return null;
     }
 
-    try {
-      const frontendLink = `${root}/smallcard?id=${id}&${joinedParams(req)}`;
+    const frontendLink = `${root}/${type}card?id=${id}&${joinedParams(req)}`;
 
-      if (!frontendLink) {
-        res.status(500).send("Internal Server Error");
-        return;
-      }
+    const [page, firstTime]: [Page, boolean] = await selectPage(id, type);
 
-      const startBrowser = Date.now();
-      const [page, firstTime]: [Page, boolean] = await selectPage(id, "small");
+    await processPage(page, firstTime, frontendLink);
 
-      await processPage(page, firstTime, frontendLink);
+    const screenshotBuffer = await page
+      .locator(`#disi-${type}-card`)
+      .screenshot({ type: "png" });
 
-      const screenshotBuffer = await page.screenshot({
-        clip: { x: 0, y: 0, width: 1350, height: 450 },
-        type: "png",
-      });
-      res.set("Content-Type", "image/png");
-      res.send(screenshotBuffer);
-      const browserTime = Date.now() - startBrowser;
+    res.set("Content-Type", "image/png");
+    res.send(screenshotBuffer);
 
-      logTimestamp("Small", "PNG", id, browserTime);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
-    }
+    const totalTime = Math.round(performance.now() - startTime);
+
+    logTimestamp(type, "png", id, totalTime);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
-});
+};
 
-app.get("/largecard/:id", async (req: Request, res: Response) => {
-  try {
-    const id: string = String(req.params.id);
-    if (!id) {
-      res.status(400).send("Bad Request");
-      return null;
-    }
+app.get(
+  "/smallcard/:id",
+  async (req: Request, res: Response) => await processCard(req, res, "small"),
+);
 
-    try {
-      const frontendLink = `${root}/largecard?id=${id}&${joinedParams(req)}`;
-
-      if (!frontendLink) {
-        res.status(500).send("Internal Server Error");
-        return;
-      }
-
-      const startBrowser = Date.now();
-      const [page, firstTime]: [Page, boolean] = await selectPage(id, "large");
-
-      await processPage(page, firstTime, frontendLink);
-
-      const maxHeight = await page.evaluate(() => {
-        const elements = document.querySelectorAll("#disi-large-card");
-
-        let maxElementHeight = 0;
-        elements.forEach((element) => {
-          const { height } = element.getBoundingClientRect();
-          maxElementHeight = Math.max(maxElementHeight, height);
-        });
-
-        return maxElementHeight;
-      });
-
-      const screenshotBuffer = await page.screenshot({
-        clip: { x: 0, y: 0, width: 807, height: maxHeight },
-        type: "png",
-      });
-      res.set("Content-Type", "image/png");
-      res.send(screenshotBuffer);
-      const browserTime = Date.now() - startBrowser;
-
-      logTimestamp("Large", "PNG", id, browserTime);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+app.get(
+  "/largecard/:id",
+  async (req: Request, res: Response) => await processCard(req, res, "large"),
+);
 
 app.post("/uploadbanner", async (req, res) => {
   try {
@@ -260,4 +217,8 @@ app.post("/uploadbanner", async (req, res) => {
   }
 });
 
-app.listen(1911, () => console.log(`MODE: ${process.env.NODE_ENV}\nServer is running on http://localhost:1911`));
+app.listen(1911, () =>
+  console.log(
+    `NODE_ENV=${process.env.NODE_ENV}\nServer is running on http://localhost:1911`,
+  ),
+);
