@@ -1,4 +1,12 @@
-import { Box, Button, Container, Image, SimpleGrid, Text, Title } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Container,
+  Image,
+  SimpleGrid,
+  Text,
+  Title,
+} from "@mantine/core";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import classes from "./index.module.css";
@@ -8,6 +16,7 @@ export default function Error404() {
     <Container className={classes.root}>
       <Helmet>
         <title>404 Not Found - Discord Status as Image</title>
+        {/* link icon here not index.html to optimize back-end */}
         <link rel="icon" type="image/png" href="/images/disi-logo-circle.png" />
         <link rel="canonical" href="https://disi.fyi/404" />
       </Helmet>
@@ -28,10 +37,18 @@ export default function Error404() {
         <Box className={classes.content}>
           <Title className={classes.title}>Something is not right...</Title>
           <Text c="dimmed" size="lg">
-            Page you are trying to open does not exist. You may have mistyped the address, or the page has been moved to
-            another URL. If you think this is an error contact support.
+            Page you are trying to open does not exist. You may have mistyped
+            the address, or the page has been moved to another URL. If you think
+            this is an error contact support.
           </Text>
-          <Button variant="outline" size="md" mt="xl" className={classes.control} component={Link} to="/">
+          <Button
+            variant="outline"
+            size="md"
+            mt="xl"
+            className={classes.control}
+            component={Link}
+            to="/"
+          >
             Get back to home page
           </Button>
         </Box>

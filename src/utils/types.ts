@@ -155,6 +155,7 @@ export interface DISIStore {
 
 export type DocumentProps = {
   id: string;
+  readable_id: string;
   title: string;
   content: string;
   created: string;

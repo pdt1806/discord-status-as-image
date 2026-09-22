@@ -1,5 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Anchor, Box, Button, Center, Container, Text, Title } from "@mantine/core";
+import {
+  Anchor,
+  Box,
+  Button,
+  Center,
+  Container,
+  Text,
+  Title,
+} from "@mantine/core";
 import { Helmet } from "react-helmet-async";
 import classes from "./index.module.css";
 
@@ -16,7 +24,8 @@ export function Error500() {
           <Title className={classes.title}>Something is not right...</Title>
           <Text size="lg" ta="center" className={classes.description}>
             The server is currently down, please try again later. <br />
-            Don't worry, we may have been notified of this issue and will work to resolve it as soon as possible.
+            Don't worry, we may have been notified of this issue and will work
+            to resolve it as soon as possible.
           </Text>
           <Text size="lg" ta="center" className={classes.description}>
             Check the status on{" "}
@@ -29,7 +38,11 @@ export function Error500() {
             </Anchor>{" "}
           </Text>
           <Center>
-            <Button variant="outline" size="md" onClick={() => window.location.reload()}>
+            <Button
+              variant="outline"
+              size="md"
+              onClick={() => window.location.reload()}
+            >
               Refresh the page
             </Button>
           </Center>

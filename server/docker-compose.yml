@@ -1,5 +1,6 @@
 services:
   discord-status-as-image-server:
+    container_name: disi-api
     build: .
     ports:
       - "1911:1911"

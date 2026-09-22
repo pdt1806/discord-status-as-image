@@ -15,8 +15,8 @@ import {
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useEffect, useState } from "react";
-import { useDISIStore } from "../../../stores/UseDISIStore";
-import { web } from "../../../utils/const";
+import { useDISIStore } from "../../../../stores/UseDISIStore";
+import { web } from "../../../../utils/const";
 
 const MainContentColumn3 = () => {
   const smallCardLink = useDISIStore((state) => state.smallCardLink);
@@ -62,7 +62,7 @@ const MainContentColumn3 = () => {
       },
     },
     {
-      value: "🔗 Copy Anchor (.png)",
+      value: "🔗 Copy Anchor tag (.png)",
       execute: () => {
         navigator.clipboard.writeText(
           `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="100px" src="${smallCardLink}"></img></a>`,
@@ -122,10 +122,10 @@ const MainContentColumn3 = () => {
       },
     },
     {
-      value: "🔗 Copy Anchor (.png)",
+      value: "🔗 Copy Anchor tag (.png)",
       execute: () => {
         navigator.clipboard.writeText(
-          `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" height="219.7px" src="${largeCardLink}"></img></a>`,
+          `<a href="https://discord.com/users/${userID}" target="_blank"><img width="300px" src="${largeCardLink}"></img></a>`,
         );
         copiedNotification();
       },
@@ -334,9 +334,8 @@ const MainContentColumn3 = () => {
                 </Combobox.Dropdown>
               </Combobox>
               <Text mt="sm" style={{ fontSize: "15px" }}>
-                The size of the iframe and anchor image is pre-determined to be
-                300.0 x 219.7 (px). You probably will need to change it to fit
-                your needs.
+                The size of the iframe is pre-determined to be 300.0 x 219.7
+                (px). You probably will need to change it to fit your needs.
               </Text>
             </Box>
           )}

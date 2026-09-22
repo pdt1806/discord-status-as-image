@@ -19,14 +19,14 @@ import {
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useEffect } from "react";
-import { useDISIStore } from "../../../stores/UseDISIStore";
-import { bannerModeList } from "../../../utils/const";
+import { useDISIStore } from "../../../../stores/UseDISIStore";
+import { bannerModeList } from "../../../../utils/const";
 import {
   formatAndUpdateHex,
   limitTextarea,
   scrollToSection,
-} from "../../../utils/tools";
-import { ColorMode, DISIForm } from "../../../utils/types";
+} from "../../../../utils/tools";
+import { ColorMode, DISIForm } from "../../../../utils/types";
 import { generatingCards } from "./utils";
 
 const MainContentColumn2 = () => {

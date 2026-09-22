@@ -29,7 +29,9 @@ export const logTimestamp = (
   id: string,
   browserTime: number,
 ) => {
-  const timestamp = new Date().toLocaleString();
+  const timestamp = new Date().toLocaleString("en-GB", {
+    hour12: false,
+  });
   console.log(`[${timestamp}] ${id}, ${type}, ${format}, ${browserTime}ms`);
 };
 

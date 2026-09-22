@@ -1,24 +1,28 @@
-import { createTheme, MantineProvider } from '@mantine/core';
-import '@mantine/core/styles.css';
-import { Notifications } from '@mantine/notifications';
-import '@mantine/notifications/styles.css';
-import React, { Suspense } from 'react';
-import { HelmetProvider } from 'react-helmet-async';
-import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
-import Fallback from './components/Fallback';
+import { createTheme, MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
+import { Notifications } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
+import React, { Suspense } from "react";
+import { HelmetProvider } from "react-helmet-async";
+import {
+  createBrowserRouter,
+  RouteObject,
+  RouterProvider,
+} from "react-router-dom";
+import Fallback from "./components/Fallback";
 
 // Dynamically import components using React.lazy
-const LargeCard = React.lazy(() => import('./components/LargeCard'));
-const Layout = React.lazy(() => import('./components/Layout'));
-const SmallCard = React.lazy(() => import('./components/SmallCard'));
-const Document = React.lazy(() => import('./pages/Document'));
-const Error404 = React.lazy(() => import('./pages/Error/404'));
-const Home = React.lazy(() => import('./pages/Home'));
+const LargeCard = React.lazy(() => import("./components/LargeCard"));
+const Layout = React.lazy(() => import("./components/Layout"));
+const SmallCard = React.lazy(() => import("./components/SmallCard"));
+const Document = React.lazy(() => import("./pages/Document"));
+const Error404 = React.lazy(() => import("./pages/Error/404"));
+const Home = React.lazy(() => import("./pages/Home"));
 
 // Define the routes with lazy-loaded components
 const routes: RouteObject[] = [
   {
-    path: '/',
+    path: "/",
     element: (
       <Suspense fallback={<Fallback />}>
         <Layout />
@@ -26,7 +30,7 @@ const routes: RouteObject[] = [
     ),
     children: [
       {
-        path: '/',
+        path: "/",
         element: (
           <Suspense fallback={<Fallback />}>
             <Home />
@@ -34,7 +38,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: '/privacy-policy',
+        path: "/privacy-policy",
         element: (
           <Suspense fallback={<Fallback />}>
             <Document id="7hlma44bu7vgn4i" />
@@ -42,7 +46,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: '/terms-of-service',
+        path: "/terms-of-service",
         element: (
           <Suspense fallback={<Fallback />}>
             <Document id="3tplcyq2zeby7ce" />
@@ -50,7 +54,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: '/*',
+        path: "/*",
         element: (
           <Suspense fallback={<Fallback />}>
             <Error404 />
@@ -60,7 +64,7 @@ const routes: RouteObject[] = [
     ],
   },
   {
-    path: '/smallcard',
+    path: "/smallcard",
     element: (
       <Suspense fallback={<Fallback />}>
         <SmallCard />
@@ -68,7 +72,7 @@ const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/largecard',
+    path: "/largecard",
     element: (
       <Suspense fallback={<Fallback />}>
         <LargeCard />
@@ -83,9 +87,9 @@ export default function App() {
   return (
     <MantineProvider
       theme={createTheme({
-        fontFamily: 'Be Vietnam Pro',
+        fontFamily: "Be Vietnam Pro",
         breakpoints: {
-          smallHeader: '600px',
+          smallHeader: "600px",
         },
       })}
     >

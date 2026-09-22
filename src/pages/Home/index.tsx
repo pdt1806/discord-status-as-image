@@ -2,12 +2,12 @@ import { Box, Center, Divider, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Helmet } from "react-helmet-async";
 
-import MainContent from "../../components/MainContent";
 import FAQs from "./FAQs";
 import HowTo from "./HowTo";
+import classes from "./index.module.css";
 import Intro from "./Intro";
 import Love from "./Love";
-import classes from "./index.module.css";
+import MainContent from "./MainContent";
 
 const Home = () => {
   const isMobile = useMediaQuery("(max-width: 1080px)");
@@ -27,7 +27,8 @@ const Home = () => {
       </Box>
       <Center>
         <Text ta="center" m="md">
-          <strong>Discord Status as Image</strong> is not affiliated with Discord.
+          <strong>Discord Status as Image</strong> is not affiliated with
+          Discord.
         </Text>
       </Center>
       <Divider w="90%" ml="auto" mr="auto" mb="sm" mt="xl" color="#333" />
