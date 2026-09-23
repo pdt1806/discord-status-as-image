@@ -41,6 +41,9 @@ The application will run on `localhost:1911`.
 # Install dependencies
 bun install
 
+# Install Playwright
+npx playwright install
+
 # Start the Express backend in development mode
 bun run dev
 ```
