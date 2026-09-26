@@ -8,10 +8,25 @@ import { base64toFile, joinedParams, logTimestamp } from "./utils/tools";
 
 const app = express();
 
-const smallPages = new Map<string, Page>();
-const largePages = new Map<string, Page>();
+const imageCache = new LRUCache<string, { body: Buffer; contentType: string }>({
+  // cap by RAM usage (512MB)
+  maxSize: 512 * 1024 * 1024,
+  sizeCalculation: (value) => {
+    return value.body.length;
+  },
+});
 
-let browser: Browser;
+const MAX_CONCURRENT_USERS = 100;
+
+const smallPages = new LRUCache<string, Page>({
+  // cap by number of tabs
+  max: MAX_CONCURRENT_USERS,
+});
+
+const largePages = new LRUCache<string, Page>({
+  // cap by number of tabs
+  max: MAX_CONCURRENT_USERS,
+});
 
 // ----------------------------------------------
 // express
@@ -55,6 +70,8 @@ app.get("/", (_: Request, res: Response) => {
 // ----------------------------------------------
 // playwright
 
+let browser: Browser;
+
 await (async () => {
   browser = await playwright.chromium.launch({
     headless: true,
@@ -65,20 +82,14 @@ await (async () => {
   process.exit(1);
 });
 
-const imageCache = new LRUCache<string, { body: Buffer; contentType: string }>({
-  // cap by RAM usage (100MB)
-  maxSize: 100 * 1024 * 1024,
-  sizeCalculation: (value) => {
-    return value.body.length;
-  },
-});
-
 const selectPage = async (
   id: string,
+  url: string,
   type: string,
 ): Promise<[Page, boolean]> => {
   const reference = type === "small" ? smallPages : largePages;
-  if (reference.has(id)) return [reference.get(id)!, false];
+  // get cached page by url instead of just id, allowing multiple pages of the same id
+  if (reference.has(url)) return [reference.get(url)!, false];
 
   const context = await browser.newContext();
 
@@ -117,7 +128,7 @@ const selectPage = async (
   type === "small" &&
     (await page.setViewportSize({ width: 1350, height: 450 }));
 
-  reference.set(id, page);
+  reference.set(url, page);
 
   return [page, true];
 };
@@ -138,13 +149,12 @@ const waitForImgs = async (page: Page, link: string) => {
 };
 
 const processPage = async (page: Page, firstTime: boolean, link: string) => {
-  if (firstTime || page.url() !== link) {
-    await page.goto(link);
-  } else {
-    await page.evaluate(async () => {
-      if (window.refreshDiscordStatus) await window.refreshDiscordStatus();
-    });
-  }
+  firstTime
+    ? await page.goto(link)
+    : await page.evaluate(
+        async () =>
+          window.refreshDiscordStatus && (await window.refreshDiscordStatus()),
+      );
   await waitForImgs(page, link);
 };
 
@@ -167,7 +177,11 @@ const processCard = async (
 
     const frontendLink = `${root}/${type}card?id=${id}&${joinedParams(req)}`;
 
-    const [page, firstTime]: [Page, boolean] = await selectPage(id, type);
+    const [page, firstTime]: [Page, boolean] = await selectPage(
+      id,
+      frontendLink,
+      type,
+    );
 
     await processPage(page, firstTime, frontendLink);
 
