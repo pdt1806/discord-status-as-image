@@ -16,16 +16,16 @@ const imageCache = new LRUCache<string, { body: Buffer; contentType: string }>({
   },
 });
 
-const MAX_CONCURRENT_USERS = 100;
+const MAX_CONCURRENT_PAGES = 100;
 
 const smallPages = new LRUCache<string, Page>({
   // cap by number of tabs
-  max: MAX_CONCURRENT_USERS,
+  max: MAX_CONCURRENT_PAGES,
 });
 
 const largePages = new LRUCache<string, Page>({
   // cap by number of tabs
-  max: MAX_CONCURRENT_USERS,
+  max: MAX_CONCURRENT_PAGES,
 });
 
 // ----------------------------------------------
