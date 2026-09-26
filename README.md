@@ -29,9 +29,9 @@ Discord Status as Image (DISI) is a web application that dynamically generates r
 
 See below for the live demonstration of this tool, as well as my Discord profile and status!
 
-<a href="https://discord.com/users/458550515614351360" target="_blank"><img width="300px" height="100px" src="https://api.disi.fyi/smallcard/458550515614351360?&bg1=1B1973&bg2=875799&activity=true&angle=45&avatarDecoration=true&primaryGuild=true"></img></a>
+<a href="https://discord.com/users/458550515614351360" target="_blank"><img width="450px" height="150px" src="https://api.disi.fyi/smallcard/458550515614351360?&bg1=1B1973&bg2=875799&activity=true&angle=45&avatarDecoration=true&primaryGuild=true"></img></a>
 
-<a href="https://discord.com/users/458550515614351360" target="_blank"><img width="300px" src="https://api.disi.fyi/largecard/458550515614351360?&bg=FFF7C9&activity=true&aboutMe=Found%20this%20card%20cool%3F%20Get%20one%20for%20yourself%20here%3A%0Ahttps%3A%2F%2Fdisi.fyi%0A%0ALeaving%20a%20star%20on%20this%20repo%20would%20be%20appreciated!&pronouns=he%2Fhim&bannerID=dpxyhvok3ovzc01&avatarDecoration=true&primaryGuild=true"></img></a>
+<a href="https://discord.com/users/458550515614351360" target="_blank"><img width="450px" src="https://api.disi.fyi/largecard/458550515614351360?&bg=FFF7C9&activity=true&aboutMe=Found%20this%20card%20cool%3F%20Get%20one%20for%20yourself%20here%3A%0Ahttps%3A%2F%2Fdisi.fyi%0A%0ALeaving%20a%20star%20on%20this%20repo%20would%20be%20appreciated!&pronouns=he%2Fhim&bannerID=dpxyhvok3ovzc01&avatarDecoration=true&primaryGuild=true"></img></a>
 
 ## System Status
 
