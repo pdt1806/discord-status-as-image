@@ -5,7 +5,6 @@ import { useLocation } from "react-router-dom";
 
 import { Helmet } from "react-helmet-async";
 import { getBannerImage } from "../../pocketbase_client";
-import "../../styles/card.module.css";
 import classes from "../../styles/profile.module.css";
 import {
   formatDate,

@@ -15,7 +15,6 @@ import DiscordAvatar from "../DiscordAvatar";
 import ServerTag from "../ServerTag";
 import innerClasses from "./index.module.css";
 import { textColorFn } from "./utils";
-import "../../styles/card.module.css";
 
 const Twemoji = (TwemojiImport as any).default || TwemojiImport;
 

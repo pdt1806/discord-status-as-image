@@ -45,8 +45,8 @@ DISI utilizes a microservice-inspired architecture separating the frontend clien
 
 ### Technical Highlights
 
-- **Programmatic Image Generation:** Instead of relying on rigid low-level drawing libraries, DISI uses a headless browser pipeline via **Playwright**. The Express backend constructs a HTML/CSS layout (from React frontend) populated with live Discord data, renders the viewport, and captures a screenshot. This allows for complex UI elements (CSS gradients, rounded avatars, custom fonts) that would be difficult to draw manually.
-- **Decoupled Architecture:** To handle Discord's strict rate limits for real-time presence, the Discord Worker API (Refiner) is isolated into a standalone worker using **Python and FastAPI**. This ensures the main Express rendering API remains highly responsive and scales independently of the Discord Worker API.
+- **Programmatic Image Generation:** Instead of relying on rigid low-level drawing libraries, DISI uses a headless browser pipeline via **Playwright**. The Express backend constructs a web layout (from React frontend) populated with live Discord data, renders the viewport, and captures a screenshot. This allows for complex UI elements (CSS gradients, rounded avatars, custom fonts) that would be difficult to draw manually.
+- **Decoupled Architecture:** The Discord Worker API (Refiner) is isolated into a standalone microservice using **Python and FastAPI**, and utilizes **discord.py** API wrapper to fetch user data. This ensures the main Express rendering API remains highly responsive and scales independently of the Discord Worker API.
 
 ## Local Development Setup
 

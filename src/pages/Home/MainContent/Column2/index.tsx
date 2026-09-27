@@ -26,7 +26,6 @@ import {
   limitTextarea,
   scrollToSection,
 } from "../../../../utils/tools";
-import "../../../../styles/card.module.css";
 import { ColorMode, DISIForm } from "../../../../utils/types";
 import { generatingCards } from "./utils";
 
