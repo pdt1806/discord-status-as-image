@@ -1,6 +1,13 @@
 import { UseFormReturnType } from "@mantine/form";
 import { refinerAPI } from "./const";
-import { ActivityType, DISIForm, EmojiType, MoodType, PrimaryGuildType, RefinerResponse } from "./types";
+import {
+  ActivityType,
+  DISIForm,
+  EmojiType,
+  MoodType,
+  PrimaryGuildType,
+  RefinerResponse,
+} from "./types";
 
 export function hexToRgb(hex: string) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -61,7 +68,7 @@ export function formatDate(date: string) {
 export function limitTextarea(value: string) {
   return value
     .split("\n")
-    .map((line) => line.slice(0, 55))
+    .map((line) => line.slice(0, 53))
     .slice(0, 5)
     .join("\n");
 }
@@ -94,19 +101,19 @@ export function setSmallCardTitleSize(displayName: string | undefined) {
   if (length > 20) return 50;
   if (length > 15) return 60;
   if (length > 10) return 80;
-  return 100;
+  return 85;
 }
 
 export function setLargeCardTitleSize(displayName: string | undefined) {
   const length = displayName?.length;
 
-  if (!length) return 30;
+  if (!length) return 20;
 
-  if (length > 30) return 30;
-  if (length > 25) return 35;
-  if (length > 20) return 40;
-  if (length > 15) return 45;
-  return 50;
+  if (length > 30) return 25;
+  if (length > 25) return 30;
+  if (length > 20) return 35;
+  if (length > 15) return 40;
+  return 45;
 }
 
 export function formatAndUpdateHex({
@@ -148,7 +155,10 @@ const formatMilliseconds = (milliseconds: number) => {
     : `${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 };
 
-export const getElapsedProgessListening = (timestamps: { start: string; end: string }) => {
+export const getElapsedProgessListening = (timestamps: {
+  start: string;
+  end: string;
+}) => {
   const startTime = new Date(timestamps.start).getTime();
   const endTime = new Date(timestamps.end).getTime();
   const currentTime = new Date().getTime();
@@ -158,7 +168,9 @@ export const getElapsedProgessListening = (timestamps: { start: string; end: str
   const totalTime = endTime - startTime;
 
   return {
-    elapsedTime: formatMilliseconds(elapsedTime <= totalTime ? elapsedTime : totalTime),
+    elapsedTime: formatMilliseconds(
+      elapsedTime <= totalTime ? elapsedTime : totalTime,
+    ),
     totalTime: formatMilliseconds(totalTime),
     progress: (elapsedTime / totalTime) * 100,
   };
@@ -166,7 +178,9 @@ export const getElapsedProgessListening = (timestamps: { start: string; end: str
 
 export const formatActivityImageUrl = (encodedUrl: string) => {
   const startIndex = encodedUrl.indexOf("https/");
-  const url = decodeURIComponent(encodedUrl.slice(startIndex).replace("https/", ""));
+  const url = decodeURIComponent(
+    encodedUrl.slice(startIndex).replace("https/", ""),
+  );
   return url ? `https://${url}` : "";
 };
 
@@ -184,7 +198,9 @@ export const getImageURLfromCDN = (appID: string, imageID: string) =>
 export const getEmojiURLfromCDN = (emoji: EmojiType) => {
   const { id, animated } = emoji;
 
-  return animated ? `https://cdn.discordapp.com/emojis/${id}.gif` : `https://cdn.discordapp.com/emojis/${id}.png`;
+  return animated
+    ? `https://cdn.discordapp.com/emojis/${id}.gif`
+    : `https://cdn.discordapp.com/emojis/${id}.png`;
 };
 
 export function setStatusImg(status?: string) {
@@ -227,8 +243,11 @@ export function updateStatus({
   setActivity: (activity: ActivityType) => void;
   setMood: (mood: MoodType) => void;
 }) {
-  const fullRequired = params.get("wantBannerImage") || params.get("wantAccentColor");
-  const extendedData = ["avatarDecoration", "primaryGuild", "activity"].filter((key) => !!params.get(key)).join(",");
+  const fullRequired =
+    params.get("wantBannerImage") || params.get("wantAccentColor");
+  const extendedData = ["avatarDecoration", "primaryGuild", "activity"]
+    .filter((key) => !!params.get(key))
+    .join(",");
 
   const refinerParams = new URLSearchParams();
   if (fullRequired) refinerParams.set("full", fullRequired);
@@ -248,14 +267,16 @@ export function updateStatus({
       setAvatar(data.avatar);
       setStatus(data.status);
       setStatusImage(setStatusImg(data.status));
-      if (params.get("avatarDecoration")) setAvatarDecoration(data.avatar_decoration || "");
+      if (params.get("avatarDecoration"))
+        setAvatarDecoration(data.avatar_decoration || "");
       if (params.get("primaryGuild")) setPrimaryGuild(data.primary_guild);
       if (params.get("created")) setCreatedDate(data.created_at);
       if (setBannerImage && params.get("wantBannerImage")) {
         setBannerImage(data.banner);
         setAccentColor(data.accent_color || "");
       }
-      if (params.get("wantAccentColor")) setAccentColor(data.accent_color || "");
+      if (params.get("wantAccentColor"))
+        setAccentColor(data.accent_color || "");
       if (params.get("activity")) setActivity(data.activity);
       if (params.get("mood")) setMood(data.mood);
     });

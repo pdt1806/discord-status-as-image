@@ -66,7 +66,7 @@ export default function ActivityBox({
       {activity.type === "listening" && (
         <>
           <Group gap="sm">
-            <Title order={3} ff="gg sans" size={25}>
+            <Title order={3} fz="content">
               Listening to {activity.platform ?? activity.name}
             </Title>
             {/* {activity.platform == "Spotify" && (
@@ -94,22 +94,20 @@ export default function ActivityBox({
               }}
             />
             <Box style={{ width: "75%" }}>
-              <Title ff="gg sans" order={3} fz={28} lineClamp={1}>
+              <Title order={3} fz="largerContent" lineClamp={1}>
                 {activity.platform ? activity.name : activity.details}
               </Title>
               <Space h={3} />
-              <Text ff="gg sans" fz={25}>
+              <Text fz="content">
                 {`by ${activity.platform ? activity.artists.join(", ") : activity.state}`}
               </Text>
               {/* {activity.platform && (
-                <Text ff="gg sans" fz={25}>{`on ${activity.album.name}`}</Text>
+                <Text  fz="content">{`on ${activity.album.name}`}</Text>
               )} */}
             </Box>
           </Group>
           <Flex mt="md" justify="space-between" align="center" w="100%">
-            <Text ff="gg sans mono" fz={22}>
-              {listeningProgress.elapsedTime}
-            </Text>
+            <Text fz={22}>{listeningProgress.elapsedTime}</Text>
             <Progress
               mx="md"
               radius="xl"
@@ -118,32 +116,30 @@ export default function ActivityBox({
               bg="var(--mantine-color-dimmed)"
               w="100%"
             />
-            <Text ff="gg sans mono" fz={22}>
-              {listeningProgress.totalTime}
-            </Text>
+            <Text fz={22}>{listeningProgress.totalTime}</Text>
           </Flex>
         </>
       )}
       {activity.type === "playing" && (
         <>
-          <Title order={3} ff="gg sans" size={25}>
+          <Title order={3} fz="content">
             Playing
           </Title>
           <Group gap="lg" mt="lg">
             {activity.assets && <OtherAssets activity={activity} />}
             <Box maw={500}>
-              <Title ff="gg sans" order={3} lineClamp={1} fz={28}>
+              <Title order={3} lineClamp={1} fz="largerContent">
                 {activity.name}
               </Title>
               <Space h={3} />
-              <Text ff="gg sans" fz={25} lineClamp={1}>
+              <Text fz="content" lineClamp={1}>
                 {activity.details}
               </Text>
-              <Text ff="gg sans" fz={25} lineClamp={1}>
+              <Text fz="content" lineClamp={1}>
                 {activity.state}
               </Text>
               {activity.timestamps.start && (
-                <Text ff="gg sans" fz={25} lineClamp={1}>
+                <Text fz="content" lineClamp={1}>
                   {playingTimestamp} elapsed
                 </Text>
               )}
@@ -153,21 +149,21 @@ export default function ActivityBox({
       )}
       {activity.type === "streaming" && (
         <>
-          <Title order={3} ff="gg sans" size={25}>
+          <Title order={3} fz="content">
             Live on {activity.platform}
           </Title>
           <Group gap="lg" mt="lg">
             {activity.assets && <OtherAssets activity={activity} />}
             <Box maw={500}>
-              <Title ff="gg sans" order={3} lineClamp={1} fz={28}>
+              <Title order={3} lineClamp={1} fz="largerContent">
                 {activity.details}
               </Title>
               <Space h={3} />
-              <Text ff="gg sans" fz={25} lineClamp={1}>
+              <Text fz="content" lineClamp={1}>
                 playing {activity.game}
               </Text>
               {activity.timestamps.start && (
-                <Text ff="gg sans" fz={25} lineClamp={1}>
+                <Text fz="content" lineClamp={1}>
                   {playingTimestamp} elapsed
                 </Text>
               )}
@@ -178,26 +174,24 @@ export default function ActivityBox({
       {["watching", "competing"].includes(activity.type) && (
         <>
           {activity.type === "watching" ? (
-            <Title order={3} ff="gg sans" size={25}>
+            <Title order={3} fz="content">
               Watching {activity.name}
             </Title>
           ) : (
-            <Title order={3} ff="gg sans">
-              Competing in {activity.name}
-            </Title>
+            <Title order={3}>Competing in {activity.name}</Title>
           )}
           <Group gap="lg" mt="lg">
             {activity.assets && <OtherAssets activity={activity} />}
             <Box maw={500}>
-              <Title ff="gg sans" order={3} lineClamp={2} fz={28}>
+              <Title order={3} lineClamp={2} fz="largerContent">
                 {activity.details}
               </Title>
               <Space h={3} />
-              <Text ff="gg sans" fz={25} lineClamp={1}>
+              <Text fz="content" lineClamp={1}>
                 {activity.state}
               </Text>
               {activity.timestamps.start && (
-                <Text ff="gg sans" fz={25} lineClamp={1}>
+                <Text fz="content" lineClamp={1}>
                   {playingTimestamp} elapsed
                 </Text>
               )}

@@ -20,7 +20,7 @@ const ServerTag = ({
     }}
     leftSection={<Image src={primaryGuild.badge} width={20} height={20} />}
   >
-    <Title fw={600} size={25} ff="gg sans" c={textColor}>
+    <Title fw={600} fz="content" c={textColor}>
       {primaryGuild.tag}
     </Title>
   </Badge>

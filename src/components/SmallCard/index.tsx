@@ -15,6 +15,7 @@ import DiscordAvatar from "../DiscordAvatar";
 import ServerTag from "../ServerTag";
 import innerClasses from "./index.module.css";
 import { textColorFn } from "./utils";
+import "../../styles/card.module.css";
 
 const Twemoji = (TwemojiImport as any).default || TwemojiImport;
 
@@ -146,14 +147,13 @@ const SmallCard = () => {
               <Title
                 mt="auto"
                 fw={600}
-                size={titleSize}
+                fz={titleSize}
                 c={
                   status !== "offline" ||
                   (status === "offline" && textColor === "white")
                     ? textColor
                     : "#5d5f6b"
                 }
-                ff="gg sans"
                 lh={1.1}
               >
                 {displayName}
@@ -190,7 +190,7 @@ const SmallCard = () => {
                 }}
               />
               <Title
-                size={40}
+                fz={40}
                 c={
                   status !== "offline" ||
                   (status === "offline" && textColor === "white")
@@ -198,7 +198,6 @@ const SmallCard = () => {
                     : "#5d5f6b"
                 }
                 fw={400}
-                ff="gg sans"
               >
                 {formatDate(createdDate)}
               </Title>
@@ -214,15 +213,13 @@ const SmallCard = () => {
             >
               {mood && (
                 <Text
-                  ff="gg sans"
-                  fz={45}
+                  fz={40}
                   c={
                     status !== "offline" ||
                     (status === "offline" && textColor === "white")
                       ? textColor
                       : "#5d5f6b"
                   }
-                  lineClamp={1}
                 >
                   {mood.emoji && mood.emoji.id && (
                     <span
@@ -246,6 +243,7 @@ const SmallCard = () => {
                         width: "max-content",
                         display: "inline-block",
                         verticalAlign: "middle",
+                        marginTop: "-5px",
                       }}
                     >
                       <span style={{ fontSize: 45 }}>{mood.emoji.name}</span>
@@ -256,8 +254,7 @@ const SmallCard = () => {
               )}
               {activity && (mood?.state === "Custom Status" || !mood) && (
                 <Title
-                  lineClamp={1}
-                  size={45}
+                  fz={40}
                   c={
                     status !== "offline" ||
                     (status === "offline" && textColor === "white")
@@ -265,7 +262,6 @@ const SmallCard = () => {
                       : "#5d5f6b"
                   }
                   fw={400}
-                  ff="gg sans"
                 >
                   {
                     {

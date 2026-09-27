@@ -1,0 +1,27 @@
+.avatar {
+  height: 70%;
+  width: 273px;
+  border-radius: 50%;
+  mask-image: url("/images/avatar_overlay.svg");
+  mask-size: cover;
+}
+
+.avatarDecoration {
+  mask-image: url("/images/avatar-decoration_overlay.svg");
+  mask-size: cover;
+}
+
+.banner {
+  width: 807px !important;
+  height: 300px !important;
+  overflow: hidden;
+  mask-image: url("/images/banner_overlay.svg");
+  mask-size: 807px auto;
+  object-fit: cover;
+}
+
+.statusImage {
+  width: 75px;
+  height: 75px;
+  transform: translate(202px, -72px);
+}

@@ -5,6 +5,8 @@ import { useLocation } from "react-router-dom";
 
 import { Helmet } from "react-helmet-async";
 import { getBannerImage } from "../../pocketbase_client";
+import "../../styles/card.module.css";
+import classes from "../../styles/profile.module.css";
 import {
   formatDate,
   setLargeCardTitleSize,
@@ -14,7 +16,6 @@ import {
 import { ActivityType, MoodType } from "../../utils/types";
 import DiscordAvatar from "../DiscordAvatar";
 import ServerTag from "../ServerTag";
-import classes from "../style/profile.module.css";
 import ActivityBox from "./ActivityBox";
 import innerClasses from "./index.module.css";
 import MoodBox from "./Mood";
@@ -186,26 +187,29 @@ const LargeCard = () => {
           />
         </Box>
         <Box mb={15} className={innerClasses.name}>
-          <Title fw={600} size={titleSize} c={textColor} ff="gg sans">
+          <Title fw={600} size={titleSize} c={textColor}>
             {displayName}
           </Title>
-          <Group gap={5} mt={15}>
-            <Title fw={400} size={30} c={dimmedColor} ff="gg sans">
+          <Group gap={0} mt={20}>
+            <Title fw={400} fz="largerContent" c={dimmedColor}>
               {username}
             </Title>
             {pronouns && (
               <>
-                <Title fw={700} mx={5} size={30} c={dimmedColor} ff="gg sans">
+                <Title fw={700} mx={5} fz="largerContent" c={dimmedColor}>
                   •
                 </Title>
-                <Title fw={400} size={30} c={dimmedColor} ff="gg sans">
+                <Title fw={400} fz="largerContent" c={dimmedColor}>
                   {pronouns}
                 </Title>
               </>
             )}
-            <Box w={10} />
+
             {primaryGuild && (
-              <ServerTag textColor={textColor} primaryGuild={primaryGuild} />
+              <>
+                <Box w={20} />
+                <ServerTag textColor={textColor} primaryGuild={primaryGuild} />
+              </>
             )}
           </Group>
         </Box>
@@ -223,23 +227,17 @@ const LargeCard = () => {
                   c={textColor}
                   lineClamp={5}
                   className={innerClasses.aboutMe}
-                  fz={25}
+                  fz="content"
                 >
                   {aboutMe}
                 </Text>
               )}
               {createdDate && (
                 <Box>
-                  <Title size={25} c={textColor} ff="gg sans">
+                  <Title fz="content" c={textColor}>
                     Member Since
                   </Title>
-                  <Text
-                    c={textColor}
-                    lineClamp={4}
-                    mt="sm"
-                    fz={25}
-                    ff="gg sans"
-                  >
+                  <Text c={textColor} lineClamp={4} mt="sm" fz="content">
                     {formatDate(createdDate)}
                   </Text>
                 </Box>

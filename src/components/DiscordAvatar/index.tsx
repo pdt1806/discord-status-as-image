@@ -1,5 +1,5 @@
 import { Box, Image } from "@mantine/core";
-import classes from "../style/profile.module.css";
+import classes from "../../styles/profile.module.css";
 
 const DiscordAvatar = ({
   avatar,

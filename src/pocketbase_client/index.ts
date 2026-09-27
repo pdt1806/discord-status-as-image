@@ -1,5 +1,4 @@
 import PocketBase from "pocketbase";
-import { DocumentProps } from "../utils/types";
 // eslint-disable-next-line import/no-cycle
 
 const pocketbase = new PocketBase("https://pocketbase.disi.fyi");
@@ -22,6 +21,3 @@ export const getBannerImage = async (
     return null;
   }
 };
-
-export const getDocument = async (id: string): Promise<DocumentProps | null> =>
-  pocketbase.collection("documents").getOne(id, { requestKey: null });

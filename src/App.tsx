@@ -10,6 +10,30 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Fallback from "./components/Fallback";
+import PrivacyPolicy from "./documents/privacy-policy.md?raw";
+import TermsOfService from "./documents/terms-of-service.md?raw";
+
+const layoutTheme = createTheme({
+  fontFamily: "Be Vietnam Pro, sans-serif",
+  breakpoints: {
+    smallHeader: "600px",
+  },
+});
+
+const cardTheme = createTheme({
+  fontFamily: "Noto Sans SC, sans-serif",
+  fontSizes: {
+    content: "23px",
+    largerContent: "26px",
+  },
+  lineHeights: {
+    xs: "1.5",
+    sm: "1.6",
+    md: "1.7",
+    lg: "1.8",
+    xl: "1.9",
+  },
+});
 
 // Dynamically import components using React.lazy
 const LargeCard = React.lazy(() => import("./components/LargeCard"));
@@ -24,9 +48,12 @@ const routes: RouteObject[] = [
   {
     path: "/",
     element: (
-      <Suspense fallback={<Fallback />}>
-        <Layout />
-      </Suspense>
+      <MantineProvider theme={layoutTheme}>
+        <Notifications />
+        <Suspense fallback={<Fallback />}>
+          <Layout />
+        </Suspense>
+      </MantineProvider>
     ),
     children: [
       {
@@ -41,7 +68,11 @@ const routes: RouteObject[] = [
         path: "/privacy-policy",
         element: (
           <Suspense fallback={<Fallback />}>
-            <Document id="7hlma44bu7vgn4i" />
+            <Document
+              text={PrivacyPolicy}
+              id="privacy-policy"
+              title="Privacy Policy"
+            />
           </Suspense>
         ),
       },
@@ -49,7 +80,11 @@ const routes: RouteObject[] = [
         path: "/terms-of-service",
         element: (
           <Suspense fallback={<Fallback />}>
-            <Document id="3tplcyq2zeby7ce" />
+            <Document
+              text={TermsOfService}
+              id="terms-of-service"
+              title="Terms of Service"
+            />
           </Suspense>
         ),
       },
@@ -66,17 +101,21 @@ const routes: RouteObject[] = [
   {
     path: "/smallcard",
     element: (
-      <Suspense fallback={<Fallback />}>
-        <SmallCard />
-      </Suspense>
+      <MantineProvider theme={cardTheme}>
+        <Suspense fallback={<Fallback />}>
+          <SmallCard />
+        </Suspense>
+      </MantineProvider>
     ),
   },
   {
     path: "/largecard",
     element: (
-      <Suspense fallback={<Fallback />}>
-        <LargeCard />
-      </Suspense>
+      <MantineProvider theme={cardTheme}>
+        <Suspense fallback={<Fallback />}>
+          <LargeCard />
+        </Suspense>
+      </MantineProvider>
     ),
   },
 ];
@@ -85,18 +124,8 @@ const router = createBrowserRouter(routes);
 
 export default function App() {
   return (
-    <MantineProvider
-      theme={createTheme({
-        fontFamily: "Be Vietnam Pro",
-        breakpoints: {
-          smallHeader: "600px",
-        },
-      })}
-    >
-      <HelmetProvider>
-        <Notifications />
-        <RouterProvider router={router} />
-      </HelmetProvider>
-    </MantineProvider>
+    <HelmetProvider>
+      <RouterProvider router={router} />
+    </HelmetProvider>
   );
 }

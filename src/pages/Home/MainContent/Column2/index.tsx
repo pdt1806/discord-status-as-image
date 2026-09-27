@@ -26,6 +26,7 @@ import {
   limitTextarea,
   scrollToSection,
 } from "../../../../utils/tools";
+import "../../../../styles/card.module.css";
 import { ColorMode, DISIForm } from "../../../../utils/types";
 import { generatingCards } from "./utils";
 
@@ -359,14 +360,14 @@ const MainContentColumn2 = () => {
               }}
             />
             <Textarea
-              styles={{ input: { fontFamily: "gg sans" } }}
+              styles={{ input: { fontFamily: "Noto Sans SC, sans-serif" } }}
               label="About me"
               minRows={5}
               maxRows={5}
               autosize
               {...form.getInputProps("aboutMe")}
               placeholder={
-                "Write something about yourself.\n\nMax number of characters per line: 55\nMax number of lines: 5\nFont family: gg sans"
+                "Write something about yourself.\n\nMax number of characters per line: 53\nMax number of lines: 5"
               }
               onChange={(e) => {
                 form.setValues({

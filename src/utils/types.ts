@@ -152,12 +152,3 @@ export interface DISIStore {
   setBannerPBID: (v: string) => void;
   setBannerFile: (file: File | null) => void;
 }
-
-export type DocumentProps = {
-  id: string;
-  readable_id: string;
-  title: string;
-  content: string;
-  created: string;
-  updated: string;
-};

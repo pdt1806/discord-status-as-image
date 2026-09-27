@@ -6,22 +6,6 @@
   transform-origin: top left;
 }
 
-
-
-/* .friendRequest {
-  padding: 8px 18px 8px 18px;
-  color: white;
-  font-size: 20px;
-  font-weight: 400;
-  border-radius: 5px;
-  font-family: 'gg sans', sans-serif;
-}
-
-.addMessageGroup {
-  position: absolute;
-  transform: translate(579px, 30px);
-} */
-
 .name {
   margin-top: -140px;
   padding-bottom: 30px;
@@ -39,17 +23,13 @@
 }
 
 .aboutMe {
-  /* margin-top: var(--mantine-spacing-sm); */
-  /* font-size: 25px; */
   max-width: 700px;
   word-wrap: break-word;
   white-space: pre-line;
-  font-family: 'gg sans', sans-serif;
 }
 
 .discordLabel {
   height: 60px;
   width: 225.86px;
-  /* transform: translateX(581.13px); */
   margin-left: 581.13px;
 }

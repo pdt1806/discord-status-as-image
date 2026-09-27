@@ -50,7 +50,7 @@ export default function MoodBox({
           position: "relative",
         }}
       >
-        <Text ff="gg sans" fz={25} c={textColor} lineClamp={2}>
+        <Text fz="content" c={textColor} lineClamp={2}>
           {mood.emoji && mood.emoji.id && (
             <span style={{ display: "inline-block", verticalAlign: "middle" }}>
               <Image
@@ -68,6 +68,8 @@ export default function MoodBox({
                 width: "max-content",
                 display: "inline-block",
                 verticalAlign: "middle",
+                marginRight: "3px",
+                marginTop: "-3px",
               }}
             >
               <span style={{ fontSize: 30 }}>{mood.emoji.name}</span>
