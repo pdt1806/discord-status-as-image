@@ -6,4 +6,6 @@ services:
       - "1911:1911"
     volumes:
       - ./src/pocketbase/.env:/app/dist/.env:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     restart: unless-stopped

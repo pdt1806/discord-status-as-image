@@ -87,37 +87,44 @@ export default function ActivityBox({
               }
               alt="Large Image"
               style={{
-                height: 150,
-                width: 150,
+                height: 200,
+                width: 200,
                 aspectRatio: "1/1",
                 borderRadius: 10,
               }}
             />
-            <Box style={{ width: "75%" }}>
+            <Box
+              style={{
+                width: "calc(100% - 200px - var(--mantine-spacing-lg))",
+              }}
+            >
               <Title order={3} fz="largerContent" lineClamp={1}>
                 {activity.platform ? activity.name : activity.details}
               </Title>
-              <Space h={3} />
-              <Text fz="content">
-                {`by ${activity.platform ? activity.artists.join(", ") : activity.state}`}
+              <Text fz="content" mt={3}>
+                {`${activity.platform ? activity.artists.join(", ") : activity.state}`}
               </Text>
               {/* {activity.platform && (
                 <Text  fz="content">{`on ${activity.album.name}`}</Text>
               )} */}
+              <Flex mt="md" justify="space-between" align="center" w="100%">
+                <Text fz={22} ff="monospace">
+                  {listeningProgress.elapsedTime}
+                </Text>
+                <Progress
+                  mx="md"
+                  radius="xl"
+                  value={listeningProgress.progress}
+                  color={textColor}
+                  bg="var(--mantine-color-dimmed)"
+                  w="100%"
+                />
+                <Text fz={22} ff="monospace">
+                  {listeningProgress.totalTime}
+                </Text>
+              </Flex>
             </Box>
           </Group>
-          <Flex mt="md" justify="space-between" align="center" w="100%">
-            <Text fz={22}>{listeningProgress.elapsedTime}</Text>
-            <Progress
-              mx="md"
-              radius="xl"
-              value={listeningProgress.progress}
-              color={textColor}
-              bg="var(--mantine-color-dimmed)"
-              w="100%"
-            />
-            <Text fz={22}>{listeningProgress.totalTime}</Text>
-          </Flex>
         </>
       )}
       {activity.type === "playing" && (
