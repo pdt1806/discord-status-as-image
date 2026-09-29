@@ -87,15 +87,15 @@ export default function ActivityBox({
               }
               alt="Large Image"
               style={{
-                height: 200,
-                width: 200,
+                height: 180,
+                width: 180,
                 aspectRatio: "1/1",
                 borderRadius: 10,
               }}
             />
             <Box
               style={{
-                width: "calc(100% - 200px - var(--mantine-spacing-lg))",
+                width: "calc(100% - 180px - var(--mantine-spacing-lg))",
               }}
             >
               <Title order={3} fz="largerContent" lineClamp={1}>

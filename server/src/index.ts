@@ -6,15 +6,9 @@ import { uploadBannerImage } from "./pocketbase";
 import { debugging, minimal_args, origins, web as root } from "./utils/const";
 import { base64toFile, joinedParams, logTimestamp } from "./utils/tools";
 
-const app = express();
+// ----------------------------------------------
 
-const imageCache = new LRUCache<string, { body: Buffer; contentType: string }>({
-  // cap by RAM usage (512MB)
-  maxSize: 512 * 1024 * 1024,
-  sizeCalculation: (value) => {
-    return value.body.length;
-  },
-});
+const app = express();
 
 const MAX_CONCURRENT_PAGES = 100;
 
@@ -36,8 +30,10 @@ const corsOptions: CorsOptions = {
     origin: string | undefined,
     callback: (err: Error | null, allow?: boolean) => void,
   ) => {
+    // direct URL access
     if (!origin) return callback(null, true);
 
+    // from prod frontend or when debugging
     if (origins.includes(origin) || debugging) return callback(null, true);
 
     callback(new Error("Not allowed by CORS"));
@@ -47,6 +43,7 @@ const corsOptions: CorsOptions = {
 
 app.use(cors(corsOptions));
 
+// no cache; new image every time
 app.use((_, res, next) => {
   res.header({
     "Access-Control-Allow-Headers": "Content-Type",
@@ -98,32 +95,6 @@ const selectPage = async (
   });
 
   const page = await context.newPage();
-
-  // force Playwright to intercept all requests on this page
-  await page.route("**/*", async (route) => {
-    const request = route.request();
-    if (request.resourceType() === "image") {
-      const url = request.url();
-
-      // instantly serve from node memory
-      if (imageCache.has(url)) {
-        const cached = imageCache.get(url)!;
-        return route.fulfill({
-          body: cached.body,
-          contentType: cached.contentType,
-        });
-      }
-
-      // otherwise, fetch it once and save it
-      const response = await route.fetch();
-      imageCache.set(url, {
-        body: await response.body(),
-        contentType: response.headers()["content-type"] || "image/png",
-      });
-      return route.fulfill({ response });
-    }
-    return route.continue();
-  });
 
   type === "small" &&
     (await page.setViewportSize({ width: 1350, height: 450 }));
@@ -200,6 +171,9 @@ const processCard = async (
     res.status(500).send("Internal Server Error");
   }
 };
+
+// ----------------------------------------------
+// api endpoints
 
 app.get(
   "/smallcard/:id",
