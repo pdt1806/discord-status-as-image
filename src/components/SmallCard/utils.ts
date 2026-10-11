@@ -19,8 +19,8 @@ export function textColorFn(
       ? `${gradient2Raw.r}, ${gradient2Raw.g}, ${gradient2Raw.b}`
       : "";
     setBackgroundGradient(
-      gradient1 && gradient2 && params.get("angle")
-        ? `linear-gradient(${params.get("angle")}deg, rgb(${gradient1}) 0%, rgb(${gradient2}) 100%)`
+      gradient1 && gradient2
+        ? `linear-gradient(${params.get("angle") ?? "0"}deg, rgb(${gradient1}) 0%, rgb(${gradient2}) 100%)`
         : "",
     );
     const textColorRaw = hexToRgb(

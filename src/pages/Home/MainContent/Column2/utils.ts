@@ -70,7 +70,7 @@ export const generatingCards = async (
       },
       body: JSON.stringify(body),
     });
-    if (response.status !== 200) throw new Error("Something went wrong");
+    if (response.status !== 201) throw new Error("Something went wrong");
     const json = await response.json();
     newBannerID = json.id;
     setBannerFile(null);

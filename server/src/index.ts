@@ -158,7 +158,7 @@ const processCard = async (
 
     const screenshotBuffer = await page
       .locator(`#disi-${type}-card`)
-      .screenshot({ type: "png" });
+      .screenshot({ type: "png", animations: "disabled" });
 
     res.set("Content-Type", "image/png");
     res.send(screenshotBuffer);
@@ -198,7 +198,7 @@ app.post("/uploadbanner", async (req, res) => {
       return null;
     }
     const id = await uploadBannerImage(blob);
-    res.status(200).json({ id });
+    res.status(201).json({ id });
   } catch (error) {
     console.error(error);
     res.status(500).send((error as Error).message);
