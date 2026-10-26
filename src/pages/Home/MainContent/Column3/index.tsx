@@ -1,13 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
 import {
   Box,
+  Code,
   Combobox,
   Divider,
   Image,
   Input,
   InputBase,
   Loader,
-  Mark,
   Table,
   Text,
   Title,
@@ -273,13 +273,13 @@ const MainContentColumn3 = () => {
                 largeCardLink.includes("bannerID=") && (
                   <>
                     <Text>
-                      Banner ID ={" "}
-                      <Mark color="blue">
+                      Banner ID:{" "}
+                      <Code color="purple">
                         {largeCardLink.substring(
                           largeCardLink.indexOf("bannerID=") + 9,
                           largeCardLink.indexOf("bannerID=") + 24,
                         )}
-                      </Mark>
+                      </Code>
                     </Text>
                     <Text mb="md" style={{ fontSize: "15px" }}>
                       Save this ID somewhere for later use.

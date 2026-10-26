@@ -19,10 +19,11 @@ To replicate the required database architecture without importing existing user 
 
 ### 2. Environment Variables
 
-This project uses environment variables to keep sensitive credentials secure.
+This project uses a single environment file for sensitive credentials and server configuration.
 
-1. Locate the `.env.example` file in `/src/pocketbase` and duplicate it. Rename the duplicated file to `.env`.
-2. Open the new `.env` file and populate it with your specific `DISI_POCKETBASE_EMAIL` and `DISI_POCKETBASE_PASSWORD`.
+1. Copy `.env.example` in the `server` directory to `.env`.
+2. Set `DISI_POCKETBASE_EMAIL` and `DISI_POCKETBASE_PASSWORD` to your PocketBase credentials.
+3. Adjust the frontend URLs, allowed CORS origins, or comma-separated Playwright arguments if needed.
 
 ### 3. Configure Local Endpoints
 
@@ -51,6 +52,8 @@ bun run dev
 #### Docker Method
 
 If you prefer to run the application in an isolated containerized environment, you can use Docker Compose to spin up the service immediately.
+
+Ensure the `.env` file in the server directory exists and contains the PocketBase credentials before starting Docker Compose. Docker Compose passes these values into the container, and allocates 1 GB of shared memory for Chromium.
 
 Build and start the container stack in detached mode:
 

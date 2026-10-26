@@ -1,12 +1,5 @@
-import * as dotenv from "dotenv";
-import path from "path";
+import "../config";
 import PocketBase from "pocketbase";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-dotenv.config({ path: `${__dirname}/.env` });
 
 const pocketbase = new PocketBase("https://pocketbase.disi.fyi");
 

@@ -10,16 +10,40 @@ import { base64toFile, joinedParams, logTimestamp } from "./utils/tools";
 
 const app = express();
 
-const MAX_CONCURRENT_PAGES = 100;
+const MAX_CONCURRENT_PAGES = 10;
 
-const smallPages = new LRUCache<string, Page>({
+type CachedPage = {
+  page: Page;
+  activeRequests: number;
+  evicted: boolean;
+  closed: boolean;
+};
+
+const closeEvictedPage = (entry: CachedPage) => {
+  if (!entry.evicted || entry.activeRequests > 0 || entry.closed) return;
+
+  entry.closed = true;
+  void entry.page
+    .context()
+    .close()
+    .catch((error) => console.error("Failed to close an evicted page", error));
+};
+
+const disposePage = (entry: CachedPage) => {
+  entry.evicted = true;
+  closeEvictedPage(entry);
+};
+
+const smallPages = new LRUCache<string, CachedPage>({
   // cap by number of tabs
   max: MAX_CONCURRENT_PAGES,
+  dispose: disposePage,
 });
 
-const largePages = new LRUCache<string, Page>({
+const largePages = new LRUCache<string, CachedPage>({
   // cap by number of tabs
   max: MAX_CONCURRENT_PAGES,
+  dispose: disposePage,
 });
 
 // ----------------------------------------------
@@ -83,10 +107,21 @@ const selectPage = async (
   id: string,
   url: string,
   type: string,
-): Promise<[Page, boolean]> => {
+): Promise<[Page, boolean, () => void]> => {
   const reference = type === "small" ? smallPages : largePages;
   // get cached page by url instead of just id, allowing multiple pages of the same id
-  if (reference.has(url)) return [reference.get(url)!, false];
+  const cachedPage = reference.get(url);
+  if (cachedPage) {
+    cachedPage.activeRequests += 1;
+    return [
+      cachedPage.page,
+      false,
+      () => {
+        cachedPage.activeRequests -= 1;
+        closeEvictedPage(cachedPage);
+      },
+    ];
+  }
 
   const context = await browser.newContext();
 
@@ -99,9 +134,22 @@ const selectPage = async (
   type === "small" &&
     (await page.setViewportSize({ width: 1350, height: 450 }));
 
-  reference.set(url, page);
+  const entry: CachedPage = {
+    page,
+    activeRequests: 1,
+    evicted: false,
+    closed: false,
+  };
+  reference.set(url, entry);
 
-  return [page, true];
+  return [
+    page,
+    true,
+    () => {
+      entry.activeRequests -= 1;
+      closeEvictedPage(entry);
+    },
+  ];
 };
 
 const waitForImgs = async (page: Page, link: string) => {
@@ -137,6 +185,8 @@ const processCard = async (
   res: Response,
   type: "small" | "large",
 ) => {
+  let finishPageRequest: (() => void) | undefined;
+
   try {
     const startTime = performance.now();
 
@@ -148,11 +198,12 @@ const processCard = async (
 
     const frontendLink = `${root}/${type}card?id=${id}&${joinedParams(req)}`;
 
-    const [page, firstTime]: [Page, boolean] = await selectPage(
+    const [page, firstTime, finishRequest] = await selectPage(
       id,
       frontendLink,
       type,
     );
+    finishPageRequest = finishRequest;
 
     await processPage(page, firstTime, frontendLink);
 
@@ -169,6 +220,8 @@ const processCard = async (
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
+  } finally {
+    finishPageRequest?.();
   }
 };
 

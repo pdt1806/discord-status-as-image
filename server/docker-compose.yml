@@ -1,11 +1,14 @@
+name: disi
+
 services:
-  discord-status-as-image-server:
-    container_name: disi-api
+  api:
     build: .
     ports:
       - "1911:1911"
+    env_file:
+      - ./.env
+    shm_size: "1gb"
     volumes:
-      - ./src/pocketbase/.env:/app/dist/.env:ro
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
     restart: unless-stopped

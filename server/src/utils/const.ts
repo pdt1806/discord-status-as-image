@@ -1,8 +1,20 @@
+import "../config";
+
 export const debugging = process.env.NODE_ENV === "development";
 
-export const web = debugging ? "http://localhost:5173" : "https://disi.fyi";
+export const web = debugging
+  ? (process.env.DISI_WEB_URL_DEVELOPMENT ?? "http://localhost:5173")
+  : (process.env.DISI_WEB_URL_PRODUCTION ?? "https://disi.fyi");
 
-export const origins = ["https://disi.bennynguyen.dev", "https://disi.fyi"];
+export const origins = (
+  process.env.DISI_CORS_ORIGINS ??
+  "https://disi.bennynguyen.dev,https://disi.fyi"
+)
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+// ---------------------------------------------
 
 export const minimal_args = [
   "--autoplay-policy=user-gesture-required",
@@ -13,7 +25,6 @@ export const minimal_args = [
   "--disable-client-side-phishing-detection",
   "--disable-component-update",
   "--disable-default-apps",
-  "--disable-dev-shm-usage",
   "--disable-domain-reliability",
   "--disable-extensions",
   "--disable-features=AudioServiceOutOfProcess",
@@ -42,7 +53,6 @@ export const minimal_args = [
   "--use-gl=swiftshader",
   "--use-mock-keychain",
   "--headless",
-
   "--disable-web-security",
   "--allow-running-insecure-content",
 ];
