@@ -4,37 +4,23 @@
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) and [Bun](https://bun.sh/)
-- [PocketBase](https://pocketbase.io/) executable
+- [Bun](https://bun.sh/)
+- A Cloudflare account with an [R2 bucket](https://developers.cloudflare.com/r2/)
 - _(Optional)_ [Docker](https://docs.docker.com/get-docker/) and Docker Compose
 
-### 1. Database Setup (PocketBase)
+### 1. Configure Cloudflare R2
 
-To replicate the required database architecture without importing existing user data:
+Create an R2 bucket, then create an R2 API token with permission to read and write objects in that bucket. The token provides an access key ID and secret access key. Find your Cloudflare account ID in the Cloudflare dashboard.
 
-1. Start your local PocketBase server by running `./pocketbase serve` where you have PocketBase set up.
-2. Navigate to the local Admin UI (typically `http://127.0.0.1:8090/_/`) and follow the prompt to create your local administrator account.
-3. Navigate to **Settings > Import collections** in the Admin UI.
-4. Copy and paste the contents of the `pb_schema.json` file (located in `/src/pocketbase` of this project) into the import window and apply. This automatically builds the `banners` collection and all required structural properties.
-
-### 2. Environment Variables
-
-This project uses a single environment file for sensitive credentials and server configuration.
+### 2. Configure Environment Variables
 
 1. Copy `.env.example` in the `server` directory to `.env`.
-2. Set `DISI_POCKETBASE_EMAIL` and `DISI_POCKETBASE_PASSWORD` to your PocketBase credentials.
-3. Adjust the frontend URLs, allowed CORS origins, or comma-separated Playwright arguments if needed.
+2. Set `R2_BUCKET_NAME` to your bucket name, `R2_ACCOUNT_ID` to your Cloudflare account ID, and `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY` to the credentials from your R2 API token.
+3. Adjust the frontend URLs or comma-separated CORS origins if needed.
 
-### 3. Configure Local Endpoints
+### 3. Start the Application
 
-The application is configured to automatically handle endpoint routing based on your active environment:
-
-1. When running local development scripts (like `bun run dev`), `NODE_ENV` is set to `development` and the application will automatically route to `http://localhost:5173`. You do not need to manually change the base URLs in the code. You **do** need to configure the URLs in production mode.
-2. Ensure your backend is correctly pointing to your local PocketBase instance (default: `http://127.0.0.1:8090`).
-
-### 4. Start the Application
-
-The application will run on `localhost:1911`.
+The application runs on `localhost:1911`. During development, it uses `http://localhost:5173` as the frontend URL by default.
 
 #### Manual Method
 
@@ -42,8 +28,8 @@ The application will run on `localhost:1911`.
 # Install dependencies
 bun install
 
-# Install Playwright
-npx playwright install
+# Install Playwright's browser
+bunx playwright install chromium
 
 # Start the Express backend in development mode
 bun run dev
@@ -51,9 +37,7 @@ bun run dev
 
 #### Docker Method
 
-If you prefer to run the application in an isolated containerized environment, you can use Docker Compose to spin up the service immediately.
-
-Ensure the `.env` file in the server directory exists and contains the PocketBase credentials before starting Docker Compose. Docker Compose passes these values into the container, and allocates 1 GB of shared memory for Chromium.
+Ensure the `server/.env` file exists and contains the R2 configuration before starting Docker Compose. Compose passes these values into the container and allocates 1 GB of shared memory for Chromium.
 
 Build and start the container stack in detached mode:
 
@@ -61,7 +45,7 @@ Build and start the container stack in detached mode:
 docker compose up --build -d
 ```
 
-To view logs and ensure all services are running correctly:
+To view logs and ensure the service is running:
 
 ```bash
 docker compose logs -f

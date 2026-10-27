@@ -2,9 +2,13 @@ import cors, { CorsOptions } from "cors";
 import express, { Request, Response } from "express";
 import { LRUCache } from "lru-cache";
 import playwright, { Browser, Page } from "playwright";
-import { uploadBannerImage } from "./pocketbase";
 import { debugging, minimal_args, origins, web as root } from "./utils/const";
-import { base64toFile, joinedParams, logTimestamp } from "./utils/tools";
+import {
+  base64toFile,
+  joinedParams,
+  logTimestamp,
+  uploadImageToR2,
+} from "./utils/tools";
 
 // ----------------------------------------------
 
@@ -168,13 +172,25 @@ const waitForImgs = async (page: Page, link: string) => {
 };
 
 const processPage = async (page: Page, firstTime: boolean, link: string) => {
-  firstTime
-    ? await page.goto(link)
-    : await page.evaluate(
-        async () =>
-          window.refreshDiscordStatus && (await window.refreshDiscordStatus()),
-      );
-  await waitForImgs(page, link);
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+
+  await Promise.race([
+    (async () => {
+      firstTime
+        ? await page.goto(link)
+        : await page.evaluate(
+            async () =>
+              window.refreshDiscordStatus &&
+              (await window.refreshDiscordStatus()),
+          );
+      await waitForImgs(page, link);
+    })(),
+    new Promise<void>((resolve) => {
+      timeout = setTimeout(resolve, 1500); // abort all waiting after 1500ms
+    }),
+  ]);
+
+  if (timeout) clearTimeout(timeout);
 };
 
 // ----------------------------------------------
@@ -238,10 +254,10 @@ app.get(
   async (req: Request, res: Response) => await processCard(req, res, "large"),
 );
 
-app.post("/uploadbanner", async (req, res) => {
+app.post("/banners", async (req, res) => {
   try {
-    const { image } = req.body as { image: string };
-    if (!image) {
+    const { image, userId } = req.body as { image: string; userId: string };
+    if (!image || !userId) {
       res.status(400).send("Bad Request");
       return null;
     }
@@ -250,7 +266,7 @@ app.post("/uploadbanner", async (req, res) => {
       res.status(400).send("Bad Request");
       return null;
     }
-    const id = await uploadBannerImage(blob);
+    const id = await uploadImageToR2(userId, "banners", blob);
     res.status(201).json({ id });
   } catch (error) {
     console.error(error);

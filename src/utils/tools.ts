@@ -1,5 +1,5 @@
 import { UseFormReturnType } from "@mantine/form";
-import { refinerAPI } from "./const";
+import { R2_BUCKET, refinerAPI } from "./const";
 import {
   ActivityType,
   DISIForm,
@@ -281,3 +281,13 @@ export function updateStatus({
       if (params.get("mood")) setMood(data.mood);
     });
 }
+
+export const getBannerImage = ({
+  userID,
+  bannerID,
+}: {
+  userID: string;
+  bannerID: string;
+}) => {
+  return `${R2_BUCKET}/banners/${userID}/${bannerID}`;
+};

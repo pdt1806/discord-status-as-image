@@ -1,5 +1,4 @@
 import { UseFormReturnType } from "@mantine/form";
-import { getBannerImage } from "../../../../pocketbase_client";
 import { useDISIStore } from "../../../../stores/UseDISIStore";
 import { disiAPI, refinerAPI } from "../../../../utils/const";
 import { fileToBase64 } from "../../../../utils/tools";
@@ -13,7 +12,7 @@ export const generatingCards = async (
   const {
     customBannerMode,
     bannerFile,
-    bannerPBID,
+    bannerID,
     setUserID,
     colorMode,
     setSmallTail,
@@ -28,20 +27,9 @@ export const generatingCards = async (
 
   if (customBannerMode === "upload" && !bannerFile)
     throw new Error("Please upload a banner");
-  if (
-    customBannerMode === "pbid" &&
-    !(await getBannerImage(bannerPBID, true))
-  ) {
-    throw new Error("Invalid banner ID");
-  }
 
-  let userID: string;
-
-  userID =
-    users.find(
-      (user: { username: string; id: string }) =>
-        user.username === form.values.username,
-    )?.id || "";
+  let userID =
+    users.find((user) => user.username === form.values.username)?.id ?? "";
 
   if (userID === "") {
     const res = await fetch(`${refinerAPI}/username/${form.values.username}`);
@@ -61,16 +49,17 @@ export const generatingCards = async (
   let newBannerID = "";
   if (bannerFile && customBannerMode === "upload") {
     const body = {
+      userId: userID,
       image: await fileToBase64(bannerFile),
     };
-    const response = await fetch(`${disiAPI}/uploadbanner`, {
+    const response = await fetch(`${disiAPI}/banners`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
     });
-    if (response.status !== 201) throw new Error("Something went wrong");
+    if (!response.ok) throw new Error("Something went wrong");
     const json = await response.json();
     newBannerID = json.id;
     setBannerFile(null);
@@ -116,7 +105,7 @@ export const generatingCards = async (
       ? "&wantBannerImage=true"
       : "") +
     (customBannerMode === "upload" ? `&bannerID=${newBannerID}` : "") +
-    (customBannerMode === "pbid" ? `&bannerID=${bannerPBID}` : "") +
+    (customBannerMode === "id" ? `&bannerID=${bannerID}` : "") +
     (customBannerMode === "exturl" ? `&bannerImage=${externalImageURL}` : "") +
     (form.values.discordLabel ? "&discordLabel=true" : "") +
     (form.values.avatarDecoration ? "&avatarDecoration=true" : "") +

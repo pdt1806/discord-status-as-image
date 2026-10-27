@@ -56,3 +56,5 @@ export const minimal_args = [
   "--disable-web-security",
   "--allow-running-insecure-content",
 ];
+
+export const lowercase_and_number = "abcdefghijklmnopqrstuvwxyz0123456789";

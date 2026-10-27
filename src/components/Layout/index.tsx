@@ -12,7 +12,7 @@ const Layout = () => {
   const [page, setPage] = useState(<Fallback />);
 
   useEffect(() => {
-    const testAPIandPB = async () => {
+    const testAPI = async () => {
       try {
         const controller = new AbortController();
         const { signal } = controller;
@@ -22,20 +22,13 @@ const Layout = () => {
         }, 3000);
 
         const responseAPI = await fetch(disiAPI, { signal });
-        const responsePB = await fetch("https://pocketbase.disi.fyi/api", {
-          signal,
-        });
         const responseRefiner = await fetch(refinerAPI, {
           signal,
         });
 
         clearTimeout(timeoutId);
 
-        if (
-          ![responseAPI, responsePB, responseRefiner].every(
-            (response) => response.ok,
-          )
-        ) {
+        if (![responseAPI, responseRefiner].every((response) => response.ok)) {
           throw new Error("One or more requests failed");
         }
 
@@ -45,7 +38,7 @@ const Layout = () => {
       }
     };
 
-    testAPIandPB();
+    testAPI();
   }, []);
 
   return (

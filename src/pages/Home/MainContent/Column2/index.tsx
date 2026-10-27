@@ -20,7 +20,6 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useEffect } from "react";
 import { useDISIStore } from "../../../../stores/UseDISIStore";
-import { bannerModeList } from "../../../../utils/const";
 import {
   formatAndUpdateHex,
   limitTextarea,
@@ -28,6 +27,13 @@ import {
 } from "../../../../utils/tools";
 import { ColorMode, DISIForm } from "../../../../utils/types";
 import { generatingCards } from "./utils";
+
+const bannerModeList = [
+  "Custom Color",
+  "Custom Image Banner",
+  "Discord Accent Color",
+  "Discord Image Banner (Nitro User Only)",
+];
 
 const MainContentColumn2 = () => {
   const form = useForm<DISIForm>({
@@ -61,7 +67,7 @@ const MainContentColumn2 = () => {
     setBannerMode,
     setCustomBannerMode,
     setExternalImageURL,
-    setBannerPBID,
+    setBannerID,
     setBannerFile,
   } = useDISIStore.getState();
 
@@ -70,7 +76,7 @@ const MainContentColumn2 = () => {
   const customBannerMode = useDISIStore((state) => state.customBannerMode);
   const bannerFile = useDISIStore((state) => state.bannerFile);
   const externalImageURL = useDISIStore((state) => state.externalImageURL);
-  const bannerPBID = useDISIStore((state) => state.bannerPBID);
+  const bannerID = useDISIStore((state) => state.bannerID);
   const colorMode = useDISIStore((state) => state.colorMode);
   const smallCardLink = useDISIStore((state) => state.smallCardLink);
 
@@ -427,7 +433,7 @@ const MainContentColumn2 = () => {
                     onChange={(e) => {
                       setCustomBannerMode(e);
                       setExternalImageURL("");
-                      setBannerPBID("");
+                      setBannerID("");
                       setBannerFile(null);
                     }}
                     value={customBannerMode}
@@ -437,7 +443,7 @@ const MainContentColumn2 = () => {
                   >
                     <Group mt="xs">
                       <Radio value="upload" label="Upload new image" />
-                      <Radio value="pbid" label="Use uploaded image" />
+                      <Radio value="id" label="Use uploaded image" />
                       <Radio value="exturl" label="External image URL" />
                     </Group>
                   </Radio.Group>
@@ -448,27 +454,38 @@ const MainContentColumn2 = () => {
                     value={bannerFile}
                     accept="image/png,image/vnd.mozilla.apng,image/jpeg,image/gif,image/webp,image/avif"
                     label="Upload image"
-                    description="Only accept image files."
+                    description="Only accept image files up to 5 MB."
                     placeholder="Click to upload image"
                     w="max-content"
                     maw="280px"
                     onChange={(e) => {
+                      if (e && e.size > 5 * 1024 * 1024) {
+                        setBannerFile(null);
+                        notifications.show({
+                          title: "Error!",
+                          message: "Image size must be 5 MB or less.",
+                          color: "red",
+                          icon: null,
+                          autoClose: 3000,
+                        });
+                        return;
+                      }
                       if (e) setBannerFile(e);
                     }}
                   />
                 )}
-                {customBannerMode === "pbid" && (
+                {customBannerMode === "id" && (
                   <TextInput
                     w="max-content"
                     required
                     maxLength={15}
                     minLength={15}
                     placeholder="1kdufzpk70fors1"
-                    value={bannerPBID}
+                    value={bannerID}
                     onChange={(e) => {
                       const value = e.currentTarget.value.trim();
                       if (/^[a-z0-9]+$/.test(value) || value === "") {
-                        setBannerPBID(value);
+                        setBannerID(value);
                       }
                     }}
                     label="Image ID"

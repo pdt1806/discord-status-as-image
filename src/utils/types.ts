@@ -135,7 +135,7 @@ export interface DISIStore {
   bannerMode: BannerMode;
   customBannerMode: string;
   externalImageURL: string;
-  bannerPBID: string;
+  bannerID: string;
   bannerFile: File | null;
 
   // Setters
@@ -149,6 +149,6 @@ export interface DISIStore {
   setBannerMode: (v: BannerMode) => void;
   setCustomBannerMode: (v: string) => void;
   setExternalImageURL: (v: string) => void;
-  setBannerPBID: (v: string) => void;
+  setBannerID: (v: string) => void;
   setBannerFile: (file: File | null) => void;
 }
