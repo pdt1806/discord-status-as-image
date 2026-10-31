@@ -6,7 +6,7 @@ RUN npm install --global bun@1.4.2
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
-COPY . .
+COPY . ./
 
 EXPOSE 1911
 

@@ -1,0 +1,30 @@
+services:
+  api:
+    command: ["bun", "run", "dev"]
+    environment:
+      DISI_WEB_URL_DEVELOPMENT: http://host.docker.internal:5173
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+
+  discord-worker:
+    environment:
+      DISI_CORS_ORIGINS: >-
+        https://disi.bennynguyen.dev,https://disi.fyi,http://localhost:5173,
+        http://localhost:1911,http://host.docker.internal:5173
+    command:
+      [
+        "uv",
+        "run",
+        "--no-sync",
+        "uvicorn",
+        "main:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8010",
+        "--reload",
+      ]
+    volumes:
+      - ./discord_worker:/app
+      - /app/.venv

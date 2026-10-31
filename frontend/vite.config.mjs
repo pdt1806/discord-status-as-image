@@ -6,6 +6,7 @@ import compression from "vite-plugin-compression";
 export default defineConfig({
   cacheDir: ".vite-cache",
   server: {
+    allowedHosts: ["host.docker.internal"],
     watch: {
       usePolling: true,
     },

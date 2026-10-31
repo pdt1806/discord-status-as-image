@@ -1,0 +1,3 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/discord_worker/.venv/bin/python"
+}

@@ -1,0 +1,28 @@
+name: disi
+
+services:
+  api:
+    build:
+      context: ./api
+    ports:
+      - "1911:1911"
+    env_file:
+      - ./api/.env
+    shm_size: "1gb"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: unless-stopped
+
+  discord-worker:
+    build:
+      context: .
+      dockerfile: discord_worker/Dockerfile
+    ports:
+      - "8010:8010"
+    env_file:
+      - ./discord_worker/.env
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: unless-stopped

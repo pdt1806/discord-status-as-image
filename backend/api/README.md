@@ -14,7 +14,7 @@ Create an R2 bucket, then create an R2 API token with permission to read and wri
 
 ### 2. Configure Environment Variables
 
-1. Copy `.env.example` in the `server` directory to `.env`.
+1. Copy `.env.example` in the `api` directory to `.env`.
 2. Set `R2_BUCKET_NAME` to your bucket name, `R2_ACCOUNT_ID` to your Cloudflare account ID, and `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY` to the credentials from your R2 API token.
 3. Adjust the frontend URLs or comma-separated CORS origins if needed.
 
@@ -37,16 +37,22 @@ bun run dev
 
 #### Docker Method
 
-Ensure the `server/.env` file exists and contains the R2 configuration before starting Docker Compose. Compose passes these values into the container and allocates 1 GB of shared memory for Chromium.
+Ensure `api/.env` contains the R2 configuration and `discord_worker/.env` contains `APP_ID` and `TOKEN` before starting Docker Compose from the `backend` directory. Compose starts the API on port 1911 and the Discord worker API on port 8010, and allocates 1 GB of shared memory for Chromium.
 
-Build and start the container stack in detached mode:
+Run these commands from the `backend` directory. For local development with hot reload:
 
 ```bash
-docker compose up --build -d
+make dev
 ```
 
-To view logs and ensure the service is running:
+This mounts the API and worker source directories and enables reload for both services. To run the regular containers without source mounts or hot reload:
 
 ```bash
-docker compose logs -f
+make up
+```
+
+Stop the containers with:
+
+```bash
+make stop
 ```
