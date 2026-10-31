@@ -65,13 +65,29 @@ bun run dev
 
 The application now runs on `localhost:5173`.
 
-### Backend API
+### Backend
 
-See [`/backend/api`](https://github.com/pdt1806/discord-status-as-image/tree/main/backend/api).
+#### Docker Method
 
-### Discord Worker
+Ensure `api/.env` contains the R2 configuration and `discord_worker/.env` contains `APP_ID` and `TOKEN` before starting Docker Compose from the `backend` directory. Compose starts the API on port 1911 and the Discord worker API on port 8010, and allocates 1 GB of shared memory for Chromium.
 
-See [`/backend/discord_worker`](https://github.com/pdt1806/discord-status-as-image/tree/main/backend/discord_worker).
+Run these commands from the `backend` directory. For local development with hot reload:
+
+```bash
+make dev
+```
+
+This mounts the API and worker source directories and enables reload for both services. To run the regular containers without source mounts or hot reload:
+
+```bash
+make up
+```
+
+Stop the containers with:
+
+```bash
+make stop
+```
 
 ## Tech Stack
 

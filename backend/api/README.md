@@ -34,25 +34,3 @@ bunx playwright install chromium
 # Start the Express backend in development mode
 bun run dev
 ```
-
-#### Docker Method
-
-Ensure `api/.env` contains the R2 configuration and `discord_worker/.env` contains `APP_ID` and `TOKEN` before starting Docker Compose from the `backend` directory. Compose starts the API on port 1911 and the Discord worker API on port 8010, and allocates 1 GB of shared memory for Chromium.
-
-Run these commands from the `backend` directory. For local development with hot reload:
-
-```bash
-make dev
-```
-
-This mounts the API and worker source directories and enables reload for both services. To run the regular containers without source mounts or hot reload:
-
-```bash
-make up
-```
-
-Stop the containers with:
-
-```bash
-make stop
-```

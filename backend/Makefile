@@ -2,7 +2,7 @@ dev:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 
 up:
-	docker compose -f docker-compose.yml up -d --build
+	docker compose -f docker-compose.yml up -d --build --force-recreate api
 
 up_verbose:
 	docker compose -f docker-compose.yml up --build
