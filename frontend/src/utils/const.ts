@@ -1,6 +1,6 @@
 export const debugging = import.meta.env.DEV;
 
-const isPlaywrightServer = window.__PLAYWRIGHT_SERVER__;
+const isPlaywrightServer = debugging && window.__PLAYWRIGHT_SERVER__;
 
 export const refinerAPI = isPlaywrightServer
   ? "http://host.docker.internal:8010"

@@ -8,6 +8,10 @@ services:
       - "1911:1911"
     env_file:
       - ./api/.env
+    environment:
+      NODE_ENV: production
+      DISI_WEB_URL_PRODUCTION: https://disi.fyi
+      DISI_CORS_ORIGINS: https://disi.bennynguyen.dev,https://disi.fyi
     shm_size: "1gb"
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -22,6 +26,8 @@ services:
       - "8010:8010"
     env_file:
       - ./discord_worker/.env
+    environment:
+      DISI_CORS_ORIGINS: https://disi.bennynguyen.dev,https://disi.fyi
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro

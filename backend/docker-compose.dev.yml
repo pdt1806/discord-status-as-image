@@ -2,6 +2,7 @@ services:
   api:
     command: ["bun", "run", "dev"]
     environment:
+      NODE_ENV: development
       DISI_WEB_URL_DEVELOPMENT: http://host.docker.internal:5173
     volumes:
       - ./api:/app
