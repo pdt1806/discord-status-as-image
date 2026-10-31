@@ -1,18 +1,18 @@
-import { create } from 'zustand';
-import { DISIStore } from '../utils/types';
+import { create } from "zustand";
+import { DISIStore } from "../utils/types";
 
 export const useDISIStore = create<DISIStore>()((set) => ({
-  smallCardLink: '',
-  largeCardLink: '',
-  smallTail: '',
-  largeTail: '',
-  userID: '',
-  colorMode: 'Single',
+  smallCardLink: "",
+  largeCardLink: "",
+  smallTail: "",
+  largeTail: "",
+  userID: "",
+  colorMode: "Single",
   wantLargeCard: false,
-  bannerMode: 'Custom Color',
-  customBannerMode: '',
-  externalImageURL: '',
-  bannerPBID: '',
+  bannerMode: "Custom Color",
+  customBannerMode: "",
+  externalImageURL: "",
+  bannerID: "",
   bannerFile: null,
 
   // Setters
@@ -26,6 +26,6 @@ export const useDISIStore = create<DISIStore>()((set) => ({
   setBannerMode: (v) => set({ bannerMode: v }),
   setCustomBannerMode: (v) => set({ customBannerMode: v }),
   setExternalImageURL: (v) => set({ externalImageURL: v }),
-  setBannerPBID: (v) => set({ bannerPBID: v }),
+  setBannerID: (v) => set({ bannerID: v }),
   setBannerFile: (file) => set({ bannerFile: file }),
 }));

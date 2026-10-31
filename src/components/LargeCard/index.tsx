@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Helmet } from "react-helmet-async";
-import { getBannerImage } from "../../pocketbase_client";
 import classes from "../../styles/profile.module.css";
 import {
   formatDate,
+  getBannerImage,
   setLargeCardTitleSize,
   setStatusImg,
   updateStatus,
@@ -102,10 +102,9 @@ const LargeCard = () => {
     if (params.get("displayName")) return; // request from back-end
 
     async function getBanner() {
-      if (!bannerID) return;
+      if (!id || !bannerID) return;
       const banner: string =
-        ((await getBannerImage(bannerID, false)) as string) || "";
-      if (!banner) return;
+        ((await getBannerImage({ userID: id, bannerID })) as string) || "";
       setBannerImage(banner);
     }
 
@@ -165,7 +164,14 @@ const LargeCard = () => {
         }}
       >
         {bannerImage ? (
-          <Image src={bannerImage} className={classes.banner} id="banner" />
+          <Image
+            src={bannerImage}
+            className={classes.banner}
+            id="banner"
+            onError={() => {
+              setBannerImage(null);
+            }}
+          />
         ) : (
           <Box
             id="banner"

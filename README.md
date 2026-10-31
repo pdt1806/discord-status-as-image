@@ -35,7 +35,7 @@ See below for the live demonstration of this tool, as well as my Discord profile
 
 ## System Status
 
-The uptime status of all three DISI services—Backend API, Discord Worker (Refiner), and Database (PocketBase)—can be monitored at https://uptime.bennynguyen.dev/status/discord-status-as-image. Powered by [Uptime Kuma](https://github.com/louislam/uptime-kuma).
+The uptime status of all three DISI services—Backend API, Discord Worker (Refiner)—can be monitored at https://uptime.bennynguyen.dev/status/discord-status-as-image. Powered by [Uptime Kuma](https://github.com/louislam/uptime-kuma).
 
 ## System Architecture
 
@@ -65,7 +65,7 @@ bun run dev
 
 The application now runs on `localhost:5173`.
 
-### Backend API and Database (PocketBase)
+### Backend API
 
 See [`/server`](https://github.com/pdt1806/discord-status-as-image/tree/main/server).
 
@@ -90,10 +90,10 @@ See [Refiner Discord Bot](https://github.com/pdt1806/refiner-discord-bot).
   - [FastAPI](https://fastapi.tiangolo.com/)
   - [SlowAPI](https://slowapi.readthedocs.io/)
 - Infrastructure and Deployment
-  - [PocketBase](https://pocketbase.io/)
   - [Docker](https://docker.com/)
   - [PM2](https://pm2.keymetrics.io/)
   - [Cloudflare Pages](https://pages.cloudflare.com/)
+  - [Cloudflare R2](https://www.cloudflare.com/products/r2/)
 
 ## Main Developer
 

@@ -14,9 +14,9 @@ When you use Discord Status as Image, [Refiner Discord Bot](https://github.com/p
 
 **1.2 Custom Banner Image:**
 
-If you choose to upload a custom banner image, you acknowledge and agree that this image will be stored in our database. The uploaded image is visible and accessible by the public through Discord Status as Image, or by direct request to the database. The unique identifier for each uploaded banner image is a 15-character long ID. This ID is assigned and displayed to users when creating the "large card" with the uploaded banner image for the first time. We recommend users store this ID somewhere safe for later use.
+If you choose to upload a custom banner image, you acknowledge and agree that this image will be stored in our database (Cloudflare R2). The uploaded image is visible and accessible by the public through Discord Status as Image, or by direct request to the database. The unique identifier for each uploaded banner image is a 15-character long ID. This ID is assigned and displayed to users when creating the "large card" with the uploaded banner image for the first time. We recommend users store this ID somewhere safe for later use.
 
-We are not responsible for any issues or consequences arising from the use or visibility of the uploaded image. If you wish to request the removal of a banner image, please send an email to [me@bennynguyen.dev](mailto:me@bennynguyen.dev). The email must contain the ID of the banner to be removed.
+We are not responsible for any issues or consequences arising from the use or visibility of the uploaded image. If you wish to request the removal of a banner image, please send an email to [me@bennynguyen.dev](mailto:me@bennynguyen.dev). The email must contain your Discord User ID and the ID of the banner to be removed.
 
 ### 2\. Data Security
 

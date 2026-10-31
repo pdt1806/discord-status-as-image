@@ -1,18 +1,9 @@
 export const debugging = import.meta.env.DEV;
 
-export const refinerAPI = debugging
-  ? "http://localhost:8010"
-  : "https://refiner-api.bennynguyen.dev";
+export const refinerAPI = import.meta.env.VITE_REFINER_API;
 
-export const disiAPI = debugging
-  ? "http://localhost:1911"
-  : "https://api.disi.fyi";
+export const disiAPI = import.meta.env.VITE_DISI_API;
 
-export const web = debugging ? "http://localhost:5173" : "https://disi.fyi";
+export const web = import.meta.env.VITE_WEB;
 
-export const bannerModeList = [
-  "Custom Color",
-  "Custom Image Banner",
-  "Discord Accent Color",
-  "Discord Image Banner (Nitro User Only)",
-];
+export const R2_BUCKET = import.meta.env.VITE_R2_BUCKET;

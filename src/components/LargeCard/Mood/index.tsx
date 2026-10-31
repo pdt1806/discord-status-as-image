@@ -1,6 +1,6 @@
 import { Box, Image, Text } from "@mantine/core";
 import TwemojiImport from "react-twemoji";
-import { getEmojiURLfromCDN } from "../../../utils/tools";
+import { getEmojiURLfromDiscordCDN } from "../../../utils/tools";
 import { MoodType } from "../../../utils/types";
 import classes from "./index.module.css";
 
@@ -54,7 +54,7 @@ export default function MoodBox({
           {mood.emoji && mood.emoji.id && (
             <span style={{ display: "inline-block", verticalAlign: "middle" }}>
               <Image
-                src={getEmojiURLfromCDN(mood.emoji)}
+                src={getEmojiURLfromDiscordCDN(mood.emoji)}
                 alt={mood.emoji.name}
                 style={{ width: 35, height: 35 }}
                 mr="md"

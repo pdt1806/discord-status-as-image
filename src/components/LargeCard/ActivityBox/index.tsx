@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import {
   formatActivityImageUrl,
   getElapsedProgessListening,
-  getImageURLfromCDN,
+  getImageURLfromDiscordCDN,
   getPlayingTimestamp,
 } from "../../../utils/tools";
 import { ActivityType } from "../../../utils/types";
@@ -218,7 +218,7 @@ function OtherAssets({ activity }: { activity: ActivityType }) {
 
     return imageName.includes("https")
       ? formatActivityImageUrl(imageName)
-      : getImageURLfromCDN(activity.application_id, imageName);
+      : getImageURLfromDiscordCDN(activity.application_id, imageName);
   };
 
   const primaryImageUrl = resolveImageUrl(large_image ?? small_image);
