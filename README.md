@@ -37,7 +37,7 @@ See below for the live demonstration of this tool, as well as my Discord profile
 
 The uptime status of DISI services—Backend API, Discord Worker (Refiner)—can be monitored at https://uptime.bennynguyen.dev/status/discord-status-as-image. Powered by [Uptime Kuma](https://github.com/louislam/uptime-kuma).
 
-## System Architecture
+<!-- ## System Architecture
 
 DISI utilizes a microservice-inspired architecture separating the frontend client, the backend API, the Discord worker, and the image database.
 
@@ -46,7 +46,7 @@ DISI utilizes a microservice-inspired architecture separating the frontend clien
 ### Technical Highlights
 
 - **Programmatic Image Generation:** Instead of relying on rigid low-level drawing libraries, DISI uses a headless browser pipeline via **Playwright**. The Express backend constructs a web layout (from React frontend) populated with live Discord data, renders the viewport, and captures a screenshot. This allows for complex UI elements (CSS gradients, rounded avatars, custom fonts) that would be difficult to draw manually.
-- **Decoupled Architecture:** The Discord Worker API (Refiner) is isolated into a standalone microservice using **Python and FastAPI**, and utilizes **discord.py** API wrapper to fetch user data. This ensures the main Express rendering API remains highly responsive and scales independently of the Discord Worker API.
+- **Decoupled Architecture:** The Discord Worker API (Refiner) is isolated into a standalone microservice using **Python and FastAPI**, and utilizes **discord.py** API wrapper to fetch user data. This ensures the main Express rendering API remains highly responsive and scales independently of the Discord Worker API. -->
 
 ## Local Development Setup
 
