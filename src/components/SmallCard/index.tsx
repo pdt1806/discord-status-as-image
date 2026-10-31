@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import TwemojiImport from "react-twemoji";
 import {
   formatDate,
-  getEmojiURLfromCDN,
+  getEmojiURLfromDiscordCDN,
   setSmallCardTitleSize,
   setStatusImg,
   updateStatus,
@@ -228,7 +228,7 @@ const SmallCard = () => {
                       }}
                     >
                       <Image
-                        src={getEmojiURLfromCDN(mood.emoji)}
+                        src={getEmojiURLfromDiscordCDN(mood.emoji)}
                         alt={mood.emoji.name}
                         style={{ width: 58, height: 58 }}
                         mr="lg"
