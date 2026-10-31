@@ -3,7 +3,7 @@
 
 <p align="center">Turn your Discord status into a simple, eye-catching image for easy sharing and display. With your username and just a few clicks, setting things up is quick and easy!</p>
 
-![Landing page](https://raw.githubusercontent.com/pdt1806/discord-status-as-image/main/public/images/disi-readme.png)
+![Landing page](https://raw.githubusercontent.com/pdt1806/discord-status-as-image/main/frontend/public/images/disi-readme.png)
 
 ## What is Discord Status as Image?
 
@@ -35,13 +35,13 @@ See below for the live demonstration of this tool, as well as my Discord profile
 
 ## System Status
 
-The uptime status of all three DISI services—Backend API, Discord Worker (Refiner)—can be monitored at https://uptime.bennynguyen.dev/status/discord-status-as-image. Powered by [Uptime Kuma](https://github.com/louislam/uptime-kuma).
+The uptime status of DISI services—Backend API, Discord Worker (Refiner)—can be monitored at https://uptime.bennynguyen.dev/status/discord-status-as-image. Powered by [Uptime Kuma](https://github.com/louislam/uptime-kuma).
 
 ## System Architecture
 
 DISI utilizes a microservice-inspired architecture separating the frontend client, the backend API, the Discord worker, and the image database.
 
-![Data flow](https://raw.githubusercontent.com/pdt1806/discord-status-as-image/main/public/images/disi-data-flow.png)
+![Data flow](https://raw.githubusercontent.com/pdt1806/discord-status-as-image/main/frontend/public/images/disi-data-flow.png)
 
 ### Technical Highlights
 
@@ -67,11 +67,11 @@ The application now runs on `localhost:5173`.
 
 ### Backend API
 
-See [`/server`](https://github.com/pdt1806/discord-status-as-image/tree/main/server).
+See [`/backend/api`](https://github.com/pdt1806/discord-status-as-image/tree/main/backend/api).
 
 ### Discord Worker
 
-See [Refiner Discord Bot](https://github.com/pdt1806/refiner-discord-bot).
+See [`/backend/discord_worker`](https://github.com/pdt1806/discord-status-as-image/tree/main/backend/discord_worker).
 
 ## Tech Stack
 
@@ -79,19 +79,18 @@ See [Refiner Discord Bot](https://github.com/pdt1806/refiner-discord-bot).
   - [React](https://reactjs.org/)
   - [Vite](https://vite.dev/)
   - [Mantine](https://mantine.dev/)
-- Backend API (see [`/server`](https://github.com/pdt1806/discord-status-as-image/tree/main/server))
+- Backend API (see [`/backend/api`](https://github.com/pdt1806/discord-status-as-image/tree/main/backend/api))
   - [Node.js](https://nodejs.org/)
   - [Bun](https://bun.sh/)
   - [Express](https://expressjs.com/)
   - [Playwright](https://playwright.dev/)
-- Discord Worker (see [Refiner Discord Bot](https://github.com/pdt1806/refiner-discord-bot))
+- Discord Worker (see [`/backend/discord_worker`](https://github.com/pdt1806/discord-status-as-image/tree/main/backend/discord_worker))
   - [discord.py](https://discordpy.readthedocs.io/en/latest/)
   - [Uvicorn](https://www.uvicorn.org/)
   - [FastAPI](https://fastapi.tiangolo.com/)
   - [SlowAPI](https://slowapi.readthedocs.io/)
 - Infrastructure and Deployment
   - [Docker](https://docker.com/)
-  - [PM2](https://pm2.keymetrics.io/)
   - [Cloudflare Pages](https://pages.cloudflare.com/)
   - [Cloudflare R2](https://www.cloudflare.com/products/r2/)
 
