@@ -186,7 +186,7 @@ const processPage = async (page: Page, firstTime: boolean, link: string) => {
       await waitForImgs(page, link);
     })(),
     new Promise<void>((resolve) => {
-      timeout = setTimeout(resolve, 1500); // abort all waiting after 1500ms
+      timeout = setTimeout(resolve, 3000); // abort all waiting after 3 seconds
     }),
   ]);
 

@@ -122,7 +122,15 @@ def extract_urls(data):
     return urls
 
 
+icon_cache = {}
+
+
 async def get_app_icon_url(app_id: int) -> str | None:
+    app_id_str = str(app_id)
+
+    if app_id_str in icon_cache:
+        return icon_cache[app_id_str]
+
     """Fetches the icon URL of a Discord activity/game using its application ID."""
     async with aiohttp.ClientSession() as session:  # noqa: SIM117
         # Query Discord's public detectable applications endpoint
@@ -131,12 +139,11 @@ async def get_app_icon_url(app_id: int) -> str | None:
         ) as response:
             if response.status == 200:
                 app_list = await response.json()
-                print(
-                    f"Fetched {len(app_list)} detectable applications from Discord API."
-                )
-                print(f"Searching for application ID: {app_id}")
                 for app in app_list:
-                    if app["id"] == str(app_id) and app.get("icon_hash"):
+                    if app["id"] == app_id_str and app.get("icon_hash"):
                         icon_hash = app["icon_hash"]
-                        return f"https://cdn.discordapp.com/app-icons/{app_id}/{icon_hash}.png"
+                        icon_cache[app_id_str] = (
+                            f"https://cdn.discordapp.com/app-icons/{app_id}/{icon_hash}.png"
+                        )
+                        return icon_cache[app_id_str]
     return None
