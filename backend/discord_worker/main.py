@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
-from utils import extract_urls, get_activity_and_mood
+from utils import extract_urls, get_activity_and_mood, get_app_icon_url
 
 # ------------------ #
 
@@ -104,6 +104,9 @@ async def get_user_info(
         if member_short.primary_guild and member_short.primary_guild.tag != None
         else None
     )
+
+    if activity and activity["type"] == "playing" and not activity["assets"]:
+        activity["app_icon"] = await get_app_icon_url(activity["application_id"])
 
     try:
         user_info = {
