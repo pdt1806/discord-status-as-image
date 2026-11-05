@@ -50,6 +50,7 @@ type OtherActivityType = {
     large_image: string;
     small_image: string;
   };
+  app_icon?: string;
 };
 
 export type ActivityType = GeneralActivityType &

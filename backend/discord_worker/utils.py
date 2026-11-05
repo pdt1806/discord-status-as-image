@@ -1,5 +1,6 @@
 import re
 
+import aiohttp
 import discord
 from discord import Activity, CustomActivity, Game, Spotify, Streaming
 
@@ -119,3 +120,23 @@ def extract_urls(data):
 
     recurse(data)
     return urls
+
+
+async def get_app_icon_url(app_id: int) -> str | None:
+    """Fetches the icon URL of a Discord activity/game using its application ID."""
+    async with aiohttp.ClientSession() as session:  # noqa: SIM117
+        # Query Discord's public detectable applications endpoint
+        async with session.get(
+            "https://discord.com/api/v10/applications/detectable"
+        ) as response:
+            if response.status == 200:
+                app_list = await response.json()
+                print(
+                    f"Fetched {len(app_list)} detectable applications from Discord API."
+                )
+                print(f"Searching for application ID: {app_id}")
+                for app in app_list:
+                    if app["id"] == str(app_id) and app.get("icon_hash"):
+                        icon_hash = app["icon_hash"]
+                        return f"https://cdn.discordapp.com/app-icons/{app_id}/{icon_hash}.png"
+    return None

@@ -227,7 +227,10 @@ function OtherAssets({ activity }: { activity: ActivityType }) {
   return (
     <Box>
       <Image
-        src={primaryImageUrl}
+        src={activity.app_icon || primaryImageUrl}
+        onError={(e) => {
+          (e.target as HTMLImageElement).style.display = "none";
+        }} // this should never happen, but just in case
         alt="Large Image"
         style={{
           height: "150px",
@@ -246,6 +249,9 @@ function OtherAssets({ activity }: { activity: ActivityType }) {
           <Image
             ml="auto"
             src={secondaryImageUrl}
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = "none";
+            }}
             alt="Small Image"
             style={{
               width: "50px",
