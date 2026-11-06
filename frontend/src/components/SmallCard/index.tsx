@@ -261,6 +261,14 @@ const SmallCard = () => {
                       : "#5d5f6b"
                   }
                   fw={400}
+                  style={{
+                    flex: 1,
+                    minWidth: 0,
+                    lineHeight: 1.5,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
                 >
                   {
                     {
