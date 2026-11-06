@@ -1,6 +1,5 @@
 import re
 
-import aiohttp
 import discord
 from discord import Activity, CustomActivity, Game, Spotify, Streaming
 
@@ -125,25 +124,28 @@ def extract_urls(data):
 icon_cache = {}
 
 
-async def get_app_icon_url(app_id: int) -> str | None:
+async def get_app_icon_url(bot: discord.Client, app_id: int) -> str | None:
     app_id_str = str(app_id)
 
     if app_id_str in icon_cache:
         return icon_cache[app_id_str]
 
-    """Fetches the icon URL of a Discord activity/game using its application ID."""
-    async with aiohttp.ClientSession() as session:  # noqa: SIM117
-        # Query Discord's public detectable applications endpoint
-        async with session.get(
-            "https://discord.com/api/v10/applications/detectable"
-        ) as response:
-            if response.status == 200:
-                app_list = await response.json()
-                for app in app_list:
-                    if app["id"] == app_id_str and app.get("icon_hash"):
-                        icon_hash = app["icon_hash"]
-                        icon_cache[app_id_str] = (
-                            f"https://cdn.discordapp.com/app-icons/{app_id}/{icon_hash}.png"
-                        )
-                        return icon_cache[app_id_str]
+    route = discord.http.Route(
+        "GET", "/applications/{application_id}/rpc", application_id=app_id
+    )
+
+    try:
+        app_data = await bot.http.request(route)
+
+        if app_data.get("icon"):
+            icon_url = (
+                f"https://cdn.discordapp.com/app-icons/{app_id}/{app_data['icon']}.png"
+            )
+            icon_cache[app_id_str] = icon_url
+            return icon_url
+
+    except discord.HTTPException:
+        pass
+
+    icon_cache[app_id_str] = None
     return None

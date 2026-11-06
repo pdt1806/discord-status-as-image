@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
-from utils import extract_urls, get_activity_and_mood, get_app_icon_url
+from utils import get_activity_and_mood, get_app_icon_url
 
 # ------------------ #
 
@@ -163,8 +163,8 @@ async def get_user_info(
                 str(member.accent_color) if member.accent_color else None
             )
 
-        urls = extract_urls(user_info)
-        user_info["urls"] = urls
+        # urls = extract_urls(user_info)
+        # user_info["urls"] = urls
 
         return JSONResponse(content=user_info)
     except Exception as e:  # noqa: BLE001

@@ -85,7 +85,7 @@ export type RefinerResponse = {
   activity: ActivityType;
   mood: MoodType;
   primary_guild: PrimaryGuildType;
-  urls: string[];
+  // urls: string[];
 };
 
 export type PrimaryGuildType = { badge: string; tag: string };
