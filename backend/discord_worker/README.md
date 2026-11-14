@@ -1,4 +1,4 @@
-<p align="center"><img width="50%" src="https://raw.githubusercontent.com/pdt1806/discord-status-as-image/main/backend/discord_worker/public/frieren.gif" /></p>
+<p align="center"><img width="50%" src="./public/frieren.gif" /></p>
 <h1 align="center">Refiner Discord Bot</h1>
 <p align="center">"Feel free to praise me more" <(￣︶￣)></p>
 
@@ -10,7 +10,7 @@ Why Refiner? I mean, why not? (￣ ▽ ￣)ノ She is the Greatest Mage of All T
 
 ## Why the name Refiner?
 
-<img width="30%" style="min-width: 250px" src="https://raw.githubusercontent.com/pdt1806/discord-status-as-image/main/backend/discord_worker/public/refiner.gif" />
+<img width="30%" style="min-width: 250px" src="./public/refiner.gif" />
 
 ## Local Development Setup
 

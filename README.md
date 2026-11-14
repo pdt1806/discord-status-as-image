@@ -1,9 +1,9 @@
-<p align="center"><img src="https://disi.fyi/images/disi-logo.png" width="20%" style="min-width: 300px"></img></p>
+<p align="center"><img src="./frontend/public/images/disi-logo.png" width="20%" style="min-width: 300px"></img></p>
 <h1 align="center">Discord Status as Image</h1>
 
 <p align="center">Turn your Discord status into a simple, eye-catching image for easy sharing and display. With your username and just a few clicks, setting things up is quick and easy!</p>
 
-![Landing page](https://raw.githubusercontent.com/pdt1806/discord-status-as-image/main/frontend/public/images/disi-readme.png)
+![Landing page](./frontend/public/images/disi-readme.png)
 
 ## What is Discord Status as Image?
 
@@ -41,7 +41,7 @@ The uptime status of DISI services—Backend API, Discord Worker (Refiner)—can
 
 DISI utilizes a microservice-inspired architecture separating the frontend client, the backend API, the Discord worker, and the image database.
 
-![Data flow](https://raw.githubusercontent.com/pdt1806/discord-status-as-image/main/frontend/public/images/disi-data-flow.png)
+![Data flow](./frontend/public/images/disi-data-flow.png)
 
 ### Technical Highlights
 
