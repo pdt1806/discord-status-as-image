@@ -6,6 +6,10 @@ export const web = debugging
   ? (process.env.DISI_WEB_URL_DEVELOPMENT ?? "http://localhost:5173")
   : (process.env.DISI_WEB_URL_PRODUCTION ?? "https://disi.fyi");
 
+export const refinerAPI =
+  process.env.DISI_REFINER_API ??
+  (debugging ? "http://localhost:8010" : "http://discord-worker:8010");
+
 export const origins = (
   process.env.DISI_CORS_ORIGINS ??
   "https://disi.bennynguyen.dev,https://disi.fyi"

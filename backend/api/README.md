@@ -20,7 +20,7 @@ Create an R2 bucket, then create an R2 API token with permission to read and wri
 
 ### 3. Start the Application
 
-The application runs on `localhost:1911`. During development, it uses `http://localhost:5173` as the frontend URL by default.
+The application runs on `localhost:1911`. During development, it uses `http://localhost:5173` as the frontend URL by default. The SVG small-card endpoint is available at `/smallcard_svg/:id`; it returns `image/svg+xml` and uses the Refiner API URL configured by `DISI_REFINER_API`.
 
 #### Manual Method
 

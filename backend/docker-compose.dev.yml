@@ -1,9 +1,10 @@
 services:
   api:
-    command: ["bun", "run", "dev"]
+    command: ["sh", "-c", "bun install --frozen-lockfile && bun run dev"]
     environment:
       NODE_ENV: development
       DISI_WEB_URL_DEVELOPMENT: http://host.docker.internal:5173
+      DISI_REFINER_API: http://discord-worker:8010
     volumes:
       - ./api:/app
       - /app/node_modules

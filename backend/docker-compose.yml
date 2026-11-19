@@ -11,6 +11,7 @@ services:
     environment:
       NODE_ENV: production
       DISI_WEB_URL_PRODUCTION: https://disi.fyi
+      DISI_REFINER_API: http://discord-worker:8010
       DISI_CORS_ORIGINS: https://disi.bennynguyen.dev,https://disi.fyi
     shm_size: "1gb"
     volumes:

@@ -2,7 +2,15 @@ import cors, { CorsOptions } from "cors";
 import express, { Request, Response } from "express";
 import { LRUCache } from "lru-cache";
 import playwright, { Browser, Page } from "playwright";
-import { debugging, minimal_args, origins, web as root } from "./utils/const";
+import {
+  debugging,
+  minimal_args,
+  origins,
+  refinerAPI,
+  web as root,
+} from "./utils/const";
+import { renderSmallCardSvg } from "./renderers/smallCardSvg";
+import type { SmallCardUser } from "./renderers/smallCardSvg";
 import {
   base64toFile,
   joinedParams,
@@ -95,23 +103,30 @@ app.get("/", (_: Request, res: Response) => {
 // ----------------------------------------------
 // playwright
 
-let browser: Browser;
+let browserPromise: Promise<Browser> | undefined;
 
-await (async () => {
-  browser = await playwright.chromium.launch({
-    headless: true,
-    args: minimal_args,
-  });
-})().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+const getBrowser = () => {
+  if (!browserPromise) {
+    browserPromise = playwright.chromium
+      .launch({
+        headless: true,
+        args: minimal_args,
+      })
+      .catch((error) => {
+        browserPromise = undefined;
+        throw error;
+      });
+  }
+
+  return browserPromise;
+};
 
 const selectPage = async (
   id: string,
   url: string,
   type: string,
 ): Promise<[Page, boolean, () => void]> => {
+  const browser = await getBrowser();
   const reference = type === "small" ? smallPages : largePages;
   // get cached page by url instead of just id, allowing multiple pages of the same id
   const cachedPage = reference.get(url);
@@ -241,8 +256,131 @@ const processCard = async (
   }
 };
 
+const parseHexColor = (value: string | undefined) => {
+  const color = value?.replace(/^#/, "");
+  return color && /^[\da-f]{6}$/i.test(color) ? `#${color}` : null;
+};
+
+const getSmallCardColors = (
+  req: Request,
+  accentColor: string | null,
+) => {
+  const backgroundColor =
+    parseHexColor(typeof req.query.bg === "string" ? req.query.bg : undefined) ??
+    parseHexColor(accentColor ?? undefined) ??
+    "#2b2d31";
+  const gradient1 = parseHexColor(
+    typeof req.query.bg1 === "string" ? req.query.bg1 : undefined,
+  );
+  const gradient2 = parseHexColor(
+    typeof req.query.bg2 === "string" ? req.query.bg2 : undefined,
+  );
+
+  if (!gradient1 || !gradient2) {
+    const [red, green, blue] = backgroundColor
+      .slice(1)
+      .match(/.{2}/g)!
+      .map((channel) => Number.parseInt(channel, 16));
+    const textColor =
+      (red * 299 + green * 587 + blue * 114) / 1000 > 186
+        ? "#202225"
+        : "white";
+
+    return { background: backgroundColor, textColor };
+  }
+
+  const angle =
+    typeof req.query.angle === "string" && /^\d{1,3}$/.test(req.query.angle)
+      ? req.query.angle
+      : "0";
+  const gradient = `linear-gradient(${angle}deg, ${gradient1} 0%, ${gradient2} 100%)`;
+  const blend = [1, 3, 5].map((index) =>
+    Math.round(
+      (Number.parseInt(gradient1.slice(index, index + 2), 16) +
+        Number.parseInt(gradient2.slice(index, index + 2), 16)) /
+        2,
+    ),
+  );
+  const textColor =
+    (blend[0] * 299 + blend[1] * 587 + blend[2] * 114) / 1000 > 186
+      ? "#202225"
+      : "white";
+
+  return { background: gradient, textColor };
+};
+
+const renderSmallCardSvgRoute = async (req: Request, res: Response) => {
+  const startTime = performance.now();
+  const id = String(req.params.id || "");
+
+  if (!id) {
+    res.status(400).send("Bad Request");
+    return;
+  }
+
+  try {
+    const query = new URLSearchParams();
+    const wantAccentColor = req.query.wantAccentColor === "true";
+    const extendedData = ["avatarDecoration", "primaryGuild", "activity"]
+      .filter((key) => req.query[key] === "true")
+      .join(",");
+
+    if (wantAccentColor) query.set("full", "true");
+    if (extendedData) query.set("extend", extendedData);
+
+    const refinerUrl = new URL(
+      `/user/${encodeURIComponent(id)}${query.size ? `?${query}` : ""}`,
+      refinerAPI,
+    );
+    const userResponse = await fetch(refinerUrl);
+
+    if (userResponse.status === 404) {
+      res.status(404).send("User not found");
+      return;
+    }
+    if (!userResponse.ok) {
+      console.error(`Refiner API returned ${userResponse.status} for ${id}`);
+      res.status(502).send("Failed to fetch Discord status");
+      return;
+    }
+
+    const user = (await userResponse.json()) as SmallCardUser;
+    const displayName =
+      req.query.displayUsername === "true" ? user.username : user.display_name;
+    const { background, textColor } = getSmallCardColors(
+      req,
+      wantAccentColor ? user.accent_color : null,
+    );
+    const svg = await renderSmallCardSvg({
+      displayName,
+      avatar: user.avatar,
+      avatarDecoration:
+        req.query.avatarDecoration === "true" ? user.avatar_decoration : null,
+      status: user.status,
+      createdDate: req.query.created === "true" ? user.created_at : null,
+      activity: req.query.activity === "true" ? user.activity : null,
+      mood: req.query.mood === "true" ? user.mood : null,
+      primaryGuild:
+        req.query.primaryGuild === "true" ? user.primary_guild : null,
+      background,
+      textColor,
+      discordLabel: req.query.discordLabel === "true",
+    });
+
+    res.set("Content-Type", "image/svg+xml");
+    res.send(svg);
+
+    logTimestamp("small", "svg", id, Math.round(performance.now() - startTime));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 // ----------------------------------------------
 // api endpoints
+
+app.get("/smallcard_svg/:id", renderSmallCardSvgRoute);
 
 app.get(
   "/smallcard/:id",

@@ -8,17 +8,21 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1157.0",
+    "@fontsource/roboto": "^5.3.0",
     "@types/cors": "2.8.19",
     "cors": "2.8.6",
     "dotenv": "17.4.2",
     "express": "5.2.1",
     "lru-cache": "11.5.2",
     "nanoid": "^6.0.2",
-    "playwright": "1.62.1"
+    "playwright": "1.62.1",
+    "react": "^19.3.1",
+    "satori": "^0.63.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^26.4.1",
+    "@types/react": "^19.3.0",
     "tsup": "^8.5.1",
     "tsx": "^4.23.13",
     "typescript": "^5.0.0"

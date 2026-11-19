@@ -7,7 +7,7 @@
 
 ## What is Discord Status as Image?
 
-Discord Status as Image (DISI) is a web application that dynamically generates real-time, customizable images of a user's Discord status. It allows users to embed their live Discord activity (online status, custom status, currently playing) across the web in various formats including `.png` and embeddable `iframes`.
+Discord Status as Image (DISI) is a web application that dynamically generates real-time, customizable images of a user's Discord status. It allows users to embed their live Discord activity (online status, custom status, currently playing) across the web in various formats including `.png`, `.svg`, and embeddable `iframes`.
 
 ## Features
 
@@ -100,6 +100,7 @@ make stop
   - [Bun](https://bun.sh/)
   - [Express](https://expressjs.com/)
   - [Playwright](https://playwright.dev/)
+  - [Satori](https://github.com/vercel/satori)
 - Discord Worker (see [`/backend/discord_worker`](https://github.com/pdt1806/discord-status-as-image/tree/main/backend/discord_worker))
   - [discord.py](https://discordpy.readthedocs.io/en/latest/)
   - [Uvicorn](https://www.uvicorn.org/)
