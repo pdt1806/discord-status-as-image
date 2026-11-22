@@ -124,11 +124,9 @@ def extract_urls(data):
 icon_cache = {}
 
 
-async def get_app_icon_url(bot: discord.Client, app_id: int) -> str | None:
-    app_id_str = str(app_id)
-
-    if app_id_str in icon_cache:
-        return icon_cache[app_id_str]
+async def get_app_icon_url(bot: discord.Client, app_id: str) -> str | None:
+    if app_id in icon_cache:
+        return icon_cache[app_id]
 
     route = discord.http.Route(
         "GET", "/applications/{application_id}/rpc", application_id=app_id
@@ -141,11 +139,11 @@ async def get_app_icon_url(bot: discord.Client, app_id: int) -> str | None:
             icon_url = (
                 f"https://cdn.discordapp.com/app-icons/{app_id}/{app_data['icon']}.png"
             )
-            icon_cache[app_id_str] = icon_url
+            icon_cache[app_id] = icon_url
             return icon_url
 
     except discord.HTTPException:
         pass
 
-    icon_cache[app_id_str] = None
+    icon_cache[app_id] = None
     return None
