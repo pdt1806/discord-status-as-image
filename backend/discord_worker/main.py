@@ -106,7 +106,12 @@ async def get_user_info(
     )
 
     if activity and activity["type"] == "playing" and not activity["assets"]:
-        activity["app_icon"] = await get_app_icon_url(activity["application_id"])
+        try:
+            activity["app_icon"] = await get_app_icon_url(
+                bot, str(activity["application_id"])
+            )
+        except Exception:  # noqa: BLE001
+            activity["app_icon"] = None
 
     try:
         user_info = {
